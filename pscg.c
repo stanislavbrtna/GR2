@@ -216,8 +216,11 @@ void pscg_set_value(uint16_t id, int32_t val, gr2context * c) {
 	if ((val != c->pscgElements[id].value) && (c->pscgElements[id].modified == 0)) {
 		c->pscgElements[id].modified = 1; // redraw modified
 	} else {
+	  if (c->pscgElements[id].type == GR2_TYPE_SLIDER_V
+	       || c->pscgElements[id].type == GR2_TYPE_SLIDER_H) {
+	    c->sliderRedrawHotfix = 1;
+	  }
 	  c->pscgElements[id].modified = 0; // wut ze fuck?
-	  c->sliderRedrawHotfix = 1;
 	}
 	c->pscgElements[id].prev_val = c->pscgElements[id].value;
 	c->pscgElements[id].value = val;
