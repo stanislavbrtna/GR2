@@ -22,30 +22,31 @@ SOFTWARE.
 #ifndef GR2_H
 #define GR2_H
 
-#define LCD_W 800
+#define LCD_W 800 // deprecated
 #define LCD_H 480
 
 // GR2 verze 2.1
 #define GR2_VERSION 220
 
+//TODO: these defines are pure mess, fix this
 #ifdef PC
 #include <stdio.h>
 #include <stdint.h>
-#else
+#endif
+
 #if defined(STM32F405xx) //defined(STM32F411xE)
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_cortex.h"
-#else
-#include "stm32f7xx_hal.h"
 #endif
+
+#if defined(STM32F407xx)
+#include "stm32f4xx.h"
+#include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_cortex.h"
 #endif
 
 typedef enum {EV_NONE,EV_PRESSED, EV_HOLD,EV_LONGHOLD, EV_RELEASED, EV_DRAGOUT} gr2EventType;
-
-#ifdef F103
-#include "stm32f10x.h"
-#endif
 
 #include "lcd_io.h"
 #include "lcd_basics.h"
