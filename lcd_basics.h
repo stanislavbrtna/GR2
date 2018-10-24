@@ -41,6 +41,8 @@ void LCD_setDrawAreaS(LCD_drawArea *a);
 //color functions
 uint16_t LCD_MixColor(uint8_t r, uint8_t g,uint8_t b);
 uint16_t LCD_get_gray16(uint16_t color);
+uint16_t LCD_color_darken(uint16_t color, uint8_t val);
+uint16_t LCD_color_lighten(uint16_t color, uint8_t val);
 
 //draw functions
 void LCD_DrawPoint(int16_t x, int16_t y, int16_t color);

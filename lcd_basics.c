@@ -282,6 +282,78 @@ uint16_t LCD_get_gray16(uint16_t color) {
 	return LCD_MixColor(round, round, round);
 }
 
+uint16_t LCD_color_lighten(uint16_t color, uint8_t val) {
+	uint8_t r = 0;
+	uint8_t g = 0;
+	uint8_t b = 0;
+	uint8_t round;
+	r = (uint8_t)(((float)((color >> 11) & 0x1F) / 32) * 256);
+	g = (uint8_t)(((float)(((color & 0x07E0) >> 5) & 0x3F) / 64) * 256);
+	b = (uint8_t)(((float)(color & 0x1F) / 32) * 256);
+
+	if ((uint32_t)r + (uint32_t)val > 255) {
+	  r = 255;
+	} else {
+	  r += val;
+	}
+
+	if ((uint32_t)g + (uint32_t)val > 255) {
+	  g = 255;
+	} else {
+	  g += val;
+	}
+
+	if ((uint32_t)g + (uint32_t)val > 255) {
+	  g = 255;
+	} else {
+	  g += val;
+	}
+
+	if ((uint32_t)b + (uint32_t)val > 255) {
+	  b = 255;
+	} else {
+	  b += val;
+	}
+
+	return LCD_MixColor(r, g, b);
+}
+
+uint16_t LCD_color_darken(uint16_t color, uint8_t val) {
+	uint8_t r = 0;
+	uint8_t g = 0;
+	uint8_t b = 0;
+	uint8_t round;
+	r = (uint8_t)(((float)((color >> 11) & 0x1F) / 32) * 256);
+	g = (uint8_t)(((float)(((color & 0x07E0) >> 5) & 0x3F) / 64) * 256);
+	b = (uint8_t)(((float)(color & 0x1F) / 32) * 256);
+
+	if ((int32_t)r - (int32_t)val < 0) {
+	  r = 0;
+	} else {
+	  r -= val;
+	}
+
+	if ((int32_t)g - (int32_t)val < 0) {
+	  g = 0;
+	} else {
+	  g -= val;
+	}
+
+	if ((int32_t)g - (int32_t)val < 0) {
+	  g = 0;
+	} else {
+	  g -= val;
+	}
+
+	if ((int32_t)b - (int32_t)val < 0) {
+	  b = 0;
+	} else {
+	  b -= val;
+	}
+
+	return LCD_MixColor(r, g, b);
+}
+
 void LCD_Fill(uint16_t color) {
 	uint16_t i, j;
 	LCD_set_XY(0, 0, lcd_x_size, lcd_y_size);
