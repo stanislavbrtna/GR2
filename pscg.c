@@ -42,6 +42,7 @@ void gr2_ResetContext(gr2context * c) {
 	c->textMouseX = 0;
 	c->textMouseY = 0;
 	c->default_grid_size = 32;
+	c->default_grid_spacing = 0;
 	c->pscg_active_element = 0;
 	c->sliderRedrawHotfix = 0; //flag pro korektní překreslení 2x modifikovaného slideru
 	c->relative_init = 0;
@@ -244,15 +245,15 @@ uint16_t pscg_get_tmy(gr2context * c) {
 	return c->textMouseY;
 }
 
-#define COUNT_A_B_C_D_old a=x1+con->pscgElements[i].x1*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll_old; \
-b=y1+con->pscgElements[i].y1*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll_old; \
-c=x1+con->pscgElements[i].x2*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll_old-1; \
-d=y1+con->pscgElements[i].y2*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll_old-1; \
+#define COUNT_A_B_C_D_old a=x1+con->pscgElements[i].x1*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll_old + con->pscgScreens[scrID].cell_space_left;; \
+b=y1+con->pscgElements[i].y1*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll_old + con->pscgScreens[scrID].cell_space_top; \
+c=x1+con->pscgElements[i].x2*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll_old-1 - con->pscgScreens[scrID].cell_space_right; \
+d=y1+con->pscgElements[i].y2*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll_old-1 - con->pscgScreens[scrID].cell_space_bottom; \
 
-#define COUNT_A_B_C_D a=x1+con->pscgElements[i].x1*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll; \
-b=y1+con->pscgElements[i].y1*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll; \
-c=x1+con->pscgElements[i].x2*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll-1; \
-d=y1+con->pscgElements[i].y2*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll-1; \
+#define COUNT_A_B_C_D a=x1+con->pscgElements[i].x1*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll + con->pscgScreens[scrID].cell_space_left; \
+b=y1+con->pscgElements[i].y1*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll + con->pscgScreens[scrID].cell_space_top; \
+c=x1+con->pscgElements[i].x2*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll-1 - con->pscgScreens[scrID].cell_space_right; \
+d=y1+con->pscgElements[i].y2*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll-1 - con->pscgScreens[scrID].cell_space_bottom; \
 
 void pscg_draw_screen(
 										int16_t x1,
@@ -524,7 +525,8 @@ int16_t get_a(
 
   scrID = con->pscgElements[screen].value;
 
-  return x1 + con->pscgElements[i].x1 * con->pscgScreens[scrID].x_cell - con->pscgScreens[scrID].x_scroll;
+  return x1 + con->pscgElements[i].x1 * con->pscgScreens[scrID].x_cell
+         - con->pscgScreens[scrID].x_scroll + con->pscgScreens[scrID].cell_space_left;
 }
 
 int16_t get_b(
@@ -547,7 +549,8 @@ int16_t get_b(
   (void)(y2);
   scrID = con->pscgElements[screen].value;
 
-  return y1 + con->pscgElements[i].y1 * con->pscgScreens[scrID].y_cell - con->pscgScreens[scrID].y_scroll;
+  return y1 + con->pscgElements[i].y1 * con->pscgScreens[scrID].y_cell
+         - con->pscgScreens[scrID].y_scroll + con->pscgScreens[scrID].cell_space_top;
 }
 
 uint8_t touch_in_element(
@@ -568,10 +571,10 @@ uint8_t touch_in_element(
 
   scrID = con->pscgElements[screen].value;
 
-  a=x1+con->pscgElements[i].x1*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll;
-	b=y1+con->pscgElements[i].y1*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll;
-	c=x1+con->pscgElements[i].x2*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll-1;
-	d=y1+con->pscgElements[i].y2*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll-1;
+  a=x1+con->pscgElements[i].x1*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll + con->pscgScreens[scrID].cell_space_left;
+	b=y1+con->pscgElements[i].y1*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll + con->pscgScreens[scrID].cell_space_top;
+	c=x1+con->pscgElements[i].x2*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll-1 - con->pscgScreens[scrID].cell_space_right;
+	d=y1+con->pscgElements[i].y2*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll-1 - con->pscgScreens[scrID].cell_space_bottom;
 
 	if ((con->pscgElements[i].grayout == 0)
 				&& (touch_x > a)

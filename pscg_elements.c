@@ -162,6 +162,7 @@ uint16_t pscg_add_button(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uin
 	c->pscgElements[i].type = GR2_TYPE_BUTTON;
 	pscg_add_fill_xy(i, x1, y1, x2, y2, c);
 	c->pscgElements[i].str_value = str;
+		c->pscgElements[i].param = 5; // text x1 is stored in param
 	c->pscgElements[i].param2 = c->pscgScreens[c->pscgElements[screen].value].default_font; //číslo fontu
 	pscg_set_max_id(i, c);
 	c->elementsUsed++;
@@ -435,6 +436,10 @@ uint16_t pscg_add_screen(gr2context * c){
 	c->pscgScreens[scrI].y_scroll = 0;
 	c->pscgScreens[scrI].x_cell = c->default_grid_size;
 	c->pscgScreens[scrI].y_cell = c->default_grid_size;
+	c->pscgScreens[scrI].cell_space_left = c->default_grid_spacing;
+	c->pscgScreens[scrI].cell_space_right = c->default_grid_spacing;
+	c->pscgScreens[scrI].cell_space_bottom = c->default_grid_spacing;
+	c->pscgScreens[scrI].cell_space_top = c->default_grid_spacing;
 	c->pscgScreens[scrI].default_font = LCD_Get_Font_Size();
 
 	pscg_fill_zero_defaults(i, i, c);

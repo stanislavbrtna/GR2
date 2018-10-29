@@ -93,6 +93,11 @@ typedef struct {
 	uint16_t x_cell;
 	uint16_t y_cell;
 
+	uint16_t cell_space_left;
+	uint16_t cell_space_right;
+	uint16_t cell_space_top;
+	uint16_t cell_space_bottom;
+
 	uint8_t default_font;
 
 	uint8_t valid;
@@ -123,6 +128,7 @@ typedef struct {
 	uint16_t textMouseY;
 
 	uint16_t default_grid_size;
+	uint16_t default_grid_spacing;
 
 	uint8_t pscg_active_element;
 
@@ -233,6 +239,10 @@ void pscg_set_y_cell(uint16_t id, uint16_t val, gr2context * c);
 uint16_t pscg_get_x_cell(uint16_t id, gr2context * c);
 uint16_t pscg_get_y_cell(uint16_t id, gr2context * c);
 void pscg_set_default_font(uint16_t id, uint8_t val, gr2context * c);
+void pscg_set_cell_space_left(uint16_t id, uint16_t val, gr2context * c);
+void pscg_set_cell_space_right(uint16_t id, uint16_t val, gr2context * c);
+void pscg_set_cell_space_top(uint16_t id, uint16_t val, gr2context * c);
+void pscg_set_cell_space_bottom(uint16_t id, uint16_t val, gr2context * c);
 
 //ostatní
 void pscg_set_border_color(uint16_t col, gr2context * c);

@@ -325,6 +325,34 @@ void pscg_set_yscroll(uint16_t id, int16_t val, gr2context * c) {
 	c->pscgScreens[c->pscgElements[id].value].y_scroll = val;
 }
 
+void pscg_set_cell_space_left(uint16_t id, uint16_t val, gr2context * c) {
+	if (val != c->pscgScreens[c->pscgElements[id].value].cell_space_left) {
+		c->pscgElements[id].modified = 1;
+	}
+	c->pscgScreens[c->pscgElements[id].value].cell_space_left = val;
+}
+
+void pscg_set_cell_space_right(uint16_t id, uint16_t val, gr2context * c) {
+	if (val != c->pscgScreens[c->pscgElements[id].value].cell_space_right) {
+		c->pscgElements[id].modified = 1;
+	}
+	c->pscgScreens[c->pscgElements[id].value].cell_space_right = val;
+}
+
+void pscg_set_cell_space_top(uint16_t id, uint16_t val, gr2context * c) {
+	if (val != c->pscgScreens[c->pscgElements[id].value].cell_space_top) {
+		c->pscgElements[id].modified = 1;
+	}
+	c->pscgScreens[c->pscgElements[id].value].cell_space_top = val;
+}
+
+void pscg_set_cell_space_bottom(uint16_t id, uint16_t val, gr2context * c) {
+	if (val != c->pscgScreens[c->pscgElements[id].value].cell_space_bottom) {
+		c->pscgElements[id].modified = 1;
+	}
+	c->pscgScreens[c->pscgElements[id].value].cell_space_bottom = val;
+}
+
 void pscg_set_x_cell(uint16_t id, uint16_t val, gr2context * c) {
 	if (val != c->pscgScreens[c->pscgElements[id].value].x_cell) {
 		c->pscgElements[id].modified = 1;

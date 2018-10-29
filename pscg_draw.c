@@ -62,7 +62,7 @@ void pscg_draw_button(int16_t x1,int16_t y1,int16_t x2,int16_t y2, uint8_t *str,
 	  LCD_FillRect(x1,y1,x2,y2,LCD_get_gray16(c->fill_color));
 	  LCD_DrawRectangle(x1,y1,x2,y2,LCD_get_gray16(c->border_color));
 	  LCD_DrawRectangle(x1+1,y1+1,x2-1,y2-1,LCD_get_gray16(c->border_color));
-	  LCD_DrawText_ext(x1+10,y1+5,LCD_get_gray16(c->text_color), str);
+	  LCD_DrawText_ext(x1+c->pscgElements[id].param,y1+5,LCD_get_gray16(c->text_color), str);
 	}
 #else
   //DP view
