@@ -162,7 +162,7 @@ uint16_t pscg_add_button(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uin
 	c->pscgElements[i].type = GR2_TYPE_BUTTON;
 	pscg_add_fill_xy(i, x1, y1, x2, y2, c);
 	c->pscgElements[i].str_value = str;
-		c->pscgElements[i].param = 5; // text x1 is stored in param
+	c->pscgElements[i].param = 5; // text x1 is stored in param, default value is 5px
 	c->pscgElements[i].param2 = c->pscgScreens[c->pscgElements[screen].value].default_font; //číslo fontu
 	pscg_set_max_id(i, c);
 	c->elementsUsed++;
