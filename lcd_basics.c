@@ -321,7 +321,6 @@ uint16_t LCD_color_darken(uint16_t color, uint8_t val) {
 	uint8_t r = 0;
 	uint8_t g = 0;
 	uint8_t b = 0;
-	uint8_t round;
 	r = (uint8_t)(((float)((color >> 11) & 0x1F) / 32) * 256);
 	g = (uint8_t)(((float)(((color & 0x07E0) >> 5) & 0x3F) / 64) * 256);
 	b = (uint8_t)(((float)(color & 0x1F) / 32) * 256);
