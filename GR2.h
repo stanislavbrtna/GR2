@@ -22,25 +22,15 @@ SOFTWARE.
 #ifndef GR2_H
 #define GR2_H
 
-#define LCD_W 800 // deprecated
-#define LCD_H 480
+// GR2 verze 2.3
+#define GR2_VERSION 230
 
-// GR2 verze 2.1
-#define GR2_VERSION 220
-
-//TODO: these defines are pure mess, fix this
 #ifdef PC
 #include <stdio.h>
 #include <stdint.h>
 #endif
 
-#if defined(STM32F405xx) //defined(STM32F411xE)
-#include "stm32f4xx.h"
-#include "stm32f4xx_hal.h"
-#include "stm32f4xx_hal_cortex.h"
-#endif
-
-#if defined(STM32F407xx)
+#if defined(STM32F405xx) || defined(STM32F411xE) || defined(STM32F407xx)
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_cortex.h"
@@ -57,6 +47,7 @@ typedef enum {EV_NONE,EV_PRESSED, EV_HOLD,EV_LONGHOLD, EV_RELEASED, EV_DRAGOUT} 
 void svp_ppm_set_pmc(uint8_t enable, uint16_t color);
 void draw_ppm(uint16_t x,uint16_t y,uint8_t scale, uint8_t *filename);
 #endif
+
 #include "pscg.h"
 
 #endif
