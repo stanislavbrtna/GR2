@@ -612,7 +612,7 @@ uint8_t pscg_touch_input(
 	  con->pscg_active_element = 0;
   }else if ((event == EV_HOLD) && (con->pscg_active_element != 0)) {
     i = con->pscg_active_element;
-    scrID = con->pscgElements[con->pscgElements[i].screen_id].value;
+    //scrID = con->pscgElements[con->pscgElements[i].screen_id].value; // probably not needed
 
 		if ( touch_in_screen( touch_x, touch_y, x1, y1, x2, y2 )){ //je dotyk ve screenu?
 			if (1 != (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con))){ //dotyk utekl z prvku
