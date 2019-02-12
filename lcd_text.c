@@ -208,13 +208,17 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
 					}
 				}
 
-				if (text[i]!=' ') {
-					outChar = text[i];
-					xLineCnt += LCD_DrawChar(x + xLineCnt, y + yLineCnt * CurrentFont[3], color, outChar, CurrentFont);
-				} else {
+				if (text[i] == ' ') {
 					lastspace = i;
 					lastX = xLineCnt;
 					xLineCnt += CurrentFont[2];
+				} else if (text[i] == 9) { // tab
+					lastspace = i;
+					lastX = xLineCnt;
+					xLineCnt =  (xLineCnt/(CurrentFont[2] * 4) + 1) * (CurrentFont[2] * 4);
+				} else {
+					outChar = text[i];
+					xLineCnt += LCD_DrawChar(x + xLineCnt, y + yLineCnt * CurrentFont[3], color, outChar, CurrentFont);
 				}
 
 			} else {
@@ -236,16 +240,18 @@ uint16_t LCD_Text_Get_Width(uint8_t *text, uint16_t count) {
 	xLineCnt = 0;
 
 	while (0 != text[i]) {
-			if (text[i]>128){
+			if (text[i] > 128){
 				xLineCnt += LCD_Char_Get_Width(LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
 				i++;
 			}else if (text[i] != '\n') {
-			if (text[i] != ' ') {
-				outChar = text[i];
-				xLineCnt += LCD_Char_Get_Width(outChar, CurrentFont);
-			} else {
-				xLineCnt += CurrentFont[2];
-			}
+				if (text[i] == ' ') {
+					xLineCnt += CurrentFont[2];
+				} else if (text[i] == 9) { // tab
+					xLineCnt =  (xLineCnt/(CurrentFont[2] * 4) + 1) * (CurrentFont[2] * 4);
+				} else {
+					outChar = text[i];
+					xLineCnt += LCD_Char_Get_Width(outChar, CurrentFont);
+				}
 		} else {
 			if (xLineCnt > maxW) {
 				maxW = xLineCnt;
@@ -313,11 +319,13 @@ uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, uint16_t touch_x, uint16_t touch
 				xstop = xLineCnt;
 				ystop = (yLineCnt+1) * CurrentFont[3];
 		}else if (text[i] != '\n') {
-			if (text[i] != ' ') {
+			if (text[i] == ' ') {
+				xLineCnt += CurrentFont[2];
+			} else if (text[i] == 9) { // tab
+				xLineCnt =  (xLineCnt/(CurrentFont[2] * 4) + 1) * (CurrentFont[2] * 4);
+			} else {
 				outChar = text[i];
 				xLineCnt += LCD_Char_Get_Width(outChar, CurrentFont);
-			} else {
-				xLineCnt += CurrentFont[2];
 			}
 			xstop = xLineCnt;
 			ystop = (yLineCnt + 1)*CurrentFont[3];
