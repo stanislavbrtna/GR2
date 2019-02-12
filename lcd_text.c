@@ -34,10 +34,10 @@ uint16_t fitTextMax;
 uint8_t fitText;
 const uint8_t * CurrentFont;
 const uint8_t * CurrentFont_cz;
-uint8_t CurrentSize; //velikost aktuálního fontu
+uint8_t CurrentSize; // current font size
 int32_t fontCorector_cz;
 
-//ošetřuje zalamování, neni to extra hezký, ale chodí to
+// background color of the text field, ugly hack for fitting text
 extern uint16_t background_color;
 
 void LCD_set_fitText(uint8_t enable, uint16_t max) {
@@ -45,18 +45,18 @@ void LCD_set_fitText(uint8_t enable, uint16_t max) {
   fitText = enable;
 }
 
-void LCD_Draw_Set_Font(uint8_t *font){
+void LCD_Draw_Set_Font(uint8_t *font) {
 
 	if (font == font18) {
-		fontCorector_cz =- 3;
-		CurrentFont_cz = font18_cz;
-		CurrentSize = 18;
+		fontCorector_cz = -3;
+		CurrentFont_cz  = font18_cz;
+		CurrentSize     = 18;
 	}
 
 	if (font == font32) {
 		fontCorector_cz = 0;
-		CurrentFont_cz = font32_cz;
-		CurrentSize = 32;
+		CurrentFont_cz  = font32_cz;
+		CurrentSize     = 32;
 	}
 
 	CurrentFont = font;
@@ -72,17 +72,17 @@ uint16_t LCD_Draw_Get_Font_Width() {
 
 void LCD_Set_Sys_Font(uint8_t size) {
 	if (size == 18) {
-		CurrentSize = 18;
-		fontCorector_cz =- 3;
-		CurrentFont = font18;
-		CurrentFont_cz = font18_cz;
+		CurrentSize     = 18;
+		fontCorector_cz = -3;
+		CurrentFont     = font18;
+		CurrentFont_cz  = font18_cz;
 	}
 
 	if (size == 32) {
-		CurrentSize = 32;
+		CurrentSize     = 32;
 		fontCorector_cz = 0;
-		CurrentFont = font32;
-		CurrentFont_cz = font32_cz;
+		CurrentFont     = font32;
+		CurrentFont_cz  = font32_cz;
 	}
 
 	if (size == 70) {
@@ -91,12 +91,11 @@ void LCD_Set_Sys_Font(uint8_t size) {
 	}
 
 	if (size == 87) {
-		CurrentSize = 87;
+		CurrentSize     = 87;
 		fontCorector_cz = -10;
-		CurrentFont = roboto87;
-		CurrentFont_cz = roboto87_cz;
+		CurrentFont     = roboto87;
+		CurrentFont_cz  = roboto87_cz;
 	}
-
 }
 
 uint8_t LCD_Get_Font_Size() {
@@ -104,78 +103,78 @@ uint8_t LCD_Get_Font_Size() {
 }
 
 uint16_t LCD_get_ext_char_num(uint8_t b1, uint8_t b2) {
-	if((b1 ==0xC3)&&(b2 == 0x81)){ //Á
+	if((b1 == 0xC3) && (b2 == 0x81)){ //Á
 		return 193;
-	}else if((b1 == 0xC4)&&(b2 == 0x8C)){ //Č
+	}else if((b1 == 0xC4) && (b2 == 0x8C)){ //Č
 		return 268;
-	}else if((b1 == 0xC4)&&(b2 == 0x8E)){ //Ď
+	}else if((b1 == 0xC4) && (b2 == 0x8E)){ //Ď
 		return 270;
-	}else if((b1 == 0xC3)&&(b2 == 0x89)){ //É
+	}else if((b1 == 0xC3) && (b2 == 0x89)){ //É
 		return 201;
-	}else if((b1 == 0xC4)&&(b2 == 0x9a)){ //Ě
+	}else if((b1 == 0xC4) && (b2 == 0x9a)){ //Ě
 		return 201;
-	}else if((b1 == 0xC3)&&(b2 == 0x8D)){ //Í
+	}else if((b1 == 0xC3) && (b2 == 0x8D)){ //Í
 		return 205;
-	}else if((b1 == 0xC5)&&(b2 == 0x87)){ //Ň
+	}else if((b1 == 0xC5) && (b2 == 0x87)){ //Ň
 		return 327;
-	}else if((b1 == 0xC3)&&(b2 == 0x93)){ //Ó
+	}else if((b1 == 0xC3) && (b2 == 0x93)){ //Ó
 		return 211;
-	}else if((b1 == 0xC5)&&(b2 == 0x98)){ //Ř
+	}else if((b1 == 0xC5) && (b2 == 0x98)){ //Ř
 		return 344;
-	}else if((b1 == 0xC5)&&(b2 == 0xa0)){ //Š
+	}else if((b1 == 0xC5) && (b2 == 0xa0)){ //Š
 		return 352;
-	}else if((b1 == 0xC5)&&(b2 == 0xa4)){ //Ť
+	}else if((b1 == 0xC5) && (b2 == 0xa4)){ //Ť
 		return 356;
-	}else if((b1 == 0xC3)&&(b2 == 0x9a)){ //Ú
+	}else if((b1 == 0xC3) && (b2 == 0x9a)){ //Ú
 		return 218;
-	}else if((b1 == 0xC5)&&(b2 == 0xae)){ //Ů
+	}else if((b1 == 0xC5) && (b2 == 0xae)){ //Ů
 		return 366;
-	}else if((b1 == 0xC3)&&(b2 == 0x9d)){ //Ý
+	}else if((b1 == 0xC3) && (b2 == 0x9d)){ //Ý
 		return 221;
-	}else if((b1 == 0xC5)&&(b2 == 0xbd)){ //Ž
+	}else if((b1 == 0xC5) && (b2 == 0xbd)){ //Ž
 		return 381;
-	}else if((b1 == 0xC3)&&(b2 == 0xa1)){ //á
+	}else if((b1 == 0xC3) && (b2 == 0xa1)){ //á
 		return 225;
-	}else if((b1 == 0xC4)&&(b2 == 0x8d)){ //č
+	}else if((b1 == 0xC4) && (b2 == 0x8d)){ //č
 		return 269;
-	}else if((b1 == 0xC4)&&(b2 == 0x8f)){ //ď
+	}else if((b1 == 0xC4) && (b2 == 0x8f)){ //ď
 		return 271;
-	}else if((b1 == 0xC3)&&(b2 == 0xa9)){ //é
+	}else if((b1 == 0xC3) && (b2 == 0xa9)){ //é
 		return 233;
-	}else if((b1 == 0xC4)&&(b2 == 0x9b)){ //ě
+	}else if((b1 == 0xC4) && (b2 == 0x9b)){ //ě
 		return 283;
-	}else if((b1 == 0xC3)&&(b2 == 0xad)){ //í
+	}else if((b1 == 0xC3) && (b2 == 0xad)){ //í
 		return 237;
-	}else if((b1 == 0xC5)&&(b2 == 0x88)){ //ň
+	}else if((b1 == 0xC5) && (b2 == 0x88)){ //ň
 		return 328;
-	}else if((b1 == 0xC3)&&(b2 == 0xb3)){ //ó
+	}else if((b1 == 0xC3) && (b2 == 0xb3)){ //ó
 		return 243;
-	}else if((b1 == 0xC5)&&(b2 == 0x99)){ //ř
+	}else if((b1 == 0xC5) && (b2 == 0x99)){ //ř
 		return 345;
-	}else if((b1 == 0xC5)&&(b2 == 0xa1)){ //š
+	}else if((b1 == 0xC5) && (b2 == 0xa1)){ //š
 		return 353;
-	}else if((b1 == 0xC5)&&(b2 == 0xa5)){ //ť
+	}else if((b1 == 0xC5) && (b2 == 0xa5)){ //ť
 		return 357;
-	}else if((b1 == 0xC3)&&(b2 == 0xba)){ //ú
+	}else if((b1 == 0xC3) && (b2 == 0xba)){ //ú
 		return 250;
-	}else if((b1 == 0xC5)&&(b2 == 0xaf)){ //ů
+	}else if((b1 == 0xC5) && (b2 == 0xaf)){ //ů
 		return 367;
-	}else if((b1 == 0xC3)&&(b2 == 0xbd)){ //ý
+	}else if((b1 == 0xC3) && (b2 == 0xbd)){ //ý
 		return 253;
-	}else if((b1 == 0xC5)&&(b2 == 0xbe)){ //í
+	}else if((b1 == 0xC5) && (b2 == 0xbe)){ //í
 		return 382;
 	}
 	return 0;
 }
 
 void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
-	uint32_t i = 0;
-	uint32_t lw_det = 0;
+	uint32_t i         = 0;
+	uint32_t lw_det    = 0;
 	uint32_t lastspace = 0;
-	uint16_t lastX = 0;
-	uint16_t xLineCnt = 0;
-	uint16_t yLineCnt = 0;
-	uint8_t outChar = 0;
+	uint16_t lastX     = 0;
+	uint16_t xLineCnt  = 0;
+	uint16_t yLineCnt  = 0;
+	uint8_t outChar    = 0;
 	uint16_t yprac;
 
 	while (0 != text[i]) {
@@ -231,13 +230,11 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
 }
 
 uint16_t LCD_Text_Get_Width(uint8_t *text, uint16_t count) {
-	uint32_t i = 0;
+	uint32_t i        = 0;
 	uint16_t xLineCnt = 0;
 	uint16_t yLineCnt = 0;
-	uint8_t outChar = 0;
-	uint16_t maxW = 0;
-
-	xLineCnt = 0;
+	uint8_t outChar   = 0;
+	uint16_t maxW     = 0;
 
 	while (0 != text[i]) {
 			if (text[i] > 128){
@@ -294,16 +291,16 @@ uint16_t LCD_Text_Get_Height(uint8_t *text, uint16_t count) {
 
 //předám x a y, ono to vrátí polohu kurzoru
 uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, uint16_t touch_x, uint16_t touch_y) {
-	uint32_t i = 0;
+	uint32_t i        = 0;
 	uint16_t xLineCnt = 0;
 	uint16_t yLineCnt = 0;
-	uint8_t outChar = 0;
-	uint8_t entFlg = 0;
-	uint8_t czFlag = 0;
-	uint16_t xstart = 0;
-	uint16_t ystart = 0;
-	uint16_t xstop = 0;
-	uint16_t ystop = 0;
+	uint8_t outChar   = 0;
+	uint8_t entFlg    = 0;
+	uint8_t czFlag    = 0;
+	uint16_t xstart   = 0;
+	uint16_t ystart   = 0;
+	uint16_t xstop    = 0;
+	uint16_t ystop    = 0;
 
 	while (0 != text[i]) {
 			czFlag = 0;
@@ -346,7 +343,7 @@ uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, uint16_t touch_x, uint16_t touch
 			entFlg = 0;
 		}
 
-		if ((touch_x>xstart)&&(touch_x<xstop)&&(touch_y>ystart)&&(touch_y<ystop)){
+		if ((touch_x > xstart) && (touch_x < xstop) && (touch_y > ystart) && (touch_y < ystop)) {
 			return i - czFlag;
 		}
 		i++;
