@@ -26,7 +26,7 @@ SOFTWARE.
 
 //draw text and text misc. functions
 void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text);
-uint16_t LCD_Text_Get_Width(uint8_t *text, uint16_t count); //if count==0 tak vrátí max
+uint16_t LCD_Text_Get_Width(uint8_t *text, uint16_t count); //if count == 0 maximum line width is returned
 uint16_t LCD_Draw_Get_Font_Height();
 uint16_t LCD_Draw_Get_Font_Width();
 uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, uint16_t touch_x, uint16_t touch_y);

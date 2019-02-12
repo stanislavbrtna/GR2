@@ -58,58 +58,59 @@ void pscg_draw_button(int16_t x1,int16_t y1,int16_t x2,int16_t y2, uint8_t *str,
 			LCD_DrawRectangle(x1 + 5, y1 + 4, x2 - 5, y2 - 4, c->active_color);
 			LCD_DrawRectangle(x1 + 4, y1 + 3, x2 - 4, y2 - 3, c->active_color);
 		}
-	}else{
-	  LCD_FillRect(x1,y1,x2,y2,LCD_get_gray16(c->fill_color));
-	  LCD_DrawRectangle(x1,y1,x2,y2,LCD_get_gray16(c->border_color));
-	  LCD_DrawRectangle(x1+1,y1+1,x2-1,y2-1,LCD_get_gray16(c->border_color));
-	  LCD_DrawText_ext(x1+c->pscgElements[id].param,y1+5,LCD_get_gray16(c->text_color), str);
+	}	else {
+		LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->fill_color));
+		LCD_DrawRectangle(x1, y1, x2, y2, LCD_get_gray16(c->border_color));
+		LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, LCD_get_gray16(c->border_color));
+		LCD_DrawText_ext(x1 + c->pscgElements[id].param, y1 + 5, LCD_get_gray16(c->text_color), str);
 	}
 #else
-  //DP view
-  if((active==1)&&(c->pscgElements[id].pre_active==0)){
-    //LCD_FillRect(x1,y1,x2,y2,fill_color);
-		LCD_DrawRectangle(x1,y1,x2,y2,active_color);
-	}else if (active==0){
-	  LCD_FillRect(x1,y1,x2,y2,background_color);
-		LCD_FillRect(x1+2,y1+2,x2-2,y1+2+(y2-y1)/3,fill_color);
+	//DP view
+	if ((active == 1) && (c->pscgElements[id].pre_active == 0)) {
+		//LCD_FillRect(x1,y1,x2,y2,fill_color);
+		LCD_DrawRectangle(x1, y1, x2, y2, active_color);
 	}
-	LCD_DrawRectangle(x1,y1,x2,y2,border_color);
-	LCD_DrawText_ext(x1+10,y1+5,text_color, str);
+	else if (active == 0) {
+		LCD_FillRect(x1, y1, x2, y2, background_color);
+		LCD_FillRect(x1 + 2, y1 + 2, x2 - 2, y1 + 2 + (y2 - y1) / 3, fill_color);
+	}
+	LCD_DrawRectangle(x1, y1, x2, y2, border_color);
+	LCD_DrawText_ext(x1 + 10, y1 + 5, text_color, str);
 #endif
   LCD_Set_Sys_Font(curr_font);
   c->pscgElements[id].pre_active = active;
 }
 
-void pscg_draw_cbutton(int16_t x1,int16_t y1,int16_t x2, int16_t y2, uint8_t *str, uint8_t active, uint16_t id, gr2context * c){
-	LCD_setSubDrawArea(x1,y1,x2,y2);
+void pscg_draw_cbutton(int16_t x1,int16_t y1,int16_t x2, int16_t y2, uint8_t *str, uint8_t active, uint16_t id, gr2context * c) {
+	LCD_setSubDrawArea(x1, y1, x2, y2);
 #ifndef PSCG_STYLE2_BTN
-  if (c->pscgElements[id].grayout==0){
-	  if((active==1)&&(c->pscgElements[id].pre_active==0)){
-		  LCD_FillRect(x1,y1,x2,y2,c->active_color);
-	  }else if (active==0){
-		  LCD_FillRect(x1,y1,x2,y2,c->pscgElements[id].value);
-	  }
-	  LCD_DrawRectangle(x1,y1,x2,y2,c->border_color);
-	  LCD_DrawRectangle(x1+1,y1+1,x2-1,y2-1,c->border_color);
-	  LCD_DrawText_ext(x1+10,y1+5,~c->pscgElements[id].value, str);
-	}else{
-	  LCD_FillRect(x1,y1,x2,y2,LCD_get_gray16(c->pscgElements[id].value));
-	  LCD_DrawRectangle(x1,y1,x2,y2,LCD_get_gray16(c->border_color));
-	  LCD_DrawRectangle(x1+1,y1+1,x2-1,y2-1,LCD_get_gray16(c->border_color));
-	  LCD_DrawText_ext(x1+10,y1+5,LCD_get_gray16(~c->pscgElements[id].value), str);
+	if (c->pscgElements[id].grayout == 0)	{
+		if ((active == 1) && (c->pscgElements[id].pre_active == 0)) {
+			LCD_FillRect(x1, y1, x2, y2, c->active_color);
+		} else if (active == 0) {
+			LCD_FillRect(x1, y1, x2, y2, c->pscgElements[id].value);
+		}
+		LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
+		LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, c->border_color);
+		LCD_DrawText_ext(x1 + 10, y1 + 5, ~c->pscgElements[id].value, str);
+	}	else {
+		LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->pscgElements[id].value));
+		LCD_DrawRectangle(x1, y1, x2, y2, LCD_get_gray16(c->border_color));
+		LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, LCD_get_gray16(c->border_color));
+		LCD_DrawText_ext(x1 + 10, y1 + 5, LCD_get_gray16(~c->pscgElements[id].value), str);
 	}
 #else
-  if((active==1)&&(c->pscgElements[id].pre_active==0)){
-    //LCD_FillRect(x1,y1,x2,y2,fill_color);
-		LCD_DrawRectangle(x1,y1,x2,y2,active_color);
-	}else if (active==0){
-	  LCD_FillRect(x1,y1,x2,y2,background_color);
-		LCD_FillRect(x1+2,y1+2,x2-2,y1+2+(y2-y1)/3,fill_color);
+	if ((active == 1) && (c->pscgElements[id].pre_active == 0)) {
+		//LCD_FillRect(x1,y1,x2,y2,fill_color);
+		LCD_DrawRectangle(x1, y1, x2, y2, active_color);
+	}	else if (active == 0) {
+		LCD_FillRect(x1, y1, x2, y2, background_color);
+		LCD_FillRect(x1 + 2, y1 + 2, x2 - 2, y1 + 2 + (y2 - y1) / 3, fill_color);
 	}
-	LCD_DrawRectangle(x1,y1,x2,y2,border_color);
-	LCD_DrawText_ext(x1+10,y1+5,text_color, str);
+	LCD_DrawRectangle(x1, y1, x2, y2, border_color);
+	LCD_DrawText_ext(x1 + 10, y1 + 5, text_color, str);
 #endif
-	c->pscgElements[id].pre_active=active;
+	c->pscgElements[id].pre_active = active;
 }
 
 void pscg_draw_checkbox(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t *str, uint8_t active, uint16_t id, gr2context * c) {
@@ -153,27 +154,29 @@ void pscg_draw_checkbox(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t 
   c->pscgElements[id].pre_active = active;
 }
 
-void pscg_draw_image(int16_t x1,int16_t y1,int16_t x2,int16_t y2, uint16_t id, gr2context * c) {
+void pscg_draw_image(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t id, gr2context * c) {
 	LCD_drawArea area;
 	LCD_setSubDrawArea(x1, y1, x2, y2);
 	LCD_getDrawArea(&area);
 
-	#ifdef PPM_SUPPORT_ENABLED
-  if (svp_fexists(c->pscgElements[id].str_value)){
-    draw_ppm(x1,y1,c->pscgElements[id].value,c->pscgElements[id].str_value);
-	}else{
-	  LCD_FillRect(x1, y1, x2, y2, c->active_color);
-	  LCD_DrawRectangle(x1,y1, x2, y2, c->border_color);
-	  LCD_DrawLine(x1,y1, x2,y2,c->border_color);
-	  LCD_DrawLine(x1,y2, x2,y1,c->border_color);
+#ifdef PPM_SUPPORT_ENABLED
+	if (svp_fexists(c->pscgElements[id].str_value)) {
+		draw_ppm(x1, y1, c->pscgElements[id].value, c->pscgElements[id].str_value);
+	}	else {
+		LCD_FillRect(x1, y1, x2, y2, c->active_color);
+		LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
+		LCD_DrawLine(x1, y1, x2, y2, c->border_color);
+		LCD_DrawLine(x1, y2, x2, y1, c->border_color);
 	}
-	#endif
-	LCD_setDrawAreaS(&area); //draw_ppm změní subdraw areu, obnovíme
+#endif
+	LCD_setDrawAreaS(&area); //draw_ppm changes subdraw area, so it must be restored
 }
 
-void pscg_draw_icon(int16_t x1,int16_t y1,int16_t x2,int16_t y2, uint8_t active, uint16_t id, gr2context * c){
+//TODO: continue with code revision
+
+void pscg_draw_icon(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t active, uint16_t id, gr2context *c) {
 	LCD_drawArea area;
-  uint16_t size=0;
+  uint16_t size = 0;
 
   if( ((x2-x1+1)/32-1)>((y2-y1+1)/80) ){
     size=((y2-y1+1)/80);

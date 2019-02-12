@@ -24,10 +24,10 @@ SOFTWARE.
 
 void gr2_InitContext(gr2context * c, pscgElement *pscgElementsArray, uint16_t elementsCount, pscgScreen *pscgScreens, uint16_t screensCount) {
 
-	c->elementsMax = elementsCount;
-	c->screensMax = screensCount;
+	c->elementsMax  = elementsCount;
+	c->screensMax   = screensCount;
 	c->pscgElements = pscgElementsArray;
-	c->pscgScreens = pscgScreens;
+	c->pscgScreens  = pscgScreens;
 
 	gr2_ResetContext(c);
 }
@@ -36,22 +36,22 @@ void gr2_ResetContext(gr2context * c) {
 
 	pscg_reset_all(c);
 
-	c->textActive = 0;
-	c->textActiveId = 0;
-	c->invisible_flag = 0;
-	c->textMouseX = 0;
-	c->textMouseY = 0;
-	c->default_grid_size = 32;
+	c->textActive           = 0;
+	c->textActiveId         = 0;
+	c->invisible_flag       = 0;
+	c->textMouseX           = 0;
+	c->textMouseY           = 0;
+	c->default_grid_size    = 32;
 	c->default_grid_spacing = 0;
-	c->pscg_active_element = 0;
-	c->sliderRedrawHotfix = 0; //flag pro korektní překreslení 2x modifikovaného slideru
-	c->relative_init = 0;
+	c->pscg_active_element  = 0;
+	c->sliderRedrawHotfix   = 0; // flag for correct redraw of two-times updated slider
+	c->relative_init        = 0;
 
-	c->border_color = 0x0000; //black
-	c->text_color = 0x0000; //black
-	c->background_color = 0xF800; //red;
-	c->fill_color = 0x07E0; //green
-	c->active_color = 0xFFFF; //white
+	c->border_color     = 0x0000; // black
+	c->text_color       = 0x0000; // black
+	c->background_color = 0xF800; // red
+	c->fill_color       = 0x07E0; // green
+	c->active_color     = 0xFFFF; // white
 }
 
 // Sets redraw flag to all valid elements
@@ -131,8 +131,8 @@ void pscg_reset_all(gr2context * c) {
 	for(x = 1; x <= c->screensMax; x++) {
 	  c->pscgScreens[x].valid = 0;
 	}
-	c->screensUsed = 0;
-	c->elementsUsed = 0;
+	c->screensUsed   = 0;
+	c->elementsUsed  = 0;
 	c->maxElementsId = 0;
 }
 
@@ -221,7 +221,7 @@ void pscg_set_value(uint16_t id, int32_t val, gr2context * c) {
 	       || c->pscgElements[id].type == GR2_TYPE_SLIDER_H) {
 	    c->sliderRedrawHotfix = 1;
 	  }
-	  c->pscgElements[id].modified = 0; // wut ze fuck?
+	  c->pscgElements[id].modified = 0;
 	}
 	c->pscgElements[id].prev_val = c->pscgElements[id].value;
 	c->pscgElements[id].value = val;
@@ -337,7 +337,7 @@ void pscg_draw_screen(
 				&& (i != screen)
 				&& (con->pscgElements[i].valid == 1)
 				&& (con->pscgElements[i].visible == 1)) {
-			if (con->pscgElements[i].type == 0) { //screen
+			if (con->pscgElements[i].type == GR2_TYPE_SCREEN) {
 				COUNT_A_B_C_D
 				//printf("PSCGdbg: DrawScreen a:%u b:%u c:%u d:%u id:%u mode: ", a,b,c,d, i);
 				if (all == 1) {
@@ -352,7 +352,7 @@ void pscg_draw_screen(
 					pscg_draw_screen(a,b,c,d,i,0, con);
 				}
 			}
-			if (con->pscgElements[i].type == 1) {
+			if (con->pscgElements[i].type == GR2_TYPE_BUTTON) {
 				COUNT_A_B_C_D
 				if ((all == 1) || (con->pscgElements[i].modified == 1)) {
 				  if ((i == con->pscg_active_element)||(con->pscgElements[i].value == 1)) {
@@ -364,81 +364,77 @@ void pscg_draw_screen(
 				  con->pscgElements[i].modified = 0;
 				}
 			}
-			if (con->pscgElements[i].type == 2) {
+			if (con->pscgElements[i].type == GR2_TYPE_SLIDER_V) {
 				COUNT_A_B_C_D
-				if ((all==1)||(con->sliderRedrawHotfix)){
+				if ((all == 1) || (con->sliderRedrawHotfix)) {
 					pscg_draw_slider_v(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param,con->pscgElements[i].value,i, con);
-					con->pscgElements[i].modified=0;
-					con->sliderRedrawHotfix=0;
-				}else if(con->pscgElements[i].modified!=0){
+					con->sliderRedrawHotfix = 0;
+				} else if(con->pscgElements[i].modified != 0) {
 				  if (con->pscgElements[i].value != con->pscgElements[i].prev_val) {
 					  pscg_draw_slider_v_f(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param, con->pscgElements[i].value,con->pscgElements[i].prev_val,i,con);
-					}else{
+					} else {
 					  pscg_draw_slider_v(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param,con->pscgElements[i].value,i,con);
 					}
-				  con->pscgElements[i].modified=0;
 				}
+				con->pscgElements[i].modified = 0;
 			}
-			if (con->pscgElements[i].type==3){
+			if (con->pscgElements[i].type == GR2_TYPE_TEXT) {
 				COUNT_A_B_C_D
-				if ((all==1) || (con->pscgElements[i].modified==1)){
+				if ((all == 1) || (con->pscgElements[i].modified == 1)) {
 				  //DBG
 				  //printf("redrawing: %s\n",con->pscgElements[i].str_value);
 					pscg_draw_text(a,b,c,d,con->pscgElements[i].str_value,con->pscgElements[i].value,pscg_text_get_editable(i,con) , con->pscgElements[i].param, con->pscgElements[i].param2, pscg_text_get_fit(i, con), i, con);
-					con->pscgElements[i].modified=0;
+					con->pscgElements[i].modified = 0;
 				}
 			}
-			if (con->pscgElements[i].type==4){
+			if (con->pscgElements[i].type == GR2_TYPE_PROGBAR) {
 				COUNT_A_B_C_D
-				if ((all==1)||(con->pscgElements[i].modified==1)){
-				  if ((c-a)<(d-b)){
+				if ((all == 1) || (con->pscgElements[i].modified == 1)) {
+				  if ((c - a) < (d - b)) {
 					  pscg_draw_progbar_v(a,b,c,d, con->pscgElements[i].param,con->pscgElements[i].value, con);
-					}else{
+					} else {
 					  pscg_draw_progbar_h(a,b,c,d, con->pscgElements[i].param,con->pscgElements[i].value, con);
 					}
-				  con->pscgElements[i].modified=0;
-				}
-			}
-			if (con->pscgElements[i].type==5){
-				COUNT_A_B_C_D
-				if ((all==1)||(con->pscgElements[i].modified==1)){
-				  if ((i == con->pscg_active_element)||(con->pscgElements[i].value == 1)) {
-					  pscg_draw_icon(a,b,c,d,1, i, con);
-					}else{
-					  pscg_draw_icon(a,b,c,d,0, i, con);
-					}
-					//printf("drawing icon %s\n", con->pscgElements[i].str_value);
 				  con->pscgElements[i].modified = 0;
 				}
 			}
-			if (con->pscgElements[i].type==6){
+			if (con->pscgElements[i].type == GR2_TYPE_ICON) {
 				COUNT_A_B_C_D
-				if ((all==1)||(con->sliderRedrawHotfix)){
-					pscg_draw_slider_h(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param,con->pscgElements[i].value,i, con);
-					con->pscgElements[i].modified=0;
-					con->sliderRedrawHotfix=0;
-				}else if(con->pscgElements[i].modified==1){
-				  if (con->pscgElements[i].value!=con->pscgElements[i].prev_val){
+				if ((all == 1) || (con->pscgElements[i].modified == 1)) {
+				  if ((i == con->pscg_active_element) || (con->pscgElements[i].value == 1)) {
+					  pscg_draw_icon(a, b, c, d, 1, i, con);
+					}else{
+					  pscg_draw_icon(a, b, c, d, 0, i, con);
+					}
+				  con->pscgElements[i].modified = 0;
+				}
+			}
+			if (con->pscgElements[i].type == GR2_TYPE_SLIDER_H) {
+				COUNT_A_B_C_D
+				if ((all == 1) || (con->sliderRedrawHotfix)) {
+					pscg_draw_slider_h(a, b, c, d, con->pscgScreens[scrID].x_cell, con->pscgElements[i].param, con->pscgElements[i].value, i, con);
+					con->sliderRedrawHotfix = 0;
+				}else if(con->pscgElements[i].modified == 1) {
+				  if (con->pscgElements[i].value != con->pscgElements[i].prev_val) {
 				    pscg_draw_slider_h_f(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param,con->pscgElements[i].value, con->pscgElements[i].prev_val,i, con);
 				  } else {
-				    pscg_draw_slider_h(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param,con->pscgElements[i].value,i, con);
+				    pscg_draw_slider_h(a, b, c, d, con->pscgScreens[scrID].x_cell, con->pscgElements[i].param, con->pscgElements[i].value, i, con);
 				  }
-				  con->pscgElements[i].modified=0;
 				}
+				con->pscgElements[i].modified = 0;
 			}
-			if (con->pscgElements[i].type==8){ //frame
+			if (con->pscgElements[i].type == GR2_TYPE_FRAME) {
 				COUNT_A_B_C_D
-				if (all==1){
-				  pscg_draw_screen(a,b,c,d,con->pscgElements[i].value,1, con);
-				}else if (con->pscgElements[i].modified){
-					//pscg_draw_screen(a,b,c,d,pscgElements[i].value,1); - tohle bylo blbě a pscg pak nevykreslovalo vnořené screeny
-					pscg_draw_screen(a,b,c,d,con->pscgElements[i].value,con->pscgElements[i].modified, con); //tohle je ok
-					con->pscgElements[i].modified=0;
-				}else{
-					pscg_draw_screen(a,b,c,d,con->pscgElements[i].value,0, con);
+				if (all == 1) {
+				  pscg_draw_screen(a, b, c, d, con->pscgElements[i].value, 1, con);
+				} else if (con->pscgElements[i].modified) {
+					pscg_draw_screen(a, b, c, d, con->pscgElements[i].value, con->pscgElements[i].modified, con);
+					con->pscgElements[i].modified = 0;
+				} else {
+					pscg_draw_screen(a, b, c, d, con->pscgElements[i].value, 0, con);
 				}
 			}
-			if (con->pscgElements[i].type == 9) {
+			if (con->pscgElements[i].type == GR2_TYPE_COLOR_BUTTON) {
 				COUNT_A_B_C_D
 				if ((all == 1) || (con->pscgElements[i].modified == 1)) {
 				  if ((con->pscgElements[i].event != EV_NONE)) {
@@ -449,7 +445,7 @@ void pscg_draw_screen(
 				  con->pscgElements[i].modified = 0;
 				}
 			}
-			if (con->pscgElements[i].type == 10) {
+			if (con->pscgElements[i].type == GR2_TYPE_CHECKBOX) {
 				COUNT_A_B_C_D
 				if ((all == 1) || (con->pscgElements[i].modified == 1)) {
 				  if (con->pscgElements[i].value == 1) {
@@ -462,12 +458,11 @@ void pscg_draw_screen(
 				  con->pscgElements[i].modified = 0;
 				}
 			}
-			if (con->pscgElements[i].type == 11) {
+			if (con->pscgElements[i].type == GR2_TYPE_IMAGE) {
 				COUNT_A_B_C_D
-				if ((all==1)||(con->pscgElements[i].modified==1)){
-					pscg_draw_image(a,b,c,d,i, con);
-					//printf("drawing icon %s\n", pscgElements[i].str_value);
-					con->pscgElements[i].modified=0;
+				if ((all == 1) || (con->pscgElements[i].modified == 1)) {
+					pscg_draw_image(a, b, c, d, i, con);
+					con->pscgElements[i].modified = 0;
 				}
 			}
 		} else if((con->pscgElements[i].screen_id == screen)
@@ -476,7 +471,6 @@ void pscg_draw_screen(
 							&& (con->pscgElements[i].visible == 0)) {
 			// clear flag for the modified invisible elements
 			con->pscgElements[i].modified = 0;
-
 		}
 		LCD_setDrawAreaS(&area);
 	}
@@ -603,85 +597,76 @@ uint8_t pscg_touch_input(
 	int16_t a, b, c, d;
 	uint8_t retval = 0;
 
-  if (event==EV_NONE){
+  if (event == EV_NONE) {
 	  con->pscgElements[con->pscg_active_element].modified = 1;
 	  con->pscg_active_element = 0;
     return 0;
-  }else if (event == EV_RELEASED){
+  } else if (event == EV_RELEASED) {
 	  con->pscgElements[con->pscg_active_element].modified = 1;
 	  con->pscg_active_element = 0;
-  }else if ((event == EV_HOLD) && (con->pscg_active_element != 0)) {
+  } else if ((event == EV_HOLD) && (con->pscg_active_element != 0)) {
     i = con->pscg_active_element;
-    //scrID = con->pscgElements[con->pscgElements[i].screen_id].value; // probably not needed
-
-		if ( touch_in_screen( touch_x, touch_y, x1, y1, x2, y2 )){ //je dotyk ve screenu?
-			if (1 != (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con))){ //dotyk utekl z prvku
-				con->pscgElements[i].event = EV_DRAGOUT;
+		if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) { // touch in screen
+			if (1 != (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con))){ // but out of element
+				con->pscgElements[i].event = EV_DRAGOUT; // event dragout is not really used here
 			}
 		}
   }
 
 	scrID = con->pscgElements[screen].value;
 
-
-	for (i=1;i<=con->maxElementsId;i++){
-		if ((con->pscgElements[i].screen_id==screen)&&(i!=screen)&&(con->pscgElements[i].valid==1)&&(con->pscgElements[i].visible==1)){
-			if (con->pscgElements[i].type==0){
-			  //a musí zvostat pošahaný, aby screen zjistil, že a je pošahaný
+	for (i = 1; i <= con->maxElementsId; i++) {
+		if ((con->pscgElements[i].screen_id == screen) && (i != screen) && (con->pscgElements[i].valid == 1) && (con->pscgElements[i].visible == 1)) {
+			if (con->pscgElements[i].type == GR2_TYPE_SCREEN) {
+				//a musí zvostat pošahaný, aby screen zjistil, že a je pošahaný
 				COUNT_A_B_C_D
-				if (touch_in_screen( touch_x, touch_y, x1, y1, x2, y2 )){ //je dotyk ve screenu?
-					if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)){ //je dotyk v prvku?
-						retval=pscg_touch_input(a,b,c,d,touch_x,touch_y,event,i, con);
+				if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
+					if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)) {
+						retval = pscg_touch_input(a, b, c, d, touch_x, touch_y, event, i, con);
 					}
 				}
 			}
 
-			if ((con->pscgElements[i].type==1)||(con->pscgElements[i].type==11)){ // button a img
-				if ( touch_in_screen( touch_x, touch_y, x1, y1, x2, y2 )){ //je dotyk ve screenu?
-					if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)){ //je totyk v prvku?
-						//printf("dbg: a:%u b:%u c:%u d:%u tx:%u ty:%u \n", a,b,c,d,touch_x, touch_y);
-						//pscgElements[i].value=1;
-
-						con->pscgElements[i].event = event;
+			if ((con->pscgElements[i].type == GR2_TYPE_BUTTON) || (con->pscgElements[i].type == GR2_TYPE_IMAGE)) {
+				if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) { 
+					if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)) {
+						con->pscgElements[i].event    = event;
 						con->pscgElements[i].modified = 1;
-
 						if (event == EV_PRESSED){
 							con->pscg_active_element = i;
 						}
-
 						retval = 1;
 					}
 				}
 			}
-			if (con->pscgElements[i].type == 10) { //checkbox
-				if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) { //je dotyk ve screenu?
-					if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)){ //je totyk v prvku?
-						//printf("dbg: a:%u b:%u c:%u d:%u tx:%u ty:%u \n", a,b,c,d,touch_x, touch_y);
-						//pscgElements[i].value=1;
+
+			if (con->pscgElements[i].type == GR2_TYPE_CHECKBOX) {
+				if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
+					if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)) {
 
 						con->pscgElements[i].event = event;
 						con->pscgElements[i].modified = 1;
 
-						if (event == EV_PRESSED){
+						if (event == EV_PRESSED) {
 							con->pscg_active_element = i;
 						}
 
-						if (event == EV_RELEASED){
-							if (con->pscgElements[i].value){
+						if (event == EV_RELEASED) {
+							if (con->pscgElements[i].value) {
 								con->pscgElements[i].value = 0;
 							} else {
 								con->pscgElements[i].value = 1;
 							}
 						}
-
 						retval = 1;
 					}
 				}
 			}
-			if (con->pscgElements[i].type == 2){ //vertikální posuvník
+
+			if (con->pscgElements[i].type == GR2_TYPE_SLIDER_V) {
 				COUNT_A_B_C_D
-				if ( touch_in_screen( touch_x, touch_y, x1, y1, x2, y2 )){ //je dotyk ve screenu?
-					if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)&&(con->pscg_active_element==0))||(con->pscg_active_element==i)){
+				if ( touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)){
+					if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con) && (con->pscg_active_element == 0)) || (con->pscg_active_element == i)) {
 						con->pscgElements[i].event = event;
 						con->pscgElements[i].prev_val = con->pscgElements[i].value;
 						d -= con->pscgScreens[scrID].x_cell/2;
@@ -689,109 +674,109 @@ uint8_t pscg_touch_input(
 
 						if ((touch_y > b) && (touch_y < d)) {
 						  pscg_set_value(i,(int32_t)( ((float)(touch_y-b)*(float)con->pscgElements[i].param)/(float)(d-b)), con);
-						}else if((touch_y < b) && (con->pscgElements[i].value!=0)){
-							pscg_set_value(i,0, con);
-						}else if((touch_y>d) && con->pscgElements[i].value!=con->pscgElements[i].param){
-							pscg_set_value(i,con->pscgElements[i].param, con);
+						}else if((touch_y < b) && (con->pscgElements[i].value != 0)) {
+							pscg_set_value(i, 0, con);
+						}else if((touch_y > d) && con->pscgElements[i].value != con->pscgElements[i].param) {
+							pscg_set_value(i, con->pscgElements[i].param, con);
 						}
-						//printf("dbg: value %u\n", pscgElements[i].value);
-
-						if (event==EV_PRESSED){
-							con->pscg_active_element=i;
+						if (event == EV_PRESSED) {
+							con->pscg_active_element = i;
 						}
-
-						retval=1;
+						retval = 1;
 					}
 				}
 			}
-			if (con->pscgElements[i].type==3){ //text
-				if ( touch_in_screen( touch_x, touch_y, x1, y1, x2, y2 )){ //je dotyk ve screenu?
-					if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)){ //je dotyk v prvku?
+
+			if (con->pscgElements[i].type == GR2_TYPE_TEXT) {
+				if ( touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
+					if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)) {
 
 						if (event == EV_PRESSED) {
 							con->pscg_active_element = i;
 						}
 
-						a=get_a(touch_x, touch_y, x1, y1, x2, y2, i, screen, con);
-				    b=y1+con->pscgElements[i].y1*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll; //y1
+						a = get_a(touch_x, touch_y, x1, y1, x2, y2, i, screen, con);
+				    b = y1 + con->pscgElements[i].y1 * con->pscgScreens[scrID].y_cell - con->pscgScreens[scrID].y_scroll;
 
 						if (pscg_text_get_editable(i, con)) {
 							if (event == EV_RELEASED) {
 								if (con->textActive == 0) {
-									retval = 2; //takhle se pozná, že se má otevřít klávesnice
+									retval = 2; //magic return value for opening the sw keyboard
 								} else {
 									pscg_text_deactivate(con);
 								}
 									con->pscgElements[i].value = 1;
-									con->textActive = 1;
-									con->textActiveId = i;
+									con->textActive            = 1;
+									con->textActiveId          = i;
 							}
 						}
 
-						//kvůli nastavování kurzoru
+						// store current absolute touch coordinates for cursor detection
 						if (con->pscgElements[i].value == 1) {
-							con->textMouseX = touch_x-a-10; //modifikátory z funkce pro vykreslení textu
-							con->textMouseY = touch_y-b-5;
+							con->textMouseX = touch_x - a - 10;
+							con->textMouseY = touch_y - b - 5;
 							con->pscgElements[i].modified = 1;
-							con->pscgElements[i].event = event;
+							con->pscgElements[i].event    = event;
 						}
 
 					}
 				}
 			}
-			if (con->pscgElements[i].type==5){
-				COUNT_A_B_C_D
-				if ( touch_in_screen( touch_x, touch_y, x1, y1, x2, y2 )){ //je dotyk ve screenu?
-					if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)){ //je totyk v prvku?
-						con->pscgElements[i].event=event;
-						con->pscgElements[i].modified=1;
-						retval=1;
-						if (event==EV_PRESSED){
-							con->pscg_active_element=i;
-						}
-					}
-				}
-			}
-			if (con->pscgElements[i].type==6){ //horizontální posuvník
-				COUNT_A_B_C_D
-				if ( touch_in_screen( touch_x, touch_y, x1, y1, x2, y2 )){ //je dotyk ve screenu?
-					if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)&&(con->pscg_active_element==0))||(con->pscg_active_element==i)){
-						con->pscgElements[i].event = event;
-						con->pscgElements[i].prev_val = con->pscgElements[i].value;
-						a += con->pscgScreens[scrID].x_cell/2;
-						c -= con->pscgScreens[scrID].x_cell/2;
-						if ((touch_x>a)&&(touch_x<c)){
-							pscg_set_value(i, (int32_t)((float)con->pscgElements[i].param) * ((float)(touch_x - a) / (float)(c - a)), con);
-						}else if((touch_x < a) && (con->pscgElements[i].value != 0)) {
-							pscg_set_value(i, 0, con);
-						}else if((touch_x > c) && (con->pscgElements[i].value != con->pscgElements[i].param)) {
-							pscg_set_value(i, con->pscgElements[i].param, con);
-						}
 
+			if (con->pscgElements[i].type == GR2_TYPE_ICON) {
+				COUNT_A_B_C_D
+				if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
+					if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)) {
+						con->pscgElements[i].event    = event;
+						con->pscgElements[i].modified = 1;
 						retval = 1;
-						if (event == EV_PRESSED){
+						if (event == EV_PRESSED) {
 							con->pscg_active_element = i;
 						}
 					}
 				}
 			}
-			if (con->pscgElements[i].type==8) {
+
+			if (con->pscgElements[i].type == GR2_TYPE_SLIDER_H) {
 				COUNT_A_B_C_D
-				if ( touch_in_screen( touch_x, touch_y, x1, y1, x2, y2 )){ //je dotyk ve screenu?
-					if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)){ //je dotyk v prvku?
-						retval=pscg_touch_input(a,b,c,d,touch_x,touch_y,event,con->pscgElements[i].value, con);
+				if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
+					if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con) && (con->pscg_active_element == 0)) || (con->pscg_active_element == i)) {
+						con->pscgElements[i].event    = event;
+						con->pscgElements[i].prev_val = con->pscgElements[i].value;
+						a += con->pscgScreens[scrID].x_cell/2;
+						c -= con->pscgScreens[scrID].x_cell/2;
+						if ((touch_x > a) && (touch_x < c)) {
+							pscg_set_value(i, (int32_t)((float)con->pscgElements[i].param) * ((float)(touch_x - a) / (float)(c - a)), con);
+						} else if((touch_x < a) && (con->pscgElements[i].value != 0)) {
+							pscg_set_value(i, 0, con);
+						} else if((touch_x > c) && (con->pscgElements[i].value != con->pscgElements[i].param)) {
+							pscg_set_value(i, con->pscgElements[i].param, con);
+						}
+
+						retval = 1;
+						if (event == EV_PRESSED) {
+							con->pscg_active_element = i;
+						}
 					}
 				}
 			}
-			if (con->pscgElements[i].type==9) {
+
+			if (con->pscgElements[i].type == GR2_TYPE_FRAME) {
 				COUNT_A_B_C_D
-				if ( touch_in_screen( touch_x, touch_y, x1, y1, x2, y2 )){ //je dotyk ve screenu?
-					if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)){ //je totyk v prvku?
-						//printf("dbg: a:%u b:%u c:%u d:%u tx:%u ty:%u \n", a,b,c,d,touch_x, touch_y);
-						//pscgElements[i].value=1;
-						con->pscgElements[i].event=event;
-						con->pscgElements[i].modified=1;
-						retval=1;
+				if ( touch_in_screen( touch_x, touch_y, x1, y1, x2, y2 )){
+					if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)){
+						retval = pscg_touch_input(a, b, c, d, touch_x, touch_y, event, con->pscgElements[i].value, con);
+					}
+				}
+			}
+
+			if (con->pscgElements[i].type == GR2_TYPE_COLOR_BUTTON) {
+				COUNT_A_B_C_D
+				if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
+					if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)) {
+						con->pscgElements[i].event    = event;
+						con->pscgElements[i].modified = 1;
+						retval = 1;
 					}
 				}
 			}
