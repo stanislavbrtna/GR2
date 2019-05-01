@@ -26,6 +26,10 @@ SOFTWARE.
 #include "GR2_types.h"
 #include "GR2_gui_draw.h"
 
+#ifndef PSCG_TEXT_Y_GAP
+#define PSCG_TEXT_Y_GAP 8
+#endif
+
 // GR2 context setup
 void gr2_ResetContext(gr2context *c);
 void gr2_InitContext(
