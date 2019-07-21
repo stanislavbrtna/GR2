@@ -22,12 +22,41 @@ SOFTWARE.
 
 #ifndef PSCG_PSCG_H_
 #define PSCG_PSCG_H_
+
 #include "GR2.h"
 #include "GR2_types.h"
 #include "GR2_gui_draw.h"
 
 #ifndef PSCG_TEXT_Y_GAP
 #define PSCG_TEXT_Y_GAP 8
+#endif
+
+#ifndef PSCG_CHECKBOX_HSPACE_UP
+#define PSCG_CHECKBOX_HSPACE_UP 5
+#endif
+
+#ifndef PSCG_CHECKBOX_VSPACE_UP
+#define PSCG_CHECKBOX_VSPACE_UP 5
+#endif
+
+#ifndef PSCG_CHECKBOX_HSPACE_DN
+#define PSCG_CHECKBOX_HSPACE_DN 5
+#endif
+
+#ifndef PSCG_CHECKBOX_VSPACE_DN
+#define PSCG_CHECKBOX_VSPACE_DN 5
+#endif
+
+#ifndef PSCG_CHECKBOX_IN_HSPACE
+#define PSCG_CHECKBOX_IN_HSPACE 5
+#endif
+
+#ifndef PSCG_CHECKBOX_IN_VSPACE
+#define PSCG_CHECKBOX_IN_VSPACE 5
+#endif
+
+#ifndef PSCG_CHECKBOX_TEXT_GAP
+#define PSCG_CHECKBOX_TEXT_GAP 5
 #endif
 
 // GR2 context setup
@@ -196,4 +225,5 @@ uint16_t pscg_get_tmy(gr2context * c);
 
 void pscg_error(uint8_t *str, gr2context * c);
 void pscg_destroy_screen(uint16_t id, gr2context * c); // deprecated
+
 #endif /* PSCG_PSCG_H_ */
