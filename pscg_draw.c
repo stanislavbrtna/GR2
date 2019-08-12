@@ -261,8 +261,6 @@ void pscg_draw_image(
   LCD_setDrawAreaS(&area); //draw_ppm changes subdraw area, so it must be restored
 }
 
-//TODO: continue with code revision
-
 void pscg_draw_icon(
     int16_t x1,
     int16_t y1,
@@ -275,160 +273,308 @@ void pscg_draw_icon(
   LCD_drawArea area;
   uint16_t size = 0;
 
-  if( ((x2-x1+1)/32-1)>((y2-y1+1)/80) ){
-    size=((y2-y1+1)/80);
-  }else{
-    size=((x2-x1+1)/32-1);
+  if (((x2 - x1 + 1) / 32 - 1) > ((y2 - y1 + 1) / 80)) {
+    size = ((y2 - y1 + 1) / 80);
+  } else {
+    size = ((x2 - x1 + 1) / 32 - 1);
   }
-  LCD_setSubDrawArea(x1,y1,x1+32*(size+1),y2); //oříznem vykreslovací oblast
 
-  LCD_getDrawArea(&area); //uložíme vykreslovací oblast
+  LCD_setSubDrawArea(x1, y1, x1 + 32 * (size + 1), y2); // set sub-draw area
+
+  LCD_getDrawArea(&area); // store the area
 
   //printf("xsize: %d, ysize: %d size: %d txsize: %d ttxt: %s\n",((x2-x1)/64),((y2-y1)/80), size , (15*size)/8, pscgElements[id].str_value);
 
-  if (size<1){
+  if (size < 1) {
     pscg_error((uint8_t *)"PSCG element icon too small!\n", c);
     return;
   }
 
-  if((active==1)&&(c->pscgElements[id].pre_active==0)){
-  #ifdef PPM_SUPPORT_ENABLED
-    if (svp_fexists(c->pscgElements[id].str_value2)){
+  if ((active == 1) && (c->pscgElements[id].pre_active == 0)) {
+#ifdef PPM_SUPPORT_ENABLED
+    if (svp_fexists(c->pscgElements[id].str_value2)) {
       svp_ppm_set_pmc(1, c->active_color);
-      if (ppm_get_width(c->pscgElements[id].str_value2)==32){
-        draw_ppm(x1,y1,size+1,c->pscgElements[id].str_value2);
-      }else if (ppm_get_width(c->pscgElements[id].str_value2)==64){
-        draw_ppm(x1,y1,size,c->pscgElements[id].str_value2);
+      if (ppm_get_width(c->pscgElements[id].str_value2) == 32) {
+        draw_ppm(x1, y1, size + 1, c->pscgElements[id].str_value2);
+      } else if (ppm_get_width(c->pscgElements[id].str_value2) == 64) {
+        draw_ppm(x1, y1, size, c->pscgElements[id].str_value2);
       }
-      svp_ppm_set_pmc(0,0);
-    }else{
-      LCD_FillRect(x1,y1, x1+64*size,y1+64*size,c->active_color);
-      LCD_DrawRectangle(x1,y1, x1+64*size,y1+64*size,c->border_color);
-      LCD_DrawLine(x1,y1, x1+64*size,y1+64*size,c->border_color);
-      LCD_DrawLine(x1,y1+64*size, x1+64*size,y1,c->border_color);
+      svp_ppm_set_pmc(0, 0);
+    } else {
+      // if there is no icon, will draw empty rectangle
+      LCD_FillRect(x1, y1, x1 + 64 * size, y1 + 64 * size, c->active_color);
+      LCD_DrawRectangle(x1, y1, x1 + 64 * size, y1 + 64 * size, c->border_color);
+      LCD_DrawLine(x1, y1, x1 + 64 * size, y1 + 64 * size, c->border_color);
+      LCD_DrawLine(x1, y1 + 64 * size, x1 + 64 * size, y1, c->border_color);
     }
-  #endif
-    LCD_setDrawAreaS(&area); //draw_ppm změní subdraw areu, obnovíme
+#endif
+    LCD_setDrawAreaS(&area); // draw_ppm changed the sub-draw area, so we will restore it
 
-    //pokud není žádný text pod ikonou, nevykreslíme obdélník
-    if (c->pscgElements[id].str_value[0]==0){
+    // if there is no text, we will draw no rectangle
+    if (c->pscgElements[id].str_value[0] == 0) {
       return;
     }
 
-    LCD_FillRect(x1,y1+2+32*(size+1),x1+32*(size+1),y1+2+32*(size+1)+8*((15*size)/8)+2,c->active_color);
-    LCD_DrawRectangle(x1,y1+2+32*(size+1),x1+32*(size+1),y1+2+32*(size+1)+8*((15*size)/8)+2,c->border_color);
-    LCD_DrawText(x1+5,y1+4+32*(size+1),c->text_color,0, c->pscgElements[id].str_value, (15*size)/8);
-  }else if (active==0){
-  #ifdef PPM_SUPPORT_ENABLED
-    if (svp_fexists(c->pscgElements[id].str_value2)){
-      if (ppm_get_width(c->pscgElements[id].str_value2)==32){
-        draw_ppm(x1,y1,size+1,c->pscgElements[id].str_value2);
-      }else if (ppm_get_width(c->pscgElements[id].str_value2)==64){
-        draw_ppm(x1,y1,size,c->pscgElements[id].str_value2);
+    LCD_FillRect(
+      x1,
+      y1 + 2 + 32 * (size + 1),
+      x1 + 32 * (size + 1),
+      y1 + 2 + 32 * (size + 1) + 8 * ((15 * size) / 8) + 2,
+      c->active_color
+    );
+    LCD_DrawRectangle(
+      x1,
+      y1 + 2 + 32 * (size + 1),
+      x1 + 32 * (size + 1),
+      y1 + 2 + 32 * (size + 1) + 8 * ((15 * size) / 8) + 2,
+      c->border_color
+    );
+    LCD_DrawText(
+      x1 + 5,
+      y1 + 4 + 32 * (size + 1),
+      c->text_color,
+      0,
+      c->pscgElements[id].str_value,
+      (15 * size) / 8
+    );
+  } else if (active == 0) {
+#ifdef PPM_SUPPORT_ENABLED
+    if (svp_fexists(c->pscgElements[id].str_value2)) {
+      if (ppm_get_width(c->pscgElements[id].str_value2) == 32) {
+        draw_ppm(x1, y1, size + 1, c->pscgElements[id].str_value2);
+      } else if (ppm_get_width(c->pscgElements[id].str_value2) == 64) {
+        draw_ppm(x1, y1, size, c->pscgElements[id].str_value2);
       }
-    }else{
-      LCD_FillRect(x1,y1, x1+64*size,y1+64*size,c->fill_color);
-      LCD_DrawRectangle(x1,y1, x1+64*size,y1+64*size,c->border_color);
-      LCD_DrawLine(x1,y1, x1+64*size,y1+64*size,c->border_color);
-      LCD_DrawLine(x1,y1+64*size, x1+64*size,y1,c->border_color);
+    } else {
+      LCD_FillRect(x1, y1, x1 + 64 * size, y1 + 64 * size, c->fill_color);
+      LCD_DrawRectangle(x1, y1, x1 + 64 * size, y1 + 64 * size, c->border_color);
+      LCD_DrawLine(x1, y1, x1 + 64 * size, y1 + 64 * size, c->border_color);
+      LCD_DrawLine(x1, y1 + 64 * size, x1 + 64 * size, y1, c->border_color);
     }
-  #endif
+#endif
 
-    //pokud není žádný text pod ikonou, nevykreslíme obdélník
-    if (c->pscgElements[id].str_value[0]==0){
+    // if there is no string under the icon, no rectangle will be drawn
+    if (c->pscgElements[id].str_value[0] == 0){
       return;
     }
 
-    LCD_setDrawAreaS(&area); //draw_ppm změní subdraw areu, obnovíme
-    LCD_FillRect(x1,y1+2+32*(size+1),x1+32*(size+1),y1+2+32*(size+1)+8*((15*size)/8)+2,c->background_color);
-    LCD_DrawRectangle(x1,y1+2+32*(size+1),x1+32*(size+1),y1+2+32*(size+1)+8*((15*size)/8)+2,c->border_color);
-    LCD_DrawText(x1+5,y1+4+32*(size+1),c->text_color,0, c->pscgElements[id].str_value, (15*size)/8);
+    LCD_setDrawAreaS(&area); // restore sub draw area
+    LCD_FillRect(
+      x1,
+      y1 + 2 + 32 * (size + 1),
+      x1 + 32 * (size + 1),
+      y1 + 2 + 32 * (size + 1) + 8 * ((15 * size) / 8) + 2,
+      c->background_color
+    );
+    LCD_DrawRectangle(
+      x1,
+      y1 + 2 + 32 * (size + 1),
+      x1 + 32 * (size + 1),
+      y1 + 2 + 32 * (size + 1) + 8 * ((15 * size) / 8) + 2,
+      c->border_color
+    );
+    LCD_DrawText(
+      x1 + 5,
+      y1 + 4 + 32 * (size + 1),
+      c->text_color,
+      0,
+      c->pscgElements[id].str_value,
+      (15 * size) / 8
+    );
   }
-  c->pscgElements[id].pre_active=active;
+  c->pscgElements[id].pre_active = active;
 }
 
-void pscg_draw_slider_v(int16_t x1,int16_t y1,int16_t x2,int16_t y2, uint16_t slider_size,int32_t param, int32_t value, uint16_t id, gr2context * c){
+
+void pscg_draw_slider_v(
+    int16_t x1,
+    int16_t y1,
+    int16_t x2,
+    int16_t y2,
+    uint16_t slider_size,
+    int32_t param,
+    int32_t value,
+    uint16_t id,
+    gr2context * c
+) {
   int32_t slider_pos;
-  LCD_setSubDrawArea(x1,y1,x2,y2); //+1 je hotfix do dp
+  uint16_t sirka = x2 - x1;
 
-  uint16_t sirka=0;
-  sirka=x2-x1;
+  LCD_setSubDrawArea(x1, y1, x2, y2);
 
-  LCD_FillRect(x1,y1,x2,y2,c->background_color); //výmaz
+  LCD_FillRect(x1, y1, x2, y2, c->background_color); // clear
 
-  //výpočet pozice slideru
-  slider_pos=(int32_t)(((float)value/(float)param)*((float)(y2-y1-slider_size)));
+  slider_pos = (int32_t)(((float)value / (float)param) * ((float)(y2 - y1 - slider_size)));
 
-  if (slider_pos>(y2-y1-slider_size)){
-    slider_pos=(y2-y1-slider_size);
+  if (slider_pos > (y2 - y1 - slider_size)) {
+    slider_pos = (y2 - y1 - slider_size);
   }
 
-  if (c->pscgElements[id].grayout==0){
-    LCD_FillRect(x1+sirka/4,y1,x2-sirka/4,y2,c->fill_color); //pozadí spodní
-    LCD_FillRect(x1+sirka/4,y1+slider_pos,x2-sirka/4,y2,c->active_color); //pozadí výrazné
-    LCD_DrawRectangle(x1+sirka/4,y1,x2-sirka/4,y2,c->border_color); //orámování
-    //slider
-    LCD_FillRect(x1,y1+slider_pos,x2,y1+slider_pos+slider_size,c->active_color);
-    LCD_DrawRectangle(x1,y1+slider_pos,x2,y1+slider_pos+slider_size,c->border_color);
-  }else{
-    LCD_FillRect(x1+sirka/4,y1,x2-sirka/4,y2,LCD_get_gray16(c->fill_color)); //pozadí spodní
-    LCD_FillRect(x1+sirka/4,y1+slider_pos,x2-sirka/4,y2,LCD_get_gray16(c->active_color)); //pozadí výrazné
-    LCD_DrawRectangle(x1+sirka/4,y1,x2-sirka/4,y2,LCD_get_gray16(c->border_color)); //orámování
-    //slider
-    LCD_FillRect(x1,y1+slider_pos,x2,y1+slider_pos+slider_size,LCD_get_gray16(c->active_color));
-    LCD_DrawRectangle(x1,y1+slider_pos,x2,y1+slider_pos+slider_size,LCD_get_gray16(c->border_color));
+  if (c->pscgElements[id].grayout == 0) {
+    LCD_FillRect(
+      x1 + sirka/4, y1, x2 - sirka/4, y2,
+      c->fill_color
+    );
+
+    LCD_FillRect(
+      x1 + sirka/4, y1 + slider_pos, x2 - sirka/4, y2,
+      c->active_color
+    );
+
+    LCD_DrawRectangle(
+      x1 + sirka/4, y1, x2 - sirka/4, y2,
+      c->border_color
+    );
+
+    // slider
+    LCD_FillRect(
+      x1, y1 + slider_pos, x2, y1 + slider_pos + slider_size,
+      c->active_color
+    );
+    LCD_DrawRectangle(
+      x1, y1 + slider_pos, x2, y1 + slider_pos + slider_size,
+      c->border_color
+    );
+  } else {
+    LCD_FillRect(
+      x1 + sirka/4, y1, x2 - sirka/4, y2,
+      LCD_get_gray16(c->fill_color)
+    );
+
+    LCD_FillRect(
+      x1 + sirka/4, y1 + slider_pos, x2 - sirka/4, y2,
+      LCD_get_gray16(c->active_color)
+    );
+
+    LCD_DrawRectangle(
+      x1 + sirka/4, y1, x2 - sirka/4, y2,
+      LCD_get_gray16(c->border_color)
+    );
+
+    // slider
+    LCD_FillRect(
+      x1, y1 + slider_pos, x2, y1 + slider_pos + slider_size,
+      LCD_get_gray16(c->active_color)
+    );
+
+    LCD_DrawRectangle(
+      x1, y1 + slider_pos, x2, y1 + slider_pos + slider_size,
+      LCD_get_gray16(c->border_color)
+    );
   }
 
 }
 
-void pscg_draw_slider_v_f(int16_t x1,int16_t y1,int16_t x2,int16_t y2, uint16_t slider_size,int32_t param, int32_t value, int32_t oldval, uint16_t id, gr2context * c){
+void pscg_draw_slider_v_f(
+    int16_t x1,
+    int16_t y1,
+    int16_t x2,
+    int16_t y2,
+    uint16_t slider_size,
+    int32_t param,
+    int32_t value,
+    int32_t oldval,
+    uint16_t id,
+    gr2context * c
+) {
   int32_t slider_pos;
   int32_t slider_pos_o;
-  LCD_setSubDrawArea(x1,y1,x2,y2); //+1 je hotfix do dp
 
-  uint16_t sirka=0;
-  sirka=x2-x1;
+  LCD_setSubDrawArea(x1, y1, x2, y2);
 
-  //výpočet nové pozice slideru
-  slider_pos=(int32_t)(((float)value/(float)param)*((float)(y2-y1-slider_size)));
+  uint16_t sirka = x2 - x1;
 
-  if (slider_pos>(y2-y1-slider_size)){
-    slider_pos=(y2-y1-slider_size);
+  // new slider position
+  slider_pos = (int32_t)(((float)value / (float)param) * ((float)(y2 - y1 - slider_size)));
+
+  if (slider_pos > (y2 - y1 - slider_size)) {
+    slider_pos = (y2 - y1 - slider_size);
   }
 
-  //výpočet staré pozice slideru
-  slider_pos_o=(int32_t)(((float)oldval/(float)param)*((float)(y2-y1-slider_size)));
+  // old slider position
+  slider_pos_o = (int32_t)(((float)oldval / (float)param) * ((float)(y2 - y1 - slider_size)));
 
-  if (slider_pos_o>(y2-y1-slider_size)){
-    slider_pos_o=(y2-y1-slider_size);
+  if (slider_pos_o > (y2 - y1 - slider_size)) {
+    slider_pos_o = (y2 - y1 - slider_size);
   }
 
-  //výmaz starého slideru
-  LCD_FillRect(x1,y1+slider_pos_o,x2,y1+slider_pos_o+slider_size+1,c->background_color); //background_color
+  // clear old slider from screen
+  LCD_FillRect(
+    x1, y1 + slider_pos_o, x2, y1 + slider_pos_o + slider_size + 1,
+    c->background_color
+  );
 
-  if (c->pscgElements[id].grayout==0){
-    if (slider_pos>=slider_pos_o){
-      LCD_FillRect(x1+sirka/4,y1+slider_pos_o,x2-sirka/4,y1+slider_pos,c->fill_color); //pozadí spodní
-    }else{
-      LCD_FillRect(x1+sirka/4,y1+slider_pos,x2-sirka/4,y1+slider_pos_o+slider_size+1,c->active_color); //pozadí výrazné
+  if (c->pscgElements[id].grayout == 0) {
+    if (slider_pos >= slider_pos_o) {
+      LCD_FillRect(
+        x1 + sirka/4,
+        y1 + slider_pos_o,
+        x2 - sirka/4,
+        y1 + slider_pos,
+        c->fill_color
+      );
+    } else {
+      LCD_FillRect(
+        x1 + sirka/4,
+        y1 + slider_pos,
+        x2 - sirka/4,
+        y1 + slider_pos_o + slider_size + 1,
+        c->active_color
+      );
     }
-    LCD_DrawRectangle(x1+sirka/4,y1,x2-sirka/4,y2,c->border_color); //orámování
-    //slider
-    LCD_FillRect(x1,y1+slider_pos,x2,y1+slider_pos+slider_size,c->active_color);
-    LCD_DrawRectangle(x1,y1+slider_pos,x2,y1+slider_pos+slider_size,c->border_color);
-  }else{
-    if (slider_pos>=slider_pos_o){
-      LCD_FillRect(x1+sirka/4,y1+slider_pos_o,x2-sirka/4,y1+slider_pos,LCD_get_gray16(c->fill_color)); //pozadí spodní
-    }else{
-      LCD_FillRect(x1+sirka/4,y1+slider_pos,x2-sirka/4,y1+slider_pos_o+slider_size+1,LCD_get_gray16(c->active_color)); //pozadí výrazné
-    }
-    LCD_DrawRectangle(x1+sirka/4,y1,x2-sirka/4,y2,LCD_get_gray16(c->border_color)); //orámování
-    //slider
-    LCD_FillRect(x1,y1+slider_pos,x2,y1+slider_pos+slider_size,LCD_get_gray16(c->active_color));
-    LCD_DrawRectangle(x1,y1+slider_pos,x2,y1+slider_pos+slider_size,LCD_get_gray16(c->border_color));
-  }
+    LCD_DrawRectangle(
+      x1 + sirka/4,
+      y1,
+      x2 - sirka/4,
+      y2,
+      c->border_color
+    );
 
+    // slider
+    LCD_FillRect(
+      x1,
+      y1 + slider_pos,
+      x2,
+      y1 + slider_pos + slider_size,
+      c->active_color
+    );
+    LCD_DrawRectangle(
+      x1, y1 + slider_pos, x2, y1 + slider_pos + slider_size,
+      c->border_color
+    );
+  } else {
+    if (slider_pos >= slider_pos_o) {
+      LCD_FillRect(
+        x1 + sirka/4,
+        y1 + slider_pos_o,
+        x2 - sirka/4,
+        y1 + slider_pos,
+        LCD_get_gray16(c->fill_color)
+      );
+    } else {
+      LCD_FillRect(
+        x1 + sirka/4, y1 + slider_pos, x2 - sirka/4, y1 + slider_pos_o + slider_size + 1,
+        LCD_get_gray16(c->active_color)
+      );
+    }
+    LCD_DrawRectangle(
+      x1 + sirka/4, y1, x2 - sirka/4, y2,
+      LCD_get_gray16(c->border_color)
+    );
+
+    // slider
+    LCD_FillRect(
+      x1, y1 + slider_pos, x2, y1 + slider_pos + slider_size,
+      LCD_get_gray16(c->active_color)
+    );
+    LCD_DrawRectangle(
+      x1, y1 + slider_pos, x2, y1 + slider_pos + slider_size,
+      LCD_get_gray16(c->border_color)
+    );
+  }
 }
+
+// TODO: Continue with code revision
 
 void pscg_draw_slider_h(int16_t x1,int16_t y1,int16_t x2,int16_t y2, uint16_t slider_size,int32_t param, int32_t value, uint16_t id, gr2context * c){
   int32_t slider_pos;
