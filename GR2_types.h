@@ -131,8 +131,6 @@ typedef struct {
 
 	uint8_t pscg_active_element;
 
-	uint8_t sliderRedrawHotfix;
-
 	uint8_t relative_init;
 
 	uint16_t border_color;     // black

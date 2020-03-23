@@ -44,7 +44,6 @@ void gr2_ResetContext(gr2context * c) {
   c->default_grid_size    = 32;
   c->default_grid_spacing = 0;
   c->pscg_active_element  = 0;
-  c->sliderRedrawHotfix   = 0; // flag for correct redraw of two-times updated slider
   c->relative_init        = 0;
 
   c->border_color     = 0x0000; // black
@@ -215,15 +214,12 @@ void pscg_destroy(uint16_t id, gr2context * c) {
 
 void pscg_set_value(uint16_t id, int32_t val, gr2context * c) {
   if ((val != c->pscgElements[id].value) && (c->pscgElements[id].modified == 0)) {
-    c->pscgElements[id].modified = 1; // redraw modified
-  } else {
-    if (c->pscgElements[id].type == GR2_TYPE_SLIDER_V
-         || c->pscgElements[id].type == GR2_TYPE_SLIDER_H) {
-      c->sliderRedrawHotfix = 1;
+    if (c->pscgElements[id].modified == 0) {
+      // Store value before item was modified
+      c->pscgElements[id].prev_val = c->pscgElements[id].value;
     }
-    c->pscgElements[id].modified = 0;
+    c->pscgElements[id].modified = 1; // redraw modified
   }
-  c->pscgElements[id].prev_val = c->pscgElements[id].value;
   c->pscgElements[id].value = val;
 }
 
@@ -366,15 +362,10 @@ void pscg_draw_screen(
       }
       if (con->pscgElements[i].type == GR2_TYPE_SLIDER_V) {
         COUNT_A_B_C_D
-        if ((all == 1) || (con->sliderRedrawHotfix)) {
+        if (all == 1) {
           pscg_draw_slider_v(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param,con->pscgElements[i].value,i, con);
-          con->sliderRedrawHotfix = 0;
         } else if(con->pscgElements[i].modified != 0) {
-          if (con->pscgElements[i].value != con->pscgElements[i].prev_val) {
-            pscg_draw_slider_v_f(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param, con->pscgElements[i].value,con->pscgElements[i].prev_val,i,con);
-          } else {
-            pscg_draw_slider_v(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param,con->pscgElements[i].value,i,con);
-          }
+          pscg_draw_slider_v_f(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param, con->pscgElements[i].value,con->pscgElements[i].prev_val,i,con);
         }
         con->pscgElements[i].modified = 0;
       }
@@ -411,15 +402,10 @@ void pscg_draw_screen(
       }
       if (con->pscgElements[i].type == GR2_TYPE_SLIDER_H) {
         COUNT_A_B_C_D
-        if ((all == 1) || (con->sliderRedrawHotfix)) {
+        if (all == 1) {
           pscg_draw_slider_h(a, b, c, d, con->pscgScreens[scrID].x_cell, con->pscgElements[i].param, con->pscgElements[i].value, i, con);
-          con->sliderRedrawHotfix = 0;
-        }else if(con->pscgElements[i].modified != 0) {
-          if (con->pscgElements[i].value != con->pscgElements[i].prev_val) {
-            pscg_draw_slider_h_f(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param,con->pscgElements[i].value, con->pscgElements[i].prev_val,i, con);
-          } else {
-            pscg_draw_slider_h(a, b, c, d, con->pscgScreens[scrID].x_cell, con->pscgElements[i].param, con->pscgElements[i].value, i, con);
-          }
+        } else if(con->pscgElements[i].modified != 0) {
+          pscg_draw_slider_h_f(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param,con->pscgElements[i].value, con->pscgElements[i].prev_val,i, con);
         }
         con->pscgElements[i].modified = 0;
       }
