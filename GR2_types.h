@@ -83,61 +83,61 @@ typedef struct {
  */
 
 typedef struct {
-	int16_t x_scroll;
-	int16_t y_scroll;
+  int16_t x_scroll;
+  int16_t y_scroll;
 
-	int16_t x_scroll_old;
-	int16_t y_scroll_old;
+  int16_t x_scroll_old;
+  int16_t y_scroll_old;
 
-	uint16_t x_cell;
-	uint16_t y_cell;
+  uint16_t x_cell;
+  uint16_t y_cell;
 
-	uint16_t cell_space_left;
-	uint16_t cell_space_right;
-	uint16_t cell_space_top;
-	uint16_t cell_space_bottom;
+  uint16_t cell_space_left;
+  uint16_t cell_space_right;
+  uint16_t cell_space_top;
+  uint16_t cell_space_bottom;
 
-	uint8_t default_font;
+  uint8_t default_font;
 
-	uint8_t valid;
+  uint8_t valid;
 
-	volatile uint16_t modified;
+  volatile uint16_t modified;
 
 } pscgScreen;
 
 typedef struct {
-	uint16_t elementsUsed;
-	uint16_t screensUsed;
+  uint16_t elementsUsed;
+  uint16_t screensUsed;
 
-	uint16_t elementsMax;
-	uint16_t screensMax;
+  uint16_t elementsMax;
+  uint16_t screensMax;
 
-	pscgElement *pscgElements;
+  pscgElement *pscgElements;
 
-	pscgScreen *pscgScreens;
+  pscgScreen *pscgScreens;
 
-	uint16_t maxElementsId;
+  uint16_t maxElementsId;
 
-	uint8_t textActive;
-	uint16_t textActiveId;
+  uint8_t textActive;
+  uint16_t textActiveId;
 
-	uint8_t invisible_flag;
+  uint8_t invisible_flag;
 
-	uint16_t textMouseX;
-	uint16_t textMouseY;
+  uint16_t textMouseX;
+  uint16_t textMouseY;
 
-	uint16_t default_grid_size;
-	uint16_t default_grid_spacing;
+  uint16_t default_grid_size;
+  uint16_t default_grid_spacing;
 
-	uint8_t pscg_active_element;
+  uint8_t pscg_active_element;
 
-	uint8_t relative_init;
+  uint8_t relative_init;
 
-	uint16_t border_color;     // black
-	uint16_t text_color;       // black
-	uint16_t background_color; // red;
-	uint16_t fill_color;       // green
-	uint16_t active_color;     // white
+  uint16_t border_color;     // black
+  uint16_t text_color;       // black
+  uint16_t background_color; // red;
+  uint16_t fill_color;       // green
+  uint16_t active_color;     // white
 } gr2context;
 
 #endif

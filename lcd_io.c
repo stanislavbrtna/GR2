@@ -52,18 +52,18 @@ void lcd_hw_set_xy(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
 }
 
 void lcd_hw_Draw_Point(uint16_t color) {
-	// Emulates behavior of LCD driver for SDL or something similar
+  // Emulates behavior of LCD driver for SDL or something similar
   ExtDrawPoint(counterX + hx1, counterY + hy1, color);
-  
+
   if (counterX < (hx2 - hx1)) {
-	  counterX++;
+    counterX++;
   }else{
-	  counterX=0;
- 
+    counterX=0;
+
     if (counterY < (hy2 - hy1)) {
-    	counterY++;
+      counterY++;
     } else {
-    	counterY = 0;
+      counterY = 0;
     }
   }
   return;
