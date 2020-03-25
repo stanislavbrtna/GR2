@@ -247,6 +247,19 @@ void pscg_draw_icon(
 ) {
   LCD_drawArea area;
   uint16_t size = 0;
+  uint16_t bc, fc, ac, tc;
+
+  if (c->pscgElements[id].grayout == 0) {
+    bc = c->border_color;
+    fc = c->fill_color;
+    ac = c->active_color;
+    tc = c->text_color;
+  } else {
+    bc = LCD_get_gray16(c->border_color);
+    fc = LCD_get_gray16(c->fill_color);
+    ac = LCD_get_gray16(c->active_color);
+    tc = LCD_get_gray16(c->text_color);
+  }
 
   if (((x2 - x1 + 1) / 32 - 1) > ((y2 - y1 + 1) / 80)) {
     size = ((y2 - y1 + 1) / 80);
@@ -268,7 +281,7 @@ void pscg_draw_icon(
   if ((active == 1) && (c->pscgElements[id].pre_active == 0)) {
 #ifdef PPM_SUPPORT_ENABLED
     if (svp_fexists(c->pscgElements[id].str_value2)) {
-      svp_ppm_set_pmc(1, c->active_color);
+      svp_ppm_set_pmc(1, ac);
       if (ppm_get_width(c->pscgElements[id].str_value2) == 32) {
         draw_ppm(x1, y1, size + 1, c->pscgElements[id].str_value2);
       } else if (ppm_get_width(c->pscgElements[id].str_value2) == 64) {
@@ -277,10 +290,10 @@ void pscg_draw_icon(
       svp_ppm_set_pmc(0, 0);
     } else {
       // if there is no icon, will draw empty rectangle
-      LCD_FillRect(x1, y1, x1 + 64 * size, y1 + 64 * size, c->active_color);
-      LCD_DrawRectangle(x1, y1, x1 + 64 * size, y1 + 64 * size, c->border_color);
-      LCD_DrawLine(x1, y1, x1 + 64 * size, y1 + 64 * size, c->border_color);
-      LCD_DrawLine(x1, y1 + 64 * size, x1 + 64 * size, y1, c->border_color);
+      LCD_FillRect(x1, y1, x1 + 64 * size, y1 + 64 * size, ac);
+      LCD_DrawRectangle(x1, y1, x1 + 64 * size, y1 + 64 * size, bc);
+      LCD_DrawLine(x1, y1, x1 + 64 * size, y1 + 64 * size, bc);
+      LCD_DrawLine(x1, y1 + 64 * size, x1 + 64 * size, y1, bc);
     }
 #endif
     LCD_setDrawAreaS(&area); // draw_ppm changed the sub-draw area, so we will restore it
@@ -295,19 +308,19 @@ void pscg_draw_icon(
       y1 + 2 + 32 * (size + 1),
       x1 + 32 * (size + 1),
       y1 + 2 + 32 * (size + 1) + 8 * ((15 * size) / 8) + 2,
-      c->active_color
+      ac
     );
     LCD_DrawRectangle(
       x1,
       y1 + 2 + 32 * (size + 1),
       x1 + 32 * (size + 1),
       y1 + 2 + 32 * (size + 1) + 8 * ((15 * size) / 8) + 2,
-      c->border_color
+      bc
     );
     LCD_DrawText(
       x1 + 5,
       y1 + 4 + 32 * (size + 1),
-      c->text_color,
+      tc,
       0,
       c->pscgElements[id].str_value,
       (15 * size) / 8
@@ -315,16 +328,20 @@ void pscg_draw_icon(
   } else if (active == 0) {
 #ifdef PPM_SUPPORT_ENABLED
     if (svp_fexists(c->pscgElements[id].str_value2)) {
+      if (c->pscgElements[id].grayout == 1) {
+        svp_ppm_set_pmc(1, ac);
+      }
       if (ppm_get_width(c->pscgElements[id].str_value2) == 32) {
         draw_ppm(x1, y1, size + 1, c->pscgElements[id].str_value2);
       } else if (ppm_get_width(c->pscgElements[id].str_value2) == 64) {
         draw_ppm(x1, y1, size, c->pscgElements[id].str_value2);
       }
+      svp_ppm_set_pmc(0, 0);
     } else {
-      LCD_FillRect(x1, y1, x1 + 64 * size, y1 + 64 * size, c->fill_color);
-      LCD_DrawRectangle(x1, y1, x1 + 64 * size, y1 + 64 * size, c->border_color);
-      LCD_DrawLine(x1, y1, x1 + 64 * size, y1 + 64 * size, c->border_color);
-      LCD_DrawLine(x1, y1 + 64 * size, x1 + 64 * size, y1, c->border_color);
+      LCD_FillRect(x1, y1, x1 + 64 * size, y1 + 64 * size, fc);
+      LCD_DrawRectangle(x1, y1, x1 + 64 * size, y1 + 64 * size, bc);
+      LCD_DrawLine(x1, y1, x1 + 64 * size, y1 + 64 * size, bc);
+      LCD_DrawLine(x1, y1 + 64 * size, x1 + 64 * size, y1, bc);
     }
 #endif
 
