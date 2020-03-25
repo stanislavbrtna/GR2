@@ -94,6 +94,10 @@ void pscg_draw_cbutton(
     LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
     LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, c->border_color);
     LCD_DrawText_ext(x1 + 10, y1 + PSCG_TEXT_Y_GAP, ~c->pscgElements[id].value, str);
+    if (c->pscgElements[id].status_reg & GR2_SELECT_B) {
+      LCD_DrawRectangle(x1 + 5, y1 + 4, x2 - 5, y2 - 4, ~c->pscgElements[id].value);
+      LCD_DrawRectangle(x1 + 4, y1 + 3, x2 - 4, y2 - 3, ~c->pscgElements[id].value);
+    }
   }  else {
     LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->pscgElements[id].value));
     LCD_DrawRectangle(x1, y1, x2, y2, LCD_get_gray16(c->border_color));
