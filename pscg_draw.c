@@ -32,9 +32,6 @@ uint8_t svp_fexists(uint8_t *fname);
 
 uint16_t background_color; //for set text fit
 
-#define PSCG_STYLE2
-//#define PSCG_STYLE2_BTN
-
 
 void pscg_draw_button(
     int16_t x1,
@@ -50,7 +47,6 @@ void pscg_draw_button(
   LCD_setSubDrawArea(x1, y1, x2, y2);
   curr_font = LCD_Get_Font_Size();
   LCD_Set_Sys_Font(c->pscgElements[id].param2);
-#ifndef PSCG_STYLE2_BTN
   if (c->pscgElements[id].grayout == 0) {
     if((active == 1) && (c->pscgElements[id].pre_active == 0)) {
       LCD_FillRect(x1, y1, x2, y2, c->active_color);
@@ -74,19 +70,6 @@ void pscg_draw_button(
     LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, LCD_get_gray16(c->border_color));
     LCD_DrawText_ext(x1 + c->pscgElements[id].param, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->text_color), str);
   }
-#else
-  //DP view
-  if ((active == 1) && (c->pscgElements[id].pre_active == 0)) {
-    //LCD_FillRect(x1,y1,x2,y2,fill_color);
-    LCD_DrawRectangle(x1, y1, x2, y2, active_color);
-  }
-  else if (active == 0) {
-    LCD_FillRect(x1, y1, x2, y2, background_color);
-    LCD_FillRect(x1 + 2, y1 + 2, x2 - 2, y1 + 2 + (y2 - y1) / 3, fill_color);
-  }
-  LCD_DrawRectangle(x1, y1, x2, y2, border_color);
-  LCD_DrawText_ext(x1 + 10, y1 + 5, text_color, str);
-#endif
   LCD_Set_Sys_Font(curr_font);
   c->pscgElements[id].pre_active = active;
 }
@@ -102,7 +85,6 @@ void pscg_draw_cbutton(
     gr2context * c
 ) {
   LCD_setSubDrawArea(x1, y1, x2, y2);
-#ifndef PSCG_STYLE2_BTN
   if (c->pscgElements[id].grayout == 0)  {
     if ((active == 1) && (c->pscgElements[id].pre_active == 0)) {
       LCD_FillRect(x1, y1, x2, y2, c->active_color);
@@ -118,17 +100,6 @@ void pscg_draw_cbutton(
     LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, LCD_get_gray16(c->border_color));
     LCD_DrawText_ext(x1 + 10, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(~c->pscgElements[id].value), str);
   }
-#else
-  if ((active == 1) && (c->pscgElements[id].pre_active == 0)) {
-    //LCD_FillRect(x1,y1,x2,y2,fill_color);
-    LCD_DrawRectangle(x1, y1, x2, y2, active_color);
-  }  else if (active == 0) {
-    LCD_FillRect(x1, y1, x2, y2, background_color);
-    LCD_FillRect(x1 + 2, y1 + 2, x2 - 2, y1 + 2 + (y2 - y1) / 3, fill_color);
-  }
-  LCD_DrawRectangle(x1, y1, x2, y2, border_color);
-  LCD_DrawText_ext(x1 + 10, y1 + 5, text_color, str);
-#endif
   c->pscgElements[id].pre_active = active;
 }
 
@@ -717,22 +688,6 @@ void pscg_draw_text(
   //uint16_t strPrac = 0;
   LCD_setSubDrawArea(x1, y1, x2, y2);
   background_color = c->background_color;
-#ifndef PSCG_STYLE2
-  if (active == 1) {
-    LCD_FillRect(x1, y1, x2, y2, fill_color);
-    LCD_FillRect(x1 + 10 + ((y2 - y1 - 10) / 8) * 8 * cursor, y1 + 5 , \
-                x1 + 10 + ((y2 - y1 - 10) / 8) * 8 * (cursor + 1), \
-                y1 + 5 + (( y2 - y1 - 10) / 8) * 8, active_color);
-  } else {
-    LCD_FillRect(x1, y1, x2, y2, background_color);
-  }
-
-  if (editable){
-    LCD_DrawRectangle(x1, y1, x2, y2, border_color);
-  }
-
-  LCD_DrawText(x1 + 10, y1 + 5, text_color, 0, str, (y2 - y1 - 10) / 8);
-#else
   uint8_t curr_font;
 
   //printf("DBG font size: %u\n", font_size);
@@ -774,5 +729,4 @@ void pscg_draw_text(
   }
 
   LCD_Set_Sys_Font(curr_font);
-#endif
 }
