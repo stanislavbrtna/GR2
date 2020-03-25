@@ -549,130 +549,225 @@ void pscg_draw_slider_v_f(
   }
 }
 
-// TODO: Continue with code revision
-
-void pscg_draw_slider_h(int16_t x1,int16_t y1,int16_t x2,int16_t y2, uint16_t slider_size,int32_t param, int32_t value, uint16_t id, gr2context * c){
+void pscg_draw_slider_h(
+    int16_t x1,
+    int16_t y1,
+    int16_t x2,
+    int16_t y2,
+    uint16_t slider_size,
+    int32_t param,
+    int32_t value,
+    uint16_t id,
+    gr2context * c
+  ){
   int32_t slider_pos;
-  LCD_setSubDrawArea(x1,y1,x2,y2+1);
+  LCD_setSubDrawArea(x1, y1, x2, y2+1);
 
-  uint16_t sirka=0;
-  sirka=y2-y1;
+  uint16_t sirka = 0;
+  sirka = y2 - y1;
 
-  LCD_FillRect(x1,y1,x2,y2+1,c->background_color);
+  LCD_FillRect(x1, y1, x2, y2 + 1, c->background_color);
 
-  slider_pos=(int32_t)(((float)value/(float)param)*((float)(x2-x1-slider_size)));
+  slider_pos = (int32_t)(((float)value/(float)param)*((float)(x2 - x1 - slider_size)));
 
-  if (slider_pos>(x2-x1-slider_size)){
-    slider_pos=(x2-x1-slider_size);
+  if (slider_pos > (x2 - x1 - slider_size)) {
+    slider_pos = (x2 - x1 - slider_size);
   }
 
-  if (c->pscgElements[id].grayout==0){
-    LCD_FillRect(x1,y1+sirka/4,x2,y2-sirka/4,c->active_color); //pozadí horní
-    LCD_FillRect(x1+slider_pos,y1+sirka/4,x2,y2-sirka/4,c->fill_color); //pozadí spodní
-    LCD_DrawRectangle(x1,y1+sirka/4,x2,y2-sirka/4,c->border_color); //orámování
+  if (c->pscgElements[id].grayout == 0) {
+    LCD_FillRect(
+      x1, y1 + sirka/4, x2, y2 - sirka/4,
+      c->active_color
+    ); // upper background
+    LCD_FillRect(
+      x1 + slider_pos, y1 + sirka/4, x2, y2 - sirka/4,
+      c->fill_color
+    ); // lower background
+    LCD_DrawRectangle(
+      x1, y1 + sirka/4, x2, y2 - sirka/4,
+      c->border_color
+    ); // frame
+    // slider
+    LCD_FillRect(
+      x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2,
+      c->active_color
+    );
+    LCD_DrawRectangle(
+      x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2,
+      c->border_color
+    );
+  } else {
+    LCD_FillRect(
+      x1, y1 + sirka/4, x2, y2 - sirka/4,
+      LCD_get_gray16(c->active_color)
+    );
+    LCD_FillRect(
+      x1 + slider_pos, y1 + sirka/4, x2, y2 - sirka/4,
+      LCD_get_gray16(c->fill_color)
+    );
+    LCD_DrawRectangle(
+      x1, y1 + sirka/4, x2, y2 - sirka/4,
+      LCD_get_gray16(c->border_color)
+    );
     //slider
-    LCD_FillRect(x1+slider_pos,y1,x1+slider_pos+slider_size,y2,c->active_color);
-    LCD_DrawRectangle(x1+slider_pos,y1,x1+slider_pos+slider_size,y2,c->border_color);
-  }else{
-    LCD_FillRect(x1,y1+sirka/4,x2,y2-sirka/4,LCD_get_gray16(c->active_color)); //pozadí horní
-    LCD_FillRect(x1+slider_pos,y1+sirka/4,x2,y2-sirka/4,LCD_get_gray16(c->fill_color)); //pozadí spodní
-    LCD_DrawRectangle(x1,y1+sirka/4,x2,y2-sirka/4,LCD_get_gray16(c->border_color)); //orámování
-    //slider
-    LCD_FillRect(x1+slider_pos,y1,x1+slider_pos+slider_size,y2,LCD_get_gray16(c->active_color));
-    LCD_DrawRectangle(x1+slider_pos,y1,x1+slider_pos+slider_size,y2,LCD_get_gray16(c->border_color));
+    LCD_FillRect(
+      x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2,
+      LCD_get_gray16(c->active_color)
+    );
+    LCD_DrawRectangle(
+      x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2,
+      LCD_get_gray16(c->border_color)
+    );
   }
-
 }
 
-void pscg_draw_slider_h_f(int16_t x1,int16_t y1,int16_t x2,int16_t y2, uint16_t slider_size,int32_t param, int32_t value, int32_t oldval, uint16_t id, gr2context * c){
+void pscg_draw_slider_h_f(
+    int16_t x1,
+    int16_t y1,
+    int16_t x2,
+    int16_t y2,
+    uint16_t slider_size,
+    int32_t param,
+    int32_t value,
+    int32_t oldval,
+    uint16_t id,
+    gr2context * c
+  ){
   uint16_t slider_pos;
   uint16_t slider_pos_o;
-  LCD_setSubDrawArea(x1,y1,x2,y2+1);
+  LCD_setSubDrawArea(x1, y1, x2, y2 + 1);
 
-  uint16_t sirka=0;
-  sirka=y2-y1;
+  uint16_t sirka = 0;
+  sirka = y2 - y1;
 
-  //pozice nového slideru
-  slider_pos=(int32_t)(((float)value/(float)param)*((float)(x2-x1-slider_size)));
-  if (slider_pos>(x2-x1-slider_size)){
-    slider_pos=(x2-x1-slider_size);
+  // new slider position
+  slider_pos = (int32_t)(((float)value/(float)param)*((float)(x2 - x1 - slider_size)));
+  if (slider_pos > (x2 - x1 - slider_size)) {
+    slider_pos = (x2 - x1 - slider_size);
   }
 
-  //pozice starého slideru
-  slider_pos_o=(int32_t)(((float)oldval/(float)param)*((float)(x2-x1-slider_size)));
-  if (slider_pos_o>(x2-x1-slider_size)){
-    slider_pos_o=(x2-x1-slider_size);
+  // old slider position
+  slider_pos_o = (int32_t)(((float)oldval/(float)param)*((float)(x2 - x1 - slider_size)));
+  if (slider_pos_o > (x2 - x1 - slider_size)) {
+    slider_pos_o = (x2 - x1 - slider_size);
   }
 
-  //výmaz slideru
-  LCD_FillRect(x1+slider_pos_o,y1,x1+slider_pos_o+slider_size,y2+1,c->background_color);
+  // remove old slider
+  LCD_FillRect(
+    x1 + slider_pos_o, y1, x1 + slider_pos_o + slider_size, y2,
+    c->background_color
+  );
 
-  if (c->pscgElements[id].grayout==0){
-    if (slider_pos>=slider_pos_o){
-      LCD_FillRect(x1+slider_pos_o,y1+sirka/4,x1+slider_pos,y2-sirka/4,c->active_color); //pozadí horní active_color
-    }else{
-      LCD_FillRect(x1+slider_pos,y1+sirka/4,x1+slider_pos_o+slider_size,y2-sirka/4,c->fill_color); //pozadí spodní
+  if (c->pscgElements[id].grayout == 0) {
+    if (slider_pos >= slider_pos_o) {
+      LCD_FillRect(
+        x1 + slider_pos_o, y1 + sirka/4, x1 + slider_pos, y2 - sirka/4,
+        c->active_color
+      );
+    } else {
+      LCD_FillRect(
+        x1 + slider_pos, y1 + sirka/4, x1 + slider_pos_o + slider_size, y2 - sirka/4,
+        c->fill_color
+        );
     }
-    LCD_DrawRectangle(x1,y1+sirka/4,x2,y2-sirka/4,c->border_color); //orámování
+    LCD_DrawRectangle(
+      x1, y1 + sirka/4, x2, y2 - sirka/4,
+      c->border_color
+    );
     //slider
-    LCD_FillRect(x1+slider_pos,y1,x1+slider_pos+slider_size,y2,c->active_color);
-    LCD_DrawRectangle(x1+slider_pos,y1,x1+slider_pos+slider_size,y2,c->border_color);
-  }else{
-    if (slider_pos>=slider_pos_o){
-      LCD_FillRect(x1+slider_pos_o,y1+sirka/4,x1+slider_pos,y2-sirka/4,LCD_get_gray16(c->active_color)); //pozadí horní active_color
-    }else{
-      LCD_FillRect(x1+slider_pos,y1+sirka/4,x1+slider_pos_o+slider_size,y2-sirka/4,LCD_get_gray16(c->fill_color)); //pozadí spodní
+    LCD_FillRect(
+      x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2,
+      c->active_color
+    );
+    LCD_DrawRectangle(
+      x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2,
+      c->border_color
+    );
+  } else {
+    if (slider_pos >= slider_pos_o) {
+      LCD_FillRect(
+        x1 + slider_pos_o, y1 + sirka/4, x1 + slider_pos, y2 - sirka/4,
+        LCD_get_gray16(c->active_color)
+      );
+    } else {
+      LCD_FillRect(
+        x1 + slider_pos, y1 + sirka/4, x1 + slider_pos_o + slider_size, y2 - sirka/4,
+        LCD_get_gray16(c->fill_color)
+      );
     }
-    LCD_DrawRectangle(x1,y1+sirka/4,x2,y2-sirka/4,LCD_get_gray16(c->border_color)); //orámování
-    //slider
-    LCD_FillRect(x1+slider_pos,y1,x1+slider_pos+slider_size,y2,LCD_get_gray16(c->active_color));
-    LCD_DrawRectangle(x1+slider_pos,y1,x1+slider_pos+slider_size,y2,LCD_get_gray16(c->border_color));
+    LCD_DrawRectangle(
+      x1, y1 + sirka/4, x2, y2 - sirka/4,
+      LCD_get_gray16(c->border_color)
+    );
+    LCD_FillRect(
+      x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2,
+      LCD_get_gray16(c->active_color)
+    );
+    LCD_DrawRectangle(
+      x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2,
+      LCD_get_gray16(c->border_color)
+    );
   }
-
 }
 
-void pscg_draw_progbar_v(int16_t x1,int16_t y1,int16_t x2,int16_t y2,int32_t param, int32_t value, gr2context * c){
+void pscg_draw_progbar_v(
+    int16_t x1,
+    int16_t y1,
+    int16_t x2,
+    int16_t y2,
+    int32_t param,
+    int32_t value,
+    gr2context * c
+  ){
   uint16_t slider_pos;
-  LCD_setSubDrawArea(x1,y1,x2,y2);
+  LCD_setSubDrawArea(x1, y1, x2, y2);
 
-  slider_pos=(uint16_t)(((float)value/(float)param)*((float)(y2-y1)));
+  slider_pos = (uint16_t)(((float)value/(float)param)*((float)(y2 - y1)));
 
-  if (slider_pos>(y2-y1)){
-    slider_pos=(y2-y1);
+  if (slider_pos > (y2 - y1)) {
+    slider_pos = (y2 - y1);
   }
-  //pozadí
-  LCD_FillRect(x1,y1,x2,y1+slider_pos,c->fill_color);
+  // background
+  LCD_FillRect(x1, y1, x2, y1 + slider_pos, c->fill_color);
 
-  //slider
-  LCD_FillRect(x1,y1+slider_pos,x2,y2,c->active_color);
-  LCD_DrawLine(x1,y1+slider_pos,x2,y1+slider_pos, c->border_color);
+  // slider
+  LCD_FillRect(x1, y1 + slider_pos, x2, y2, c->active_color);
+  LCD_DrawLine(x1, y1 + slider_pos, x2, y1 + slider_pos, c->border_color);
 
-  //orámování
-  LCD_DrawRectangle(x1,y1,x2,y2,c->border_color);
-  LCD_DrawRectangle(x1+1,y1+1,x2-1,y2-1,c->border_color);
+  // frame
+  LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
+  LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, c->border_color);
 }
 
 
-void pscg_draw_progbar_h(int16_t x1,int16_t y1,int16_t x2,int16_t y2,int32_t param, int32_t value, gr2context * c){
+void pscg_draw_progbar_h(
+    int16_t x1,
+    int16_t y1,
+    int16_t x2,
+    int16_t y2,
+    int32_t param,
+    int32_t value,
+    gr2context * c
+  ){
   uint16_t slider_pos;
-  LCD_setSubDrawArea(x1,y1,x2,y2);
+  LCD_setSubDrawArea(x1, y1, x2, y2);
 
-  slider_pos=(int32_t)(((float)value/(float)param)*((float)(x2-x1)));
+  slider_pos = (int32_t)(((float)value/(float)param)*((float)(x2 - x1)));
 
-  if (slider_pos>(x2-x1)){
-    slider_pos=(x2-x1);
+  if (slider_pos > (x2 - x1)) {
+    slider_pos = (x2 - x1);
   }
-  //pozadí
-  LCD_FillRect(x1 + slider_pos,y1 ,x2 ,y2 ,c->fill_color);
 
+  // background
+  LCD_FillRect(x1 + slider_pos, y1 ,x2 ,y2 ,c->fill_color);
 
-  //slider
+  // slider
   LCD_FillRect(x1, y1, x1 + slider_pos, y2, c->active_color);
   LCD_DrawLine(x1 + slider_pos, y1, x1 + slider_pos, y2, c->border_color);
 
-  //orámování
-  LCD_DrawRectangle(x1,y1,x2,y2,c->border_color);
-  LCD_DrawRectangle(x1+1,y1+1,x2-1,y2-1,c->border_color);
+  // frame
+  LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
+  LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, c->border_color);
 }
 
 void pscg_draw_text(
