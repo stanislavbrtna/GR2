@@ -298,6 +298,8 @@ void pscg_draw_icon(
 #endif
     LCD_setDrawAreaS(&area); // draw_ppm changed the sub-draw area, so we will restore it
 
+    c->pscgElements[id].pre_active = active;
+
     // if there is no text, we will draw no rectangle
     if (c->pscgElements[id].str_value[0] == 0) {
       return;

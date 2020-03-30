@@ -234,14 +234,11 @@ void pscg_draw_end(gr2context * c) {
   c->invisible_flag = 0;
 
   if (c->reset_active_element_flag) {
+    c->pscgElements[c->pscg_active_element].pre_active = 0;
+    c->pscgElements[c->pscg_active_element].modified = 1;
+
     c->pscg_active_element = 0;
     c->reset_active_element_flag = 0;
-    for (uint16_t i = c->maxElementsId; i > 0; i--) {
-      if (c->pscgElements[i].pre_active) {
-        c->pscgElements[i].pre_active = 0;
-        c->pscgElements[i].modified = 1;
-      }
-    }
   }
 }
 
@@ -731,7 +728,6 @@ uint8_t pscg_touch_input(
               con->pscgElements[i].modified = 1;
               con->pscgElements[i].event    = event;
             }
-
           }
         }
       }
