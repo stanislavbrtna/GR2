@@ -101,8 +101,6 @@ typedef struct {
 
   uint8_t valid;
 
-  volatile uint16_t modified;
-
 } pscgScreen;
 
 typedef struct {

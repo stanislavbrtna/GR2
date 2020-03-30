@@ -63,6 +63,8 @@ void pscg_redraw_all(gr2context * c) {
   }
 }
 
+uint8_t reset_active_element_flag;
+
 gr2context * svs_pscg_c;
 
 void set_pscg_workaround_context(gr2context * c) {
@@ -231,6 +233,18 @@ void pscg_text_deactivate(gr2context * c) {
 
 void pscg_draw_end(gr2context * c) {
   c->invisible_flag = 0;
+
+  if (reset_active_element_flag) {
+    c->pscg_active_element = 0;
+    reset_active_element_flag = 0;
+  }
+
+  for (uint16_t i = c->maxElementsId; i > 0; i--) {
+    if (c->pscgElements[i].pre_active) {
+      c->pscgElements[i].pre_active = 0;
+      c->pscgElements[i].modified = 1;
+    }
+  }
 }
 
 uint16_t pscg_get_tmx(gr2context * c) {
@@ -542,6 +556,7 @@ uint8_t touch_in_element(
             int16_t y2,
             uint16_t i,
             uint16_t screen,
+            gr2EventType event,
             gr2context * con
             ) {
   int16_t a, b, c, d;
@@ -561,9 +576,16 @@ uint8_t touch_in_element(
         && (touch_x < c)
         && (touch_y > b)
         && (touch_y < d)
-        && ((con->pscg_active_element == 0) || (con->pscg_active_element == i))) {
-
-    return 1;
+  ) {
+    if (con->pscgElements[i].type == GR2_TYPE_SCREEN) {
+      return 1;
+    } else {
+      if ((con->pscg_active_element == 0 && event == EV_PRESSED) || (con->pscg_active_element == i && event != EV_PRESSED)) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
   } else {
     return 0;
   }
@@ -589,11 +611,11 @@ uint8_t pscg_touch_input(
     return 0;
   } else if (event == EV_RELEASED) {
     con->pscgElements[con->pscg_active_element].modified = 1;
-    con->pscg_active_element = 0;
+    reset_active_element_flag = 1;
   } else if ((event == EV_HOLD) && (con->pscg_active_element != 0)) {
     i = con->pscg_active_element;
     if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) { // touch in screen
-      if (1 != (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con))){ // but out of element
+      if (1 != (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con))) { // but out of element
         con->pscgElements[i].event = EV_DRAGOUT; // event dragout is not really used here
       }
     }
@@ -607,7 +629,7 @@ uint8_t pscg_touch_input(
         //a musí zvostat pošahaný, aby screen zjistil, že a je pošahaný
         COUNT_A_B_C_D
         if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
-          if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)) {
+          if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con)) {
             retval = pscg_touch_input(a, b, c, d, touch_x, touch_y, event, i, con);
           }
         }
@@ -615,11 +637,15 @@ uint8_t pscg_touch_input(
 
       if ((con->pscgElements[i].type == GR2_TYPE_BUTTON) || (con->pscgElements[i].type == GR2_TYPE_IMAGE)) {
         if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
-          if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)) {
+          if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con)) {
             con->pscgElements[i].event    = event;
             con->pscgElements[i].modified = 1;
             if (event == EV_PRESSED){
               con->pscg_active_element = i;
+            }
+
+            if (event == EV_RELEASED) {
+              con->pscg_active_element = 0;
             }
             retval = 1;
           }
@@ -628,7 +654,7 @@ uint8_t pscg_touch_input(
 
       if (con->pscgElements[i].type == GR2_TYPE_CHECKBOX) {
         if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
-          if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)) {
+          if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con)) {
 
             con->pscgElements[i].event = event;
             con->pscgElements[i].modified = 1;
@@ -643,6 +669,7 @@ uint8_t pscg_touch_input(
               } else {
                 con->pscgElements[i].value = 1;
               }
+              con->pscg_active_element = 0;
             }
             retval = 1;
           }
@@ -652,7 +679,7 @@ uint8_t pscg_touch_input(
       if (con->pscgElements[i].type == GR2_TYPE_SLIDER_V) {
         COUNT_A_B_C_D
         if ( touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)){
-          if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con) && (con->pscg_active_element == 0)) || (con->pscg_active_element == i)) {
+          if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con) && (con->pscg_active_element == 0)) || (con->pscg_active_element == i)) {
             con->pscgElements[i].event = event;
             con->pscgElements[i].prev_val = con->pscgElements[i].value;
             d -= con->pscgScreens[scrID].x_cell/2;
@@ -668,6 +695,9 @@ uint8_t pscg_touch_input(
             if (event == EV_PRESSED) {
               con->pscg_active_element = i;
             }
+            if (event == EV_RELEASED) {
+              con->pscg_active_element = 0;
+            }
             retval = 1;
           }
         }
@@ -675,7 +705,7 @@ uint8_t pscg_touch_input(
 
       if (con->pscgElements[i].type == GR2_TYPE_TEXT) {
         if ( touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
-          if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)) {
+          if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con)) {
 
             if (event == EV_PRESSED) {
               con->pscg_active_element = i;
@@ -691,9 +721,10 @@ uint8_t pscg_touch_input(
                 } else {
                   pscg_text_deactivate(con);
                 }
-                  con->pscgElements[i].value = 1;
-                  con->textActive            = 1;
-                  con->textActiveId          = i;
+                con->pscg_active_element = 0;
+                con->pscgElements[i].value = 1;
+                con->textActive            = 1;
+                con->textActiveId          = i;
               }
             }
 
@@ -712,12 +743,15 @@ uint8_t pscg_touch_input(
       if (con->pscgElements[i].type == GR2_TYPE_ICON) {
         COUNT_A_B_C_D
         if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
-          if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)) {
+          if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con)) {
             con->pscgElements[i].event    = event;
             con->pscgElements[i].modified = 1;
             retval = 1;
             if (event == EV_PRESSED) {
               con->pscg_active_element = i;
+            }
+            if (event == EV_RELEASED) {
+              con->pscg_active_element = 0;
             }
           }
         }
@@ -726,7 +760,7 @@ uint8_t pscg_touch_input(
       if (con->pscgElements[i].type == GR2_TYPE_SLIDER_H) {
         COUNT_A_B_C_D
         if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
-          if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con) && (con->pscg_active_element == 0)) || (con->pscg_active_element == i)) {
+          if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con) && (con->pscg_active_element == 0)) || (con->pscg_active_element == i)) {
             con->pscgElements[i].event    = event;
             con->pscgElements[i].prev_val = con->pscgElements[i].value;
             a += con->pscgScreens[scrID].x_cell/2;
@@ -743,6 +777,9 @@ uint8_t pscg_touch_input(
             if (event == EV_PRESSED) {
               con->pscg_active_element = i;
             }
+            if (event == EV_RELEASED) {
+              con->pscg_active_element = 0;
+            }
           }
         }
       }
@@ -750,7 +787,7 @@ uint8_t pscg_touch_input(
       if (con->pscgElements[i].type == GR2_TYPE_FRAME) {
         COUNT_A_B_C_D
         if ( touch_in_screen( touch_x, touch_y, x1, y1, x2, y2 )){
-          if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)){
+          if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con)){
             retval = pscg_touch_input(a, b, c, d, touch_x, touch_y, event, con->pscgElements[i].value, con);
           }
         }
@@ -759,10 +796,16 @@ uint8_t pscg_touch_input(
       if (con->pscgElements[i].type == GR2_TYPE_COLOR_BUTTON) {
         COUNT_A_B_C_D
         if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
-          if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, con)) {
+          if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con)) {
             con->pscgElements[i].event    = event;
             con->pscgElements[i].modified = 1;
             retval = 1;
+            if (event == EV_PRESSED) {
+              con->pscg_active_element = i;
+            }
+            if (event == EV_RELEASED) {
+              con->pscg_active_element = 0;
+            }
           }
         }
       }

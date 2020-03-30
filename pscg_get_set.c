@@ -124,6 +124,7 @@ void pscg_text_set_editable(uint16_t id, uint16_t val, gr2context * c) {
 		} else {
 			c->pscgElements[id].status_reg &= ~1;
 		}
+		pscg_set_modified(id, c);
 	}
 }
 
@@ -142,6 +143,7 @@ void pscg_text_set_fit(uint16_t id, uint16_t val, gr2context * c) {
 		} else {
 			c->pscgElements[id].status_reg &= ~2;
 		}
+		pscg_set_modified(id, c);
 	}
 }
 
@@ -228,6 +230,7 @@ uint16_t pscg_get_y2(uint16_t id, gr2context * c) {
 void pscg_set_x1(uint16_t id, uint16_t val, gr2context * c) {
 	if (val != c->pscgElements[id].x1) {
 		c->pscgElements[id].modified = 1;
+		c->pscgElements[c->pscgElements[id].screen_id].modified = 1;
 	}
 	c->pscgElements[id].x1 = val;
 }
@@ -236,11 +239,13 @@ void pscg_set_x2(uint16_t id, uint16_t val, gr2context * c) {
 	if (c->relative_init) {
 		if (val + c->pscgElements[id].x1 != c->pscgElements[id].x2) {
 			c->pscgElements[id].modified = 1;
+			c->pscgElements[c->pscgElements[id].screen_id].modified = 1;
 		}
 		c->pscgElements[id].x2 = c->pscgElements[id].x1 + val;
 	} else {
 		if (val != c->pscgElements[id].x2) {
 			c->pscgElements[id].modified = 1;
+			c->pscgElements[c->pscgElements[id].screen_id].modified = 1;
 		}
 		c->pscgElements[id].x2 = val;
 	}
@@ -249,6 +254,7 @@ void pscg_set_x2(uint16_t id, uint16_t val, gr2context * c) {
 void pscg_set_y1(uint16_t id, uint16_t val, gr2context * c) {
 	if (val != c->pscgElements[id].y1) {
 		c->pscgElements[id].modified = 1;
+		c->pscgElements[c->pscgElements[id].screen_id].modified = 1;
 	}
 	c->pscgElements[id].y1 = val;
 }
@@ -257,11 +263,13 @@ void pscg_set_y2(uint16_t id, uint16_t val, gr2context * c) {
 	if (c->relative_init) {
 		if (c->pscgElements[id].y1 + val != c->pscgElements[id].y2) {
 			c->pscgElements[id].modified = 1;
+			c->pscgElements[c->pscgElements[id].screen_id].modified = 1;
 		}
 		c->pscgElements[id].y2 = c->pscgElements[id].y1 + val;
 	} else {
 		if (val != c->pscgElements[id].y2) {
 			c->pscgElements[id].modified = 1;
+			c->pscgElements[c->pscgElements[id].screen_id].modified = 1;
 		}
 		c->pscgElements[id].y2 = val;
 	}
@@ -276,6 +284,7 @@ void pscg_set_x1y1x2y2(
 		gr2context * c
 		) {
 	c->pscgElements[id].modified = 1;
+	c->pscgElements[c->pscgElements[id].screen_id].modified = 1;
 	c->pscgElements[id].x1 = x1;
 	c->pscgElements[id].y1 = y1;
 
