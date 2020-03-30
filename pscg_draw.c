@@ -178,6 +178,7 @@ void pscg_draw_checkbox(
       y2 - PSCG_CHECKBOX_VSPACE_DN - PSCG_CHECKBOX_IN_VSPACE,
       tc
     );
+    c->pscgElements[id].pre_active = 1;
   } else if (active == 0) {
      LCD_FillRect(
       x1 + PSCG_CHECKBOX_HSPACE_UP,
@@ -208,7 +209,6 @@ void pscg_draw_checkbox(
   // text position behind box
   LCD_DrawText_ext(x1 + y2 - y1 + PSCG_CHECKBOX_TEXT_GAP, y1 + PSCG_TEXT_Y_GAP, tc, str);
   LCD_Set_Sys_Font(curr_font);
-  c->pscgElements[id].pre_active = active;
 }
 
 void pscg_draw_image(
@@ -345,6 +345,8 @@ void pscg_draw_icon(
     }
 #endif
 
+    c->pscgElements[id].pre_active = active;
+
     // if there is no string under the icon, no rectangle will be drawn
     if (c->pscgElements[id].str_value[0] == 0){
       return;
@@ -374,7 +376,6 @@ void pscg_draw_icon(
       (15 * size) / 8
     );
   }
-  c->pscgElements[id].pre_active = active;
 }
 
 
