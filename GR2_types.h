@@ -120,6 +120,7 @@ typedef struct {
   uint16_t textActiveId;
 
   uint8_t invisible_flag;
+  uint8_t reset_active_element_flag;
 
   uint16_t textMouseX;
   uint16_t textMouseY;

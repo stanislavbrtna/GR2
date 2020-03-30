@@ -163,7 +163,7 @@ void pscg_draw_checkbox(
       y2 - PSCG_CHECKBOX_VSPACE_DN - PSCG_CHECKBOX_IN_VSPACE,
       tc
     );
-  } else if (active == 2) {
+  } else if (c->pscg_active_element == id) {
     LCD_FillRect(
       x1 + PSCG_CHECKBOX_HSPACE_UP,
       y1 + PSCG_CHECKBOX_VSPACE_UP,

@@ -36,15 +36,16 @@ void gr2_ResetContext(gr2context * c) {
 
   pscg_reset_all(c);
 
-  c->textActive           = 0;
-  c->textActiveId         = 0;
-  c->invisible_flag       = 0;
-  c->textMouseX           = 0;
-  c->textMouseY           = 0;
-  c->default_grid_size    = 32;
-  c->default_grid_spacing = 0;
-  c->pscg_active_element  = 0;
-  c->relative_init        = 0;
+  c->textActive                = 0;
+  c->textActiveId              = 0;
+  c->invisible_flag            = 0;
+  c->reset_active_element_flag = 0;
+  c->textMouseX                = 0;
+  c->textMouseY                = 0;
+  c->default_grid_size         = 32;
+  c->default_grid_spacing      = 0;
+  c->pscg_active_element       = 0;
+  c->relative_init             = 0;
 
   c->border_color     = 0x0000; // black
   c->text_color       = 0x0000; // black
@@ -62,8 +63,6 @@ void pscg_redraw_all(gr2context * c) {
       }
   }
 }
-
-uint8_t reset_active_element_flag;
 
 gr2context * svs_pscg_c;
 
@@ -234,9 +233,9 @@ void pscg_text_deactivate(gr2context * c) {
 void pscg_draw_end(gr2context * c) {
   c->invisible_flag = 0;
 
-  if (reset_active_element_flag) {
+  if (c->reset_active_element_flag) {
     c->pscg_active_element = 0;
-    reset_active_element_flag = 0;
+    c->reset_active_element_flag = 0;
     for (uint16_t i = c->maxElementsId; i > 0; i--) {
       if (c->pscgElements[i].pre_active) {
         c->pscgElements[i].pre_active = 0;
@@ -449,8 +448,6 @@ void pscg_draw_screen(
         if ((all == 1) || (con->pscgElements[i].modified == 1)) {
           if (con->pscgElements[i].value == 1) {
             pscg_draw_checkbox(a, b, c, d, con->pscgElements[i].str_value, 1, i, con);
-          } else if (i == con->pscg_active_element) {
-            pscg_draw_checkbox(a, b, c, d, con->pscgElements[i].str_value, 2, i, con);
           } else {
             pscg_draw_checkbox(a, b, c, d, con->pscgElements[i].str_value, 0, i, con);
           }
@@ -610,7 +607,7 @@ uint8_t pscg_touch_input(
     return 0;
   } else if (event == EV_RELEASED) {
     con->pscgElements[con->pscg_active_element].modified = 1;
-    reset_active_element_flag = 1;
+    con->reset_active_element_flag = 1;
   } else if ((event == EV_HOLD) && (con->pscg_active_element != 0)) {
     i = con->pscg_active_element;
     if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) { // touch in screen
