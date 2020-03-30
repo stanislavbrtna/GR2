@@ -237,12 +237,11 @@ void pscg_draw_end(gr2context * c) {
   if (reset_active_element_flag) {
     c->pscg_active_element = 0;
     reset_active_element_flag = 0;
-  }
-
-  for (uint16_t i = c->maxElementsId; i > 0; i--) {
-    if (c->pscgElements[i].pre_active) {
-      c->pscgElements[i].pre_active = 0;
-      c->pscgElements[i].modified = 1;
+    for (uint16_t i = c->maxElementsId; i > 0; i--) {
+      if (c->pscgElements[i].pre_active) {
+        c->pscgElements[i].pre_active = 0;
+        c->pscgElements[i].modified = 1;
+      }
     }
   }
 }
