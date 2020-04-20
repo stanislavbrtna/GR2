@@ -229,6 +229,16 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
   }
 }
 
+void LCD_DrawText_Pwd(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
+  uint16_t xLineCnt = 0;
+  uint32_t i        = 0;
+
+  while (0 != text[i]) {
+    xLineCnt += LCD_DrawChar(x + xLineCnt, y, color, '*', CurrentFont);
+    i++;
+  }
+}
+
 uint16_t LCD_Text_Get_Width(uint8_t *text, uint16_t count) {
   uint32_t i        = 0;
   uint16_t xLineCnt = 0;

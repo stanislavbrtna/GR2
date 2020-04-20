@@ -174,6 +174,9 @@ uint8_t pscg_text_get_editable(uint16_t id, gr2context * c);
 void pscg_text_set_fit(uint16_t id, uint16_t val, gr2context * c);
 uint8_t pscg_text_get_fit(uint16_t id, gr2context * c);
 
+void pscg_text_set_pwd(uint16_t id, uint16_t val, gr2context * c);
+uint8_t pscg_text_get_pwd(uint16_t id, gr2context * c);
+
 void pscg_activate_text(uint16_t id, gr2context * c);
 void pscg_text_deactivate(gr2context * c);
 uint8_t pscg_get_text_active(uint16_t id, gr2context * c);

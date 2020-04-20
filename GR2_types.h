@@ -23,8 +23,11 @@ SOFTWARE.
 #ifndef GR2_TYPES_H_
 #define GR2_TYPES_H_
 
+#define GR2_TEXT_EDITABLE_B 1
+#define GR2_TEXT_FIT_B 2
 #define GR2_GHOST_B 512
 #define GR2_SELECT_B 1024
+#define GR2_TEXT_PWD_B 2048
 
 #define GR2_TYPE_SCREEN 0
 #define GR2_TYPE_BUTTON 1

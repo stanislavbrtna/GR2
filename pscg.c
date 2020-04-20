@@ -383,7 +383,7 @@ void pscg_draw_screen(
         if ((all == 1) || (con->pscgElements[i].modified == 1)) {
           //DBG
           //printf("redrawing: %s\n",con->pscgElements[i].str_value);
-          pscg_draw_text(a,b,c,d,con->pscgElements[i].str_value,con->pscgElements[i].value,pscg_text_get_editable(i,con) , con->pscgElements[i].param, con->pscgElements[i].param2, pscg_text_get_fit(i, con), i, con);
+          pscg_draw_text(a,b,c,d,con->pscgElements[i].str_value,con->pscgElements[i].value,pscg_text_get_editable(i,con) , con->pscgElements[i].param, con->pscgElements[i].param2, pscg_text_get_fit(i, con), pscg_text_get_pwd(i, con), i, con);
           con->pscgElements[i].modified = 0;
         }
       }

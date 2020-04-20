@@ -57,6 +57,7 @@ void pscg_draw_text(
            uint16_t cursor,
            uint16_t font_size,
            uint8_t fit,
+           uint8_t pwd,
            uint16_t id,
            gr2context * c
           );

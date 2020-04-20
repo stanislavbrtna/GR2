@@ -801,6 +801,7 @@ void pscg_draw_text(
     uint16_t cursor,
     uint16_t font_size,
     uint8_t fit,
+    uint8_t pwd,
     uint16_t id,
     gr2context * c
 ) {
@@ -815,9 +816,10 @@ void pscg_draw_text(
 
   if (c->pscgElements[id].grayout == 0) {
     if (active == 1) {
-      LCD_FillRect(x1, y1, x2, y2, c->active_color); //pozadí
-      //strPrac = LCD_Text_Get_Width(str, 0);
-      LCD_Text_Draw_Cursor(x1 + 10, y1 + 5, str, cursor, c->text_color);
+      LCD_FillRect(x1, y1, x2, y2, c->active_color);
+      if (pwd == 0) {
+        LCD_Text_Draw_Cursor(x1 + 10, y1 + 5, str, cursor, c->text_color);
+      }
     } else {
       LCD_FillRect(x1, y1, x2, y2, c->background_color);
     }
@@ -827,13 +829,18 @@ void pscg_draw_text(
     }
 
     LCD_set_fitText(fit, x2);
-    LCD_DrawText_ext(x1 + 10, y1 + PSCG_TEXT_Y_GAP, c->text_color, str);
+    if (pwd == 1) {
+      LCD_DrawText_Pwd(x1 + 10, y1 + PSCG_TEXT_Y_GAP, c->text_color, str);
+    } else {
+      LCD_DrawText_ext(x1 + 10, y1 + PSCG_TEXT_Y_GAP, c->text_color, str);
+    }
     LCD_set_fitText(0, 0);
   } else {
     if (active == 1) {
       LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->active_color)); //pozadí
-      //strPrac = LCD_Text_Get_Width(str, 0);
+    if (pwd == 0) {
       LCD_Text_Draw_Cursor(x1 + 10, y1 + 5, str, cursor, LCD_get_gray16(c->text_color));
+    }
     } else {
       LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->background_color));
     }
@@ -843,7 +850,11 @@ void pscg_draw_text(
     }
 
     LCD_set_fitText(fit, x2);
-    LCD_DrawText_ext(x1 + 10, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->text_color), str);
+    if (pwd == 1) {
+      LCD_DrawText_Pwd(x1 + 10, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->text_color), str);
+    } else {
+      LCD_DrawText_ext(x1 + 10, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->text_color), str);
+    }
     LCD_set_fitText(0, 0);
   }
 

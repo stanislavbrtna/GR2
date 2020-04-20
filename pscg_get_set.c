@@ -118,18 +118,18 @@ void pscg_set_modified(uint16_t id, gr2context * c) {
 }
 
 void pscg_text_set_editable(uint16_t id, uint16_t val, gr2context * c) {
-	if (c->pscgElements[id].type == 3) {
+	if (c->pscgElements[id].type == GR2_TYPE_TEXT) {
 		if (val == 1) {
-			c->pscgElements[id].status_reg |= 1;
+			c->pscgElements[id].status_reg |= GR2_TEXT_EDITABLE_B;
 		} else {
-			c->pscgElements[id].status_reg &= ~1;
+			c->pscgElements[id].status_reg &= ~GR2_TEXT_EDITABLE_B;
 		}
 		pscg_set_modified(id, c);
 	}
 }
 
 uint8_t pscg_text_get_editable(uint16_t id, gr2context * c) {
-	if (c->pscgElements[id].status_reg & 1) {
+	if (c->pscgElements[id].status_reg & GR2_TEXT_EDITABLE_B) {
 		return 1;
 	} else {
 		return 0;
@@ -137,18 +137,37 @@ uint8_t pscg_text_get_editable(uint16_t id, gr2context * c) {
 }
 
 void pscg_text_set_fit(uint16_t id, uint16_t val, gr2context * c) {
-	if (c->pscgElements[id].type == 3) {
+	if (c->pscgElements[id].type == GR2_TYPE_TEXT) {
 		if (val == 1) {
-			c->pscgElements[id].status_reg |= 2;
+			c->pscgElements[id].status_reg |= GR2_TEXT_FIT_B;
 		} else {
-			c->pscgElements[id].status_reg &= ~2;
+			c->pscgElements[id].status_reg &= ~GR2_TEXT_FIT_B;
 		}
 		pscg_set_modified(id, c);
 	}
 }
 
 uint8_t pscg_text_get_fit(uint16_t id, gr2context * c) {
-	if (c->pscgElements[id].status_reg&2) {
+	if (c->pscgElements[id].status_reg & GR2_TEXT_FIT_B) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+void pscg_text_set_pwd(uint16_t id, uint16_t val, gr2context * c) {
+	if (c->pscgElements[id].type == GR2_TYPE_TEXT) {
+		if (val == 1) {
+			c->pscgElements[id].status_reg |= GR2_TEXT_PWD_B;
+		} else {
+			c->pscgElements[id].status_reg &= ~GR2_TEXT_PWD_B;
+		}
+		pscg_set_modified(id, c);
+	}
+}
+
+uint8_t pscg_text_get_pwd(uint16_t id, gr2context * c) {
+	if (c->pscgElements[id].status_reg & GR2_TEXT_PWD_B) {
 		return 1;
 	} else {
 		return 0;
