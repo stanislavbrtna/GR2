@@ -570,7 +570,7 @@ uint8_t touch_in_element(
         && (touch_y > b)
         && (touch_y < d)
   ) {
-    if (con->pscgElements[i].type == GR2_TYPE_SCREEN) {
+    if ((con->pscgElements[i].type == GR2_TYPE_SCREEN) || (con->pscgElements[i].type == GR2_TYPE_FRAME)) {
       return 1;
     } else {
       if ((con->pscg_active_element == 0 && event == EV_PRESSED) || (con->pscg_active_element == i && event != EV_PRESSED)) {
