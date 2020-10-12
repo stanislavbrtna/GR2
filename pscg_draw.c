@@ -32,6 +32,16 @@ uint8_t svp_fexists(uint8_t *fname);
 
 uint16_t background_color; //for set text fit
 
+uint8_t global_grayout_flag;
+
+void set_global_grayout_flag(uint8_t val) {
+  global_grayout_flag = val;
+}
+
+uint8_t get_global_grayout_flag() {
+  return global_grayout_flag;
+}
+
 
 void pscg_draw_button(
     int16_t x1,
@@ -47,7 +57,7 @@ void pscg_draw_button(
   LCD_setSubDrawArea(x1, y1, x2, y2);
   curr_font = LCD_Get_Font_Size();
   LCD_Set_Sys_Font(c->pscgElements[id].param2);
-  if (c->pscgElements[id].grayout == 0) {
+  if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     if((active == 1) && (c->pscgElements[id].pre_active == 0)) {
       LCD_FillRect(x1, y1, x2, y2, c->active_color);
     }else if (active == 0) {
@@ -85,7 +95,7 @@ void pscg_draw_cbutton(
     gr2context * c
 ) {
   LCD_setSubDrawArea(x1, y1, x2, y2);
-  if (c->pscgElements[id].grayout == 0)  {
+  if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0))  {
     if ((active == 1) && (c->pscgElements[id].pre_active == 0)) {
       LCD_FillRect(x1, y1, x2, y2, c->active_color);
     } else if (active == 0) {
@@ -124,9 +134,15 @@ void pscg_draw_checkbox(
   curr_font = LCD_Get_Font_Size();
   LCD_Set_Sys_Font(c->pscgElements[id].param2);
 
-  LCD_FillRect(x1, y1, x2, y2, c->background_color);
+  // So the background is matching rest of the screen
+  // If the screen is grey, background will be gray
+  if (global_grayout_flag == 0) {
+    LCD_FillRect(x1, y1, x2, y2, c->background_color);
+  } else {
+    LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->background_color));
+  }
 
-  if (c->pscgElements[id].grayout == 0) {
+  if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     bc = c->border_color;
     fc = c->fill_color;
     ac = c->active_color;
@@ -249,7 +265,7 @@ void pscg_draw_icon(
   uint16_t size = 0;
   uint16_t bc, fc, ac, tc;
 
-  if (c->pscgElements[id].grayout == 0) {
+  if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     bc = c->border_color;
     fc = c->fill_color;
     ac = c->active_color;
@@ -405,7 +421,7 @@ void pscg_draw_slider_v(
     slider_pos = (y2 - y1 - slider_size);
   }
 
-  if (c->pscgElements[id].grayout == 0) {
+  if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     LCD_FillRect(
       x1 + sirka/4, y1, x2 - sirka/4, y2,
       c->fill_color
@@ -499,7 +515,7 @@ void pscg_draw_slider_v_f(
     c->background_color
   );
 
-  if (c->pscgElements[id].grayout == 0) {
+  if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     if (slider_pos >= slider_pos_o) {
       LCD_FillRect(
         x1 + sirka/4,
@@ -594,7 +610,7 @@ void pscg_draw_slider_h(
     slider_pos = (x2 - x1 - slider_size);
   }
 
-  if (c->pscgElements[id].grayout == 0) {
+  if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     LCD_FillRect(
       x1, y1 + sirka/4, x2, y2 - sirka/4,
       c->active_color
@@ -678,7 +694,7 @@ void pscg_draw_slider_h_f(
     c->background_color
   );
 
-  if (c->pscgElements[id].grayout == 0) {
+  if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     if (slider_pos >= slider_pos_o) {
       LCD_FillRect(
         x1 + slider_pos_o, y1 + sirka/4, x1 + slider_pos, y2 - sirka/4,
@@ -814,7 +830,7 @@ void pscg_draw_text(
   curr_font = LCD_Get_Font_Size();
   LCD_Set_Sys_Font(font_size);
 
-  if (c->pscgElements[id].grayout == 0) {
+  if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     if (active == 1) {
       LCD_FillRect(x1, y1, x2, y2, c->active_color);
       if (pwd == 0) {

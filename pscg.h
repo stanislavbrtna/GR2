@@ -105,6 +105,7 @@ void pscg_set_relative_init(uint8_t relativeInitEnabled, gr2context * c); // swi
 
 //======================== GUI element constructors ============================
 uint16_t pscg_add_screen(gr2context * c);
+uint16_t pscg_add_screen_ext(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t screen, gr2context * c);
 uint16_t pscg_add_button(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c);
 uint16_t pscg_add_slider_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c);
 uint16_t pscg_add_slider_h(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c);
@@ -219,6 +220,9 @@ uint16_t pscg_get_active_color(gr2context * c);
 
 uint16_t pscg_get_element_count(gr2context * c);
 void pscg_reset_all(gr2context * c);
+
+void set_global_grayout_flag(uint8_t val);
+uint8_t get_global_grayout_flag();
 
 void pscg_cleanup(gr2context * c); //sets correct maxElementId
 void set_pscg_workaround_context(gr2context * c);

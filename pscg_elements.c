@@ -406,14 +406,14 @@ uint16_t pscg_add_image(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint
 	return i;
 }
 
-uint16_t pscg_add_screen(gr2context * c){
+uint16_t pscg_add_screen(gr2context * c) {
 	uint16_t i = 1;
 	uint16_t scrI = 0;
-	while(1){
-	  if (c->pscgElements[i].valid==0){
+	while(1) {
+	  if (c->pscgElements[i].valid == 0) {
 	    break;
 	  }
-	  if (i>=c->elementsMax){
+	  if (i >= c->elementsMax) {
 		  pscg_error((uint8_t *) "Maximum number of elements reached!", c);
 		  return 0;
 	  }
@@ -421,10 +421,10 @@ uint16_t pscg_add_screen(gr2context * c){
 	}
 
 	while(1){
-	  if (c->pscgScreens[scrI].valid==0){
+	  if (c->pscgScreens[scrI].valid == 0) {
 	    break;
 	  }
-	  if (scrI>=c->screensMax){
+	  if (scrI >= c->screensMax) {
 		  pscg_error((uint8_t *) "Maximum number of screens reached!", c);
 		  return 0;
 	  }
@@ -453,5 +453,20 @@ uint16_t pscg_add_screen(gr2context * c){
 	c->screensUsed++;
 
 	return i;
+}
 
+uint16_t pscg_add_screen_ext(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t screen, gr2context * c) {
+	uint16_t id;
+	id = pscg_add_screen(c);
+	pscg_add_fill_xy(id, x1, y1, x2, y2, c);
+	c->pscgElements[id].event = EV_NONE;
+	c->pscgElements[id].status_reg = 0;
+	c->pscgElements[id].pre_active = 0;
+	c->pscgElements[id].visible = 1;
+	c->pscgElements[id].grayout = 0;
+	c->pscgElements[id].param = 0;
+	c->pscgElements[id].param2 = 0;
+	c->pscgElements[id].screen_id = screen;
+	c->pscgElements[id].modified = 0;
+	return id;
 }

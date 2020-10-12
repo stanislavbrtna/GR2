@@ -134,6 +134,8 @@ void pscg_reset_all(gr2context * c) {
   c->screensUsed   = 0;
   c->elementsUsed  = 0;
   c->maxElementsId = 0;
+
+  set_global_grayout_flag(0);
 }
 
 
@@ -240,6 +242,8 @@ void pscg_draw_end(gr2context * c) {
     c->pscg_active_element = 0;
     c->reset_active_element_flag = 0;
   }
+
+  set_global_grayout_flag(0);
 }
 
 uint16_t pscg_get_tmx(gr2context * c) {
@@ -273,6 +277,8 @@ void pscg_draw_screen(
   int16_t a, b, c, d;
   uint8_t all;
   uint8_t draw_frame_flag = 0;
+  uint16_t global_grayout_flag;
+  uint16_t background_color;
 
   LCD_setSubDrawArea(x1, y1, x2, y2);
 
@@ -286,12 +292,23 @@ void pscg_draw_screen(
     draw_frame_flag = 1;
   }
 
+  if (get_global_grayout_flag() || (con->pscgElements[screen].grayout == 1)) {
+    background_color = LCD_get_gray16(con->background_color);
+  } else {
+    background_color = con->background_color;
+  }
+
+  global_grayout_flag = get_global_grayout_flag();
+  if ((global_grayout_flag == 0) && (con->pscgElements[screen].grayout == 1)) {
+    set_global_grayout_flag(1);
+  }
+
   LCD_getDrawArea(&area);
   scrID = con->pscgElements[screen].value;
 
   if (all == 1) {
     draw_frame_flag = 1;
-    LCD_FillRect(x1, y1, x2, y2, con->background_color);
+    LCD_FillRect(x1, y1, x2, y2, background_color);
   } else if (all == 2) {
     for (i = 1; i <= con->maxElementsId; i++) {
       if ((con->pscgElements[i].screen_id == screen) && (i != screen) && (con->pscgElements[i].valid == 1)) {
@@ -305,7 +322,7 @@ void pscg_draw_screen(
         }
 
         COUNT_A_B_C_D_old
-        LCD_FillRect(a, b, c + 1, d,con->background_color);
+        LCD_FillRect(a, b, c + 1, d, background_color);
       }
     }
     all = 1; //aby se znovu překreslily prvky
@@ -420,6 +437,13 @@ void pscg_draw_screen(
       }
       if (con->pscgElements[i].type == GR2_TYPE_FRAME) {
         COUNT_A_B_C_D
+        uint16_t global_grayout_flag;
+
+        global_grayout_flag = get_global_grayout_flag();
+        if ((global_grayout_flag == 0) && (con->pscgElements[i].grayout == 1)) {
+          set_global_grayout_flag(1);
+        }
+
         if (all == 1) {
           pscg_draw_screen(a, b, c, d, con->pscgElements[i].value, 1, con);
         } else if (con->pscgElements[i].modified) {
@@ -428,6 +452,8 @@ void pscg_draw_screen(
         } else {
           pscg_draw_screen(a, b, c, d, con->pscgElements[i].value, 0, con);
         }
+
+        set_global_grayout_flag(global_grayout_flag);
       }
       if (con->pscgElements[i].type == GR2_TYPE_COLOR_BUTTON) {
         COUNT_A_B_C_D
@@ -471,6 +497,8 @@ void pscg_draw_screen(
   if(draw_frame_flag == 1) {
     LCD_DrawRectangle(x1, y1, x2, y2, con->border_color);
   }
+
+  set_global_grayout_flag(global_grayout_flag);
 }
 
 uint8_t touch_in_screen(
