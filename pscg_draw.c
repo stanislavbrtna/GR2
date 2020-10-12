@@ -835,6 +835,8 @@ void pscg_draw_text(
       LCD_FillRect(x1, y1, x2, y2, c->active_color);
       if (pwd == 0) {
         LCD_Text_Draw_Cursor(x1 + 10, y1 + 5, str, cursor, c->text_color);
+      } else {
+        LCD_Text_Draw_Cursor_Pwd(x1 + 10, y1 + 5, str, c->text_color);
       }
     } else {
       LCD_FillRect(x1, y1, x2, y2, c->background_color);

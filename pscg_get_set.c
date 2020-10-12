@@ -159,6 +159,8 @@ void pscg_text_set_pwd(uint16_t id, uint16_t val, gr2context * c) {
 	if (c->pscgElements[id].type == GR2_TYPE_TEXT) {
 		if (val == 1) {
 			c->pscgElements[id].status_reg |= GR2_TEXT_PWD_B;
+			// Set cursor position on the last char
+			c->pscgElements[id].param = sda_strlen(c->pscgElements[id].str_value);
 		} else {
 			c->pscgElements[id].status_reg &= ~GR2_TEXT_PWD_B;
 		}

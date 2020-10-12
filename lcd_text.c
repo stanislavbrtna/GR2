@@ -239,6 +239,19 @@ void LCD_DrawText_Pwd(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
   }
 }
 
+void LCD_Text_Draw_Cursor_Pwd(int16_t x, int16_t y, uint8_t *text, uint16_t Color) {
+  uint16_t xplus = 0;
+  uint16_t yplus = 0;
+  uint32_t i = 0;
+
+  while (0 != text[i]) {
+    xplus += LCD_Char_Get_Width('*', CurrentFont);
+    i++;
+  }
+
+  LCD_DrawLine(x + xplus, y, x + xplus, y + CurrentFont[3], Color);
+}
+
 uint16_t LCD_Text_Get_Width(uint8_t *text, uint16_t count) {
   uint32_t i        = 0;
   uint16_t xLineCnt = 0;
