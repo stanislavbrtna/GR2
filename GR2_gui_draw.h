@@ -104,6 +104,7 @@ void pscg_draw_progbar_v(
            int16_t y2,
            int32_t param,
            int32_t value,
+           uint16_t id,
            gr2context * c
           );
 
@@ -114,6 +115,7 @@ void pscg_draw_progbar_h(
            int16_t y2,
            int32_t param,
            int32_t value,
+           uint16_t id,
            gr2context * c
           );
 

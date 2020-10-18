@@ -410,9 +410,9 @@ void pscg_draw_screen(
         COUNT_A_B_C_D
         if ((all == 1) || (con->pscgElements[i].modified == 1)) {
           if ((c - a) < (d - b)) {
-            pscg_draw_progbar_v(a,b,c,d, con->pscgElements[i].param,con->pscgElements[i].value, con);
+            pscg_draw_progbar_v(a,b,c,d, con->pscgElements[i].param,con->pscgElements[i].value, i, con);
           } else {
-            pscg_draw_progbar_h(a,b,c,d, con->pscgElements[i].param,con->pscgElements[i].value, con);
+            pscg_draw_progbar_h(a,b,c,d, con->pscgElements[i].param,con->pscgElements[i].value, i, con);
           }
           con->pscgElements[i].modified = 0;
         }

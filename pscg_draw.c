@@ -753,6 +753,7 @@ void pscg_draw_progbar_v(
     int16_t y2,
     int32_t param,
     int32_t value,
+    uint16_t id,
     gr2context * c
   ){
   uint16_t slider_pos;
@@ -763,12 +764,21 @@ void pscg_draw_progbar_v(
   if (slider_pos > (y2 - y1)) {
     slider_pos = (y2 - y1);
   }
-  // background
-  LCD_FillRect(x1, y1, x2, y1 + slider_pos, c->fill_color);
 
-  // slider
-  LCD_FillRect(x1, y1 + slider_pos, x2, y2, c->active_color);
-  LCD_DrawLine(x1, y1 + slider_pos, x2, y1 + slider_pos, c->border_color);
+  if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
+    // background
+    LCD_FillRect(x1, y1, x2, y2 - slider_pos, c->fill_color);
+
+    // slider
+    LCD_FillRect(x1, y2 - slider_pos, x2, y2, c->active_color);
+  } else {
+    // grayed out variants
+    LCD_FillRect(x1, y1, x2, y2 - slider_pos, LCD_get_gray16(c->fill_color));
+    LCD_FillRect(x1, y2 - slider_pos, x2, y2, LCD_get_gray16(c->active_color));
+  }
+
+  // rest of the slider
+  LCD_DrawLine(x1, y2 - slider_pos, x2, y2 - slider_pos, c->border_color);
 
   // frame
   LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
@@ -783,6 +793,7 @@ void pscg_draw_progbar_h(
     int16_t y2,
     int32_t param,
     int32_t value,
+    uint16_t id,
     gr2context * c
   ){
   uint16_t slider_pos;
@@ -794,11 +805,16 @@ void pscg_draw_progbar_h(
     slider_pos = (x2 - x1);
   }
 
-  // background
-  LCD_FillRect(x1 + slider_pos, y1 ,x2 ,y2 ,c->fill_color);
+  if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
+    // background
+    LCD_FillRect(x1 + slider_pos, y1, x2, y2, c->fill_color);
+    // slider
+    LCD_FillRect(x1, y1, x1 + slider_pos, y2, c->active_color);
+  } else {
+    LCD_FillRect(x1 + slider_pos, y1 , x2, y2, LCD_get_gray16(c->fill_color));
+    LCD_FillRect(x1, y1, x1 + slider_pos, y2, LCD_get_gray16(c->active_color));
+  }
 
-  // slider
-  LCD_FillRect(x1, y1, x1 + slider_pos, y2, c->active_color);
   LCD_DrawLine(x1 + slider_pos, y1, x1 + slider_pos, y2, c->border_color);
 
   // frame
