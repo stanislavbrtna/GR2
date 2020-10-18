@@ -388,7 +388,9 @@ void pscg_draw_screen(
       }
       if (con->pscgElements[i].type == GR2_TYPE_SLIDER_V) {
         COUNT_A_B_C_D
-        if (all == 1) {
+        if (all == 1 ||
+            (con->pscgElements[i].modified == 1 && con->pscgElements[i].value == con->pscgElements[i].prev_val)
+        ) {
           pscg_draw_slider_v(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param,con->pscgElements[i].value,i, con);
         } else if(con->pscgElements[i].modified != 0) {
           pscg_draw_slider_v_f(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param, con->pscgElements[i].value,con->pscgElements[i].prev_val,i,con);
@@ -428,7 +430,9 @@ void pscg_draw_screen(
       }
       if (con->pscgElements[i].type == GR2_TYPE_SLIDER_H) {
         COUNT_A_B_C_D
-        if (all == 1) {
+        if (all == 1 ||
+            (con->pscgElements[i].modified == 1 && con->pscgElements[i].value == con->pscgElements[i].prev_val)
+        ) {
           pscg_draw_slider_h(a, b, c, d, con->pscgScreens[scrID].x_cell, con->pscgElements[i].param, con->pscgElements[i].value, i, con);
         } else if(con->pscgElements[i].modified != 0) {
           pscg_draw_slider_h_f(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param,con->pscgElements[i].value, con->pscgElements[i].prev_val,i, con);
