@@ -22,6 +22,8 @@ SOFTWARE.
 
 #include "pscg.h"
 
+uint32_t sda_strlen(uint8_t * str);
+
 void pscg_set_grid_size(uint16_t size, gr2context * c){
 	c->default_grid_size = size;
 }
