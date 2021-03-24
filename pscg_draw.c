@@ -264,6 +264,8 @@ void pscg_draw_icon(
   LCD_drawArea area;
   uint16_t size = 0;
   uint16_t bc, fc, ac, tc;
+  uint8_t curr_font;
+  curr_font = LCD_Get_Font_Size();
 
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     bc = c->border_color;
@@ -325,24 +327,18 @@ void pscg_draw_icon(
       x1,
       y1 + 2 + 32 * (size + 1),
       x1 + 32 * (size + 1),
-      y1 + 2 + 32 * (size + 1) + 8 * ((15 * size) / 8) + 2,
+      y1 + 2 + 32 * (size + 1) + 8 * ((22 * size) / 8) + 2,
       ac
     );
     LCD_DrawRectangle(
       x1,
       y1 + 2 + 32 * (size + 1),
       x1 + 32 * (size + 1),
-      y1 + 2 + 32 * (size + 1) + 8 * ((15 * size) / 8) + 2,
+      y1 + 2 + 32 * (size + 1) + 8 * ((22 * size) / 8) + 2,
       bc
     );
-    LCD_DrawText(
-      x1 + 5,
-      y1 + 4 + 32 * (size + 1),
-      tc,
-      0,
-      c->pscgElements[id].str_value,
-      (15 * size) / 8
-    );
+    LCD_Set_Sys_Font(12);
+    LCD_DrawText_ext(x1 + 5, y1 + 5 + 32 * (size + 1), tc, c->pscgElements[id].str_value);
   } else if (active == 0) {
 #ifdef PPM_SUPPORT_ENABLED
     if (svp_fexists(c->pscgElements[id].str_value2)) {
@@ -375,25 +371,21 @@ void pscg_draw_icon(
       x1,
       y1 + 2 + 32 * (size + 1),
       x1 + 32 * (size + 1),
-      y1 + 2 + 32 * (size + 1) + 8 * ((15 * size) / 8) + 2,
+      y1 + 2 + 32 * (size + 1) + 8 * ((22 * size) / 8) + 2,
       c->background_color
     );
     LCD_DrawRectangle(
       x1,
       y1 + 2 + 32 * (size + 1),
       x1 + 32 * (size + 1),
-      y1 + 2 + 32 * (size + 1) + 8 * ((15 * size) / 8) + 2,
+      y1 + 2 + 32 * (size + 1) + 8 * ((22 * size) / 8) + 2,
       c->border_color
     );
-    LCD_DrawText(
-      x1 + 5,
-      y1 + 4 + 32 * (size + 1),
-      c->text_color,
-      0,
-      c->pscgElements[id].str_value,
-      (15 * size) / 8
-    );
+
+    LCD_Set_Sys_Font(12);
+    LCD_DrawText_ext(x1 + 5, y1 + 5 + 32 * (size + 1), c->text_color, c->pscgElements[id].str_value);
   }
+  LCD_Set_Sys_Font(curr_font);
 }
 
 

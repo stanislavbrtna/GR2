@@ -30,6 +30,9 @@ SOFTWARE.
 #include "fonts/roboto87.h"
 #include "fonts/roboto87_cz.h"
 
+#include "fonts/roboto12.h"
+#include "fonts/roboto12_cz.h"
+
 uint16_t fitTextMax;
 uint8_t fitText;
 const uint8_t * CurrentFont;
@@ -71,6 +74,13 @@ uint16_t LCD_Draw_Get_Font_Width() {
 }
 
 void LCD_Set_Sys_Font(uint8_t size) {
+  if (size == 12) {
+    CurrentSize     = 12;
+    fontCorector_cz = -2;
+    CurrentFont     = roboto12;
+    CurrentFont_cz  = roboto12_cz;
+  }
+
   if (size == 18) {
     CurrentSize     = 18;
     fontCorector_cz = -3;
