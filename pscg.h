@@ -147,6 +147,10 @@ void pscg_set_x1y1x2y2(uint16_t id, uint16_t x1, uint16_t y1, uint16_t x2, uint1
 void pscg_set_str(uint16_t id, uint8_t *str, gr2context * c);
 uint8_t * pscg_get_str(uint16_t id, gr2context * c);
 
+// string alignment
+uint8_t pscg_text_get_align(uint16_t id, gr2context * c);
+void pscg_text_set_align(uint16_t id, uint16_t val, gr2context * c);
+
 // modified flag
 void pscg_set_modified(uint16_t id, gr2context * c);
 

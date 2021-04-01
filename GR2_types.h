@@ -28,6 +28,8 @@ SOFTWARE.
 #define GR2_GHOST_B 512
 #define GR2_SELECT_B 1024
 #define GR2_TEXT_PWD_B 2048
+#define GR2_T_ALIGN_B1 4096
+#define GR2_T_ALIGN_B2 8192
 
 #define GR2_TYPE_SCREEN 0
 #define GR2_TYPE_BUTTON 1
@@ -42,6 +44,10 @@ SOFTWARE.
 #define GR2_TYPE_CHECKBOX 10
 #define GR2_TYPE_IMAGE 11
 
+#define GR2_ALIGN_LEFT 0
+#define GR2_ALIGN_RIGHT 1
+#define GR2_ALIGN_CENTER 2
+
 typedef struct {
   uint16_t type;            // use enum in the future
   int16_t x1;               // grid coordinates
@@ -55,9 +61,21 @@ typedef struct {
   uint8_t *str_value2;
   volatile uint16_t status_reg;
   // text:
-  // bit0 - editable
-  // bit1 - fit
-  // TODO: move visibility and graiout to position 7, 8, also add ghost option 9 and selected 10
+  // bit0 - editable 1
+  // bit1 - fit 2
+  // bit2 4
+  // bit3 8
+  // bit4 16
+  // bit5 32
+  // bit6 64
+  // bit7 128
+  // bit8 256
+  // bit9 - ghost
+  // bit10 - select
+  // bit11 - pwd
+  // bit12 - text align bit 1
+  // bit13 - text align bit 2
+  // TODO: move visibility and grayout to position 7, 8
   uint16_t screen_id;         // id of the parent screen
   volatile uint16_t modified; // modified flag, modified elements are redrawn
   volatile int32_t prev_val;  // previous value, used for redraw

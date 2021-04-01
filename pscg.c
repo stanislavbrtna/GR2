@@ -755,7 +755,13 @@ uint8_t pscg_touch_input(
 
             // store current absolute touch coordinates for cursor detection
             if (con->pscgElements[i].value == 1) {
-              con->textMouseX = touch_x - a - 10;
+              if (pscg_text_get_align(i, con) == GR2_ALIGN_LEFT) {
+                con->textMouseX = touch_x - a - 10;
+              } else if (pscg_text_get_align(i, con) == GR2_ALIGN_RIGHT) {
+                con->textMouseX = touch_x - a - (pscg_get_text_align_x(i, x1, x2, con) - 52);
+              } else if (pscg_text_get_align(i, con) == GR2_ALIGN_CENTER) {
+                con->textMouseX = touch_x - a - (pscg_get_text_align_x(i, x1, x2, con) - 26);
+              }
               con->textMouseY = touch_y - b - 5;
               con->pscgElements[i].modified = 1;
               con->pscgElements[i].event    = event;

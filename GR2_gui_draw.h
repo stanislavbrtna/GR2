@@ -23,6 +23,14 @@ SOFTWARE.
 #ifndef GR2_GUI_DRAW_H_
 #define GR2_GUI_DRAW_H_
 
+// text align helper
+int16_t pscg_get_text_align_x(
+    uint16_t id,
+    int16_t x1,
+    int16_t x2,
+    gr2context * c
+);
+
 // headers for the element draw functions, used only internaly in the GR2
 void pscg_draw_button(
            int16_t x1,

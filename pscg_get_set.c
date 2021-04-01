@@ -157,6 +157,36 @@ uint8_t pscg_text_get_fit(uint16_t id, gr2context * c) {
 	}
 }
 
+uint8_t pscg_text_get_align(uint16_t id, gr2context * c) {
+	if (!(c->pscgElements[id].status_reg & GR2_T_ALIGN_B1) && !(c->pscgElements[id].status_reg & GR2_T_ALIGN_B2)) {
+		return GR2_ALIGN_LEFT;
+	}
+	if (c->pscgElements[id].status_reg & GR2_T_ALIGN_B1 && !(c->pscgElements[id].status_reg & GR2_T_ALIGN_B2)) {
+		return GR2_ALIGN_RIGHT;
+	}
+	if (!(c->pscgElements[id].status_reg & GR2_T_ALIGN_B1) && c->pscgElements[id].status_reg & GR2_T_ALIGN_B2) {
+		return GR2_ALIGN_CENTER;
+	}
+}
+
+
+void pscg_text_set_align(uint16_t id, uint16_t val, gr2context * c) {
+	if (val == GR2_ALIGN_LEFT) {
+		c->pscgElements[id].status_reg &= ~GR2_T_ALIGN_B1;
+		c->pscgElements[id].status_reg &= ~GR2_T_ALIGN_B2;
+	}
+	if (val == GR2_ALIGN_RIGHT) {
+		c->pscgElements[id].status_reg |= GR2_T_ALIGN_B1;
+		c->pscgElements[id].status_reg &= ~GR2_T_ALIGN_B2;
+	}
+	if (val == GR2_ALIGN_CENTER) {
+		c->pscgElements[id].status_reg &= ~GR2_T_ALIGN_B1;
+		c->pscgElements[id].status_reg |= GR2_T_ALIGN_B2;
+	}
+	pscg_set_modified(id, c);
+}
+
+
 void pscg_text_set_pwd(uint16_t id, uint16_t val, gr2context * c) {
 	if (c->pscgElements[id].type == GR2_TYPE_TEXT) {
 		if (val == 1) {
