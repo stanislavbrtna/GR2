@@ -334,11 +334,15 @@ void pscg_draw_icon(
 #ifdef PPM_SUPPORT_ENABLED
     if (svp_fexists(c->pscgElements[id].str_value2)) {
       svp_ppm_set_pmc(1, ac);
+      if (c->pscgElements[id].param != 0) {
+        sda_p16_set_alpha(1, c->pscgElements[id].param - 1, c->background_color);
+      }
       if (ppm_get_width(c->pscgElements[id].str_value2) == 32) {
         draw_ppm(x1, y1, size + 1, c->pscgElements[id].str_value2);
       } else if (ppm_get_width(c->pscgElements[id].str_value2) == 64) {
         draw_ppm(x1, y1, size, c->pscgElements[id].str_value2);
       }
+      sda_p16_set_alpha(0, 0, c->background_color);
       svp_ppm_set_pmc(0, 0);
     } else {
       // if there is no icon, will draw empty rectangle
@@ -381,6 +385,9 @@ void pscg_draw_icon(
   } else if (active == 0) {
 #ifdef PPM_SUPPORT_ENABLED
     if (svp_fexists(c->pscgElements[id].str_value2)) {
+      if (c->pscgElements[id].param != 0) {
+        sda_p16_set_alpha(1, c->pscgElements[id].param - 1, c->background_color);
+      }
       if (c->pscgElements[id].grayout == 1) {
         svp_ppm_set_pmc(1, ac);
       }
@@ -390,6 +397,7 @@ void pscg_draw_icon(
         draw_ppm(x1, y1, size, c->pscgElements[id].str_value2);
       }
       svp_ppm_set_pmc(0, 0);
+      sda_p16_set_alpha(0, 0, c->background_color);
     } else {
       LCD_FillRect(x1, y1, x1 + 64 * size, y1 + 64 * size, fc);
       LCD_DrawRectangle(x1, y1, x1 + 64 * size, y1 + 64 * size, bc);
