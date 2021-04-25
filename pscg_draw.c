@@ -28,6 +28,7 @@ SOFTWARE.
 #ifdef PPM_SUPPORT_ENABLED
 uint16_t ppm_get_width(uint8_t *filename);
 uint8_t svp_fexists(uint8_t *fname);
+void sda_p16_set_alpha(uint8_t enable, uint16_t color, uint16_t bg_color);
 #endif
 
 uint16_t background_color; //for set text fit
