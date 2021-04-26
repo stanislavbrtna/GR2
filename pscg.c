@@ -75,6 +75,7 @@ void pscg_set_relative_init(uint8_t val, gr2context * c) {
 }
 
 uint8_t gr2_clicked(uint16_t id, gr2context * c) {
+  PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
   if ((c->pscgElements[id].event == EV_RELEASED)) {
     pscg_set_event(id, EV_NONE, c);
     return 1;
@@ -142,6 +143,7 @@ void pscg_reset_all(gr2context * c) {
 // this function is here so elements_used is not decremented twice when recursion occurs
 void pscg_destroy_screen_lvl2(uint16_t id, gr2context * c) {
   uint16_t x;
+  PSCG_BOUNDARY_CHECK_AND_RETURN();
 
   c->pscgElements[id].valid = 0;
   c->pscgScreens[c->pscgElements[id].value].valid = 0;
@@ -161,7 +163,7 @@ void pscg_destroy_screen_lvl2(uint16_t id, gr2context * c) {
 }
 
 void pscg_destroy_screen(uint16_t id, gr2context * c) {
-
+  PSCG_BOUNDARY_CHECK_AND_RETURN();
   if (c->pscgElements[id].valid != 1) {
     return;
   }
@@ -171,6 +173,7 @@ void pscg_destroy_screen(uint16_t id, gr2context * c) {
 }
 
 uint8_t pscg_get_valid(uint16_t id, gr2context * c) {
+  PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
   return c->pscgElements[id].valid;
 }
 
@@ -185,7 +188,7 @@ void pscg_cleanup(gr2context * c) {
 
 void pscg_clear_screen_ev(uint16_t id, gr2context * c) {
   uint16_t x;
-
+  PSCG_BOUNDARY_CHECK_AND_RETURN();
   for(x = 1; x <= c->maxElementsId; x++) {
     if ((c->pscgElements[x].screen_id == id) && (c->pscgElements[x].valid == 1)) {
       pscg_set_event(x, EV_NONE, c);
@@ -194,6 +197,7 @@ void pscg_clear_screen_ev(uint16_t id, gr2context * c) {
 }
 
 void pscg_clear_event(uint16_t id, gr2context * c) {
+  PSCG_BOUNDARY_CHECK_AND_RETURN();
   if (c->pscgElements[id].type != 0) {
     pscg_set_event(id, EV_NONE, c);
   } else {
@@ -202,6 +206,7 @@ void pscg_clear_event(uint16_t id, gr2context * c) {
 }
 
 void pscg_destroy(uint16_t id, gr2context * c) {
+  PSCG_BOUNDARY_CHECK_AND_RETURN();
   if (c->pscgElements[id].valid) {
     if (c->pscgElements[id].type == 0) {
       pscg_destroy_screen(id, c);
@@ -216,6 +221,12 @@ void pscg_destroy(uint16_t id, gr2context * c) {
 }
 
 void pscg_set_value(uint16_t id, int32_t val, gr2context * c) {
+  PSCG_BOUNDARY_CHECK_AND_RETURN();
+
+  if (c->pscgElements[id].type == GR2_TYPE_SCREEN) {
+    return;
+  }
+
   if ((val != c->pscgElements[id].value) && (c->pscgElements[id].modified == 0)) {
     if (c->pscgElements[id].modified == 0) {
       // Store value before item was modified
@@ -279,6 +290,12 @@ void pscg_draw_screen(
   uint8_t draw_frame_flag = 0;
   uint16_t global_grayout_flag;
   uint16_t background_color;
+
+  if (screen > con->elementsMax) {
+    pscg_error("id out of bounds.", c);
+    printf("%s: id out of bounds.\n", __FUNCTION__);
+    return;
+  }
 
   LCD_setSubDrawArea(x1, y1, x2, y2);
 
@@ -629,6 +646,12 @@ uint8_t pscg_touch_input(
   uint16_t i, scrID;
   int16_t a, b, c, d;
   uint8_t retval = 0;
+
+  if (screen > con->elementsMax) {
+    pscg_error("id out of bounds.", c);
+    printf("%s: id out of bounds.\n", __FUNCTION__);
+    return;
+  }
 
   if (event == EV_NONE) {
     con->pscgElements[con->pscg_active_element].modified = 1;

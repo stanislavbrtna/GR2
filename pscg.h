@@ -237,4 +237,8 @@ uint16_t pscg_get_tmy(gr2context * c);
 void pscg_error(uint8_t *str, gr2context * c);
 void pscg_destroy_screen(uint16_t id, gr2context * c); // deprecated
 
+#define PSCG_BOUNDARY_CHECK_AND_RETURN() do{if (id > c->elementsMax) {pscg_error("id out of bounds.", c);printf("%s: id out of bounds.\n", __FUNCTION__);return;} }while(0)
+#define PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO() do{if (id > c->elementsMax) {pscg_error("id out of bounds.", c);printf("%s: id out of bounds.\n", __FUNCTION__);return 0;} }while(0)
+
+
 #endif /* PSCG_PSCG_H_ */
