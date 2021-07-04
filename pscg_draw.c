@@ -43,17 +43,20 @@ uint8_t get_global_grayout_flag() {
   return global_grayout_flag;
 }
 
-int16_t pscg_get_text_align_x(uint16_t id, int16_t x1, int16_t x2, gr2context * c) {
+int16_t pscg_get_text_align_x(uint16_t id, int16_t x1, int16_t x2, int16_t offset, gr2context * c) {
   uint8_t alignment;
   int16_t x_add = 0;
   alignment = pscg_text_get_align(id, c);
   if (alignment != GR2_ALIGN_LEFT) {
     if (alignment == GR2_ALIGN_RIGHT) {
-      x_add = x2 - x1 - LCD_Text_Get_Width(c->pscgElements[id].str_value, 0) - 15;
+      x_add = x2 - x1 - LCD_Text_Get_Width(c->pscgElements[id].str_value, 0) - offset;
     } else if (alignment == GR2_ALIGN_CENTER) {
-      x_add = (x2 - x1)/2 - LCD_Text_Get_Width(c->pscgElements[id].str_value, 0)/2 - 5;
+      x_add = (x2 - x1)/2 - LCD_Text_Get_Width(c->pscgElements[id].str_value, 0)/2;
     }
+  } else {
+    x_add += offset;
   }
+
   return x_add;
 }
 
@@ -83,7 +86,7 @@ void pscg_draw_button(
       }
     }
     LCD_DrawText_ext(
-      x1 + c->pscgElements[id].param + pscg_get_text_align_x(id, x1, x2, c),
+      x1 + pscg_get_text_align_x(id, x1, x2, c->pscgElements[id].param, c),
       y1 + PSCG_TEXT_Y_GAP,
       c->text_color,
       str
@@ -97,7 +100,7 @@ void pscg_draw_button(
   }  else {
     LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->fill_color));
     LCD_DrawText_ext(
-      x1 + c->pscgElements[id].param + pscg_get_text_align_x(id, x1, x2, c),
+      x1 + pscg_get_text_align_x(id, x1, x2,c->pscgElements[id].param, c),
       y1 + PSCG_TEXT_Y_GAP,
       LCD_get_gray16(c->text_color),
       str
@@ -127,7 +130,7 @@ void pscg_draw_cbutton(
       LCD_FillRect(x1, y1, x2, y2, c->pscgElements[id].value);
     }
     LCD_DrawText_ext(
-      x1 + 10 + pscg_get_text_align_x(id, x1, x2, c),
+      x1 + pscg_get_text_align_x(id, x1, x2, c->pscgElements[id].param, c),
       y1 + PSCG_TEXT_Y_GAP,
       ~c->pscgElements[id].value,
       str
@@ -141,7 +144,7 @@ void pscg_draw_cbutton(
   }  else {
     LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->pscgElements[id].value));
     LCD_DrawText_ext(
-      x1 + 10 + pscg_get_text_align_x(id, x1, x2, c),
+      x1 + pscg_get_text_align_x(id, x1, x2, c->pscgElements[id].param, c),
       y1 + PSCG_TEXT_Y_GAP,
       LCD_get_gray16(~c->pscgElements[id].value),
       str
@@ -378,7 +381,7 @@ void pscg_draw_icon(
     );
     LCD_Set_Sys_Font(12);
     LCD_DrawText_ext(
-      x1 + 5 + pscg_get_text_align_x(id, x1, x1 + 64 * size, c),
+      x1 + pscg_get_text_align_x(id, x1, x1 + 64 * size, 5, c),
       y1 + 5 + 32 * (size + 1),
       tc,
       c->pscgElements[id].str_value
@@ -432,7 +435,7 @@ void pscg_draw_icon(
 
     LCD_Set_Sys_Font(12);
     LCD_DrawText_ext(
-      x1 + 5 + pscg_get_text_align_x(id, x1, x1 + 64 * size, c),
+      x1 + pscg_get_text_align_x(id, x1, x1 + 64 * size, 5, c),
       y1 + 5 + 32 * (size + 1),
       c->text_color,
       c->pscgElements[id].str_value
@@ -892,15 +895,15 @@ void pscg_draw_text(
 
   // get additional alignment
   int16_t x_add = 0;
-  x_add = pscg_get_text_align_x(id, x1, x2, c);
+  x_add = pscg_get_text_align_x(id, x1, x2, 10, c);
 
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     if (active == 1) {
       LCD_FillRect(x1, y1, x2, y2, c->active_color);
       if (pwd == 0) {
-        LCD_Text_Draw_Cursor(x_add + x1 + 10, y1 + 5, str, cursor, c->text_color);
+        LCD_Text_Draw_Cursor(x_add + x1, y1 + 5, str, cursor, c->text_color);
       } else {
-        LCD_Text_Draw_Cursor_Pwd(x_add + x1 + 10, y1 + 5, str, c->text_color);
+        LCD_Text_Draw_Cursor_Pwd(x_add + x1, y1 + 5, str, c->text_color);
       }
     } else {
       LCD_FillRect(x1, y1, x2, y2, c->background_color);
@@ -908,9 +911,9 @@ void pscg_draw_text(
 
     LCD_set_fitText(fit, x2);
     if (pwd == 1) {
-      LCD_DrawText_Pwd(x_add + x1 + 10, y1 + PSCG_TEXT_Y_GAP, c->text_color, str);
+      LCD_DrawText_Pwd(x_add + x1, y1 + PSCG_TEXT_Y_GAP, c->text_color, str);
     } else {
-      LCD_DrawText_ext(x_add + x1 + 10, y1 + PSCG_TEXT_Y_GAP, c->text_color, str);
+      LCD_DrawText_ext(x_add + x1, y1 + PSCG_TEXT_Y_GAP, c->text_color, str);
     }
     LCD_set_fitText(0, 0);
 
@@ -921,7 +924,7 @@ void pscg_draw_text(
     if (active == 1) {
       LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->active_color)); // background
       if (pwd == 0) {
-        LCD_Text_Draw_Cursor(x_add + x1 + 10, y1 + 5, str, cursor, LCD_get_gray16(c->text_color));
+        LCD_Text_Draw_Cursor(x_add + x1, y1 + 5, str, cursor, LCD_get_gray16(c->text_color));
       }
     } else {
       LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->background_color));
@@ -929,14 +932,14 @@ void pscg_draw_text(
 
     LCD_set_fitText(fit, x2);
     if (pwd == 1) {
-      LCD_DrawText_Pwd(x_add + x1 + 10, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->text_color), str);
+      LCD_DrawText_Pwd(x_add + x1, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->text_color), str);
     } else {
-      LCD_DrawText_ext(x_add + x1 + 10, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->text_color), str);
+      LCD_DrawText_ext(x_add + x1, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->text_color), str);
     }
     LCD_set_fitText(0, 0);
 
     if (editable) {
-      LCD_DrawRectangle(x_add + x1, y1, x2, y2, LCD_get_gray16(c->border_color));
+      LCD_DrawRectangle(x1, y1, x2, y2, LCD_get_gray16(c->border_color));
     }
   }
 

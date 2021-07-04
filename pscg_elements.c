@@ -187,6 +187,7 @@ uint16_t pscg_add_cbutton(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, ui
 	pscg_add_fill_xy(i, x1, y1, x2, y2, c);
 	c->pscgElements[i].str_value = str;
 	c->pscgElements[i].value = 0; // color is stored in value
+	c->pscgElements[i].param = 10;
 	c->pscgElements[i].param2 = c->pscgScreens[c->pscgElements[screen].value].default_font; //číslo fontu
 	pscg_set_max_id(i, c);
 	c->elementsUsed++;

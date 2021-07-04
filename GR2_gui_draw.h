@@ -28,6 +28,7 @@ int16_t pscg_get_text_align_x(
     uint16_t id,
     int16_t x1,
     int16_t x2,
+    int16_t offset,
     gr2context * c
 );
 
