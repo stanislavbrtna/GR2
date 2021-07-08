@@ -292,7 +292,7 @@ uint16_t pscg_add_text(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8
 	pscg_add_fill_xy(i, x1, y1, x2, y2, c);
 	c->pscgElements[i].str_value = str;
 	//value: marks active textbox
-	//param: stores cursor position
+	//param: stores cursor position, stores last breakpoint in fix mode
 	//status_reg: bit0 - editable
 	c->pscgElements[i].param2 = c->pscgScreens[c->pscgElements[screen].value].default_font; //font
 

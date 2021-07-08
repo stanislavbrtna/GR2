@@ -914,6 +914,9 @@ void pscg_draw_text(
       LCD_DrawText_Pwd(x_add + x1, y1 + PSCG_TEXT_Y_GAP, c->text_color, str);
     } else {
       LCD_DrawText_ext(x_add + x1, y1 + PSCG_TEXT_Y_GAP, c->text_color, str);
+      if (fit) {
+        c->pscgElements[id].param = LCD_get_fitText_breakpoint();
+      }
     }
     LCD_set_fitText(0, 0);
 
@@ -935,6 +938,9 @@ void pscg_draw_text(
       LCD_DrawText_Pwd(x_add + x1, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->text_color), str);
     } else {
       LCD_DrawText_ext(x_add + x1, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->text_color), str);
+      if (fit) {
+        c->pscgElements[id].param = LCD_get_fitText_breakpoint();
+      }
     }
     LCD_set_fitText(0, 0);
 

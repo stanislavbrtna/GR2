@@ -35,6 +35,7 @@ SOFTWARE.
 
 uint16_t fitTextMax;
 uint8_t fitText;
+int32_t fitTextBreakpoint;
 const uint8_t * CurrentFont;
 const uint8_t * CurrentFont_cz;
 uint8_t CurrentSize; // current font size
@@ -46,6 +47,10 @@ extern uint16_t background_color;
 void LCD_set_fitText(uint8_t enable, uint16_t max) {
   fitTextMax = max;
   fitText = enable;
+}
+
+int32_t LCD_get_fitText_breakpoint() {
+  return fitTextBreakpoint;
 }
 
 void LCD_Draw_Set_Font(uint8_t *font) {
@@ -187,6 +192,8 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
   uint8_t outChar    = 0;
   uint16_t yprac;
 
+  fitTextBreakpoint = 0;
+
   while (0 != text[i]) {
     //bitbang utf8
     if (text[i] > 128) {
@@ -206,6 +213,9 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
                            background_color
               );
               i = lastspace;
+              if (fitTextBreakpoint == 0) {
+                fitTextBreakpoint = i;
+              }
             }
 
             xLineCnt = 0;
@@ -233,6 +243,10 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
       } else {
         xLineCnt = 0;
         yLineCnt++;
+
+        if (fitTextBreakpoint == 0 && fitText == 1) {
+          fitTextBreakpoint = i;
+        }
       }
     }
     i++;

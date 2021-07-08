@@ -39,6 +39,7 @@ void LCD_Set_Sys_Font(uint8_t size);
 uint8_t LCD_Get_Font_Size();
 
 void LCD_set_fitText(uint8_t enable, uint16_t max);
+int32_t LCD_get_fitText_breakpoint(); // returns position of first automatic breakpoint
 
 uint16_t LCD_DrawChar(int16_t x, int16_t y, uint16_t color, uint16_t znak, const uint8_t *font);
 uint16_t LCD_Char_Get_Width(uint16_t znak, const uint8_t *font);
