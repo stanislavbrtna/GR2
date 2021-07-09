@@ -292,7 +292,7 @@ void pscg_draw_screen(
   uint16_t background_color;
 
   if (screen > con->elementsMax) {
-    pscg_error("id out of bounds.", c);
+    pscg_error("id out of bounds.", con);
     printf("%s: id out of bounds.\n", __FUNCTION__);
     return;
   }
@@ -648,9 +648,9 @@ uint8_t pscg_touch_input(
   uint8_t retval = 0;
 
   if (screen > con->elementsMax) {
-    pscg_error("id out of bounds.", c);
+    pscg_error("id out of bounds.", con);
     printf("%s: id out of bounds.\n", __FUNCTION__);
-    return;
+    return 0;
   }
 
   if (event == EV_NONE) {
