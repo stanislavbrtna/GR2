@@ -146,11 +146,11 @@ static void pscg_fill_zero_defaults(uint16_t i, uint16_t screen_id, gr2context *
 	c->pscgElements[i].modified = 0;
 }
 
-uint16_t pscg_add_button(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c){
-	uint16_t i = 1;
+static uint16_t pscg_get_new_id(gr2context * c) {
+  uint16_t i = 1;
 	while (1) {
 	  if (c->pscgElements[i].valid == 0) {
-	    break;
+	    return i;
 	  }
 	  if (i >= c->elementsMax) {
 		  pscg_error((uint8_t *)"Maximum number of elements reached!", c);
@@ -158,6 +158,11 @@ uint16_t pscg_add_button(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uin
 	  }
 	  i++;
 	}
+}
+
+uint16_t pscg_add_button(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c){
+	uint16_t i = pscg_get_new_id(c);
+
 	pscg_fill_zero_defaults(i, screen, c);
 	c->pscgElements[i].type = GR2_TYPE_BUTTON;
 	pscg_add_fill_xy(i, x1, y1, x2, y2, c);
@@ -170,17 +175,7 @@ uint16_t pscg_add_button(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uin
 }
 
 uint16_t pscg_add_cbutton(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c){
-	uint16_t i = 1;
-	while(1){
-	  if (c->pscgElements[i].valid == 0) {
-	    break;
-	  }
-	  if (i>= c->elementsMax){
-		  pscg_error((uint8_t *) "Maximum number of elements reached!", c);
-		  return 0;
-	  }
-	  i++;
-	}
+	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
 	c->pscgElements[i].type = GR2_TYPE_COLOR_BUTTON;
@@ -197,17 +192,7 @@ uint16_t pscg_add_cbutton(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, ui
 
 
 uint16_t pscg_add_checkbox(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c) {
-	uint16_t i = 1;
-	while(1) {
-	  if (c->pscgElements[i].valid == 0) {
-	    break;
-	  }
-	  if (i >= c->elementsMax) {
-		  pscg_error((uint8_t *) "Maximum number of elements reached!", c);
-		  return 0;
-	  }
-	  i++;
-	}
+	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
 	c->pscgElements[i].type = GR2_TYPE_CHECKBOX;
@@ -222,17 +207,7 @@ uint16_t pscg_add_checkbox(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, u
 }
 
 uint16_t pscg_add_frame(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t val, uint16_t screen, gr2context * c){
-	uint16_t i = 1;
-	while(1){
-	  if (c->pscgElements[i].valid==0){
-	    break;
-	  }
-	  if (i>= c->elementsMax){
-		  pscg_error((uint8_t *) "Maximum number of elements reached!", c);
-		  return 0;
-	  }
-	  i++;
-	}
+	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
 	c->pscgElements[i].type = GR2_TYPE_FRAME;
@@ -246,17 +221,7 @@ uint16_t pscg_add_frame(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int3
 }
 
 uint16_t pscg_add_icon(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint8_t *str2, uint16_t screen, gr2context * c){
-	uint16_t i = 1;
-	while(1){
-	  if (c->pscgElements[i].valid==0){
-	    break;
-	  }
-	  if (i>= c->elementsMax){
-		  pscg_error((uint8_t *) "Maximum number of elements reached!", c);
-		  return 0;
-	  }
-	  i++;
-	}
+	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
 	c->pscgElements[i].type = GR2_TYPE_ICON;
@@ -275,17 +240,7 @@ uint16_t pscg_add_icon(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8
 }
 
 uint16_t pscg_add_text(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c){
-	uint16_t i = 1;
-	while(1){
-	  if (c->pscgElements[i].valid==0){
-	    break;
-	  }
-	  if (i >= c->elementsMax){
-		  pscg_error((uint8_t *) "Maximum number of elements reached!", c);
-		  return 0;
-	  }
-	  i++;
-	}
+	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
 	c->pscgElements[i].type = GR2_TYPE_TEXT;
@@ -303,17 +258,7 @@ uint16_t pscg_add_text(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8
 }
 
 uint16_t pscg_add_slider_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c){
-	uint16_t i = 1;
-	while(1){
-	  if (c->pscgElements[i].valid==0){
-	    break;
-	  }
-	  if (i>=c->elementsMax){
-		  pscg_error((uint8_t *) "Maximum number of elements reached!", c);
-		  return 0;
-	  }
-	  i++;
-	}
+	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
 	c->pscgElements[i].type = GR2_TYPE_SLIDER_V;
@@ -328,17 +273,7 @@ uint16_t pscg_add_slider_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, i
 }
 
 uint16_t pscg_add_slider_h(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c){
-	uint16_t i=1;
-	while(1){
-	  if (c->pscgElements[i].valid==0){
-	    break;
-	  }
-	  if (i>=c->elementsMax){
-		  pscg_error((uint8_t *) "Maximum number of elements reached!", c);
-		  return 0;
-	  }
-	  i++;
-	}
+	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
 	c->pscgElements[i].type = GR2_TYPE_SLIDER_H;
@@ -355,17 +290,7 @@ uint16_t pscg_add_slider_h(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, i
 
 //vertikální progbar
 uint16_t pscg_add_progbar_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c){
-	uint16_t i = 1;
-	while(1){
-	  if (c->pscgElements[i].valid==0){
-	    break;
-	  }
-	  if (i>=c->elementsMax){
-		  pscg_error((uint8_t *) "Maximum number of elements reached!", c);
-		  return 0;
-	  }
-	  i++;
-	}
+	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
 	c->pscgElements[i].type = GR2_TYPE_PROGBAR;
@@ -383,17 +308,7 @@ uint16_t pscg_add_progbar_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, 
 
 // image
 uint16_t pscg_add_image(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c){
-	uint16_t i = 1;
-	while(1){
-	  if (c->pscgElements[i].valid==0){
-	    break;
-	  }
-	  if (i>= c->elementsMax){
-		  pscg_error((uint8_t *) "Maximum number of elements reached!", c);
-		  return 0;
-	  }
-	  i++;
-	}
+	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
 	c->pscgElements[i].type = GR2_TYPE_IMAGE;
@@ -408,20 +323,10 @@ uint16_t pscg_add_image(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint
 }
 
 uint16_t pscg_add_screen(gr2context * c) {
-	uint16_t i = 1;
+	uint16_t i = pscg_get_new_id(c);
 	uint16_t scrI = 0;
-	while(1) {
-	  if (c->pscgElements[i].valid == 0) {
-	    break;
-	  }
-	  if (i >= c->elementsMax) {
-		  pscg_error((uint8_t *) "Maximum number of elements reached!", c);
-		  return 0;
-	  }
-	  i++;
-	}
 
-	while(1){
+	while(1) {
 	  if (c->pscgScreens[scrI].valid == 0) {
 	    break;
 	  }
