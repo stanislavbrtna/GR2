@@ -277,6 +277,13 @@ void pscg_set_str(uint16_t id, uint8_t *str, gr2context * c) {
 	c->pscgElements[id].str_value = str;
 }
 
+void pscg_set_str2(uint16_t id, uint8_t *str, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+ 	// always redraw
+	c->pscgElements[id].modified = 1;
+	c->pscgElements[id].str_value2 = str;
+}
+
 uint8_t * pscg_get_str(uint16_t id, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
 	return c->pscgElements[id].str_value;
