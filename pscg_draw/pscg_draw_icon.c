@@ -126,6 +126,8 @@ void pscg_draw_icon(
       }
       if (c->pscgElements[id].grayout == 1) {
         svp_ppm_set_pmc(1, ac);
+      } else if (c->pscgElements[id].status_reg & GR2_SELECT_B) {
+        svp_ppm_set_pmc(1, ac);
       }
       if (ppm_get_width(c->pscgElements[id].str_value2) == 32) {
         draw_ppm(x1, y1, size + 1, c->pscgElements[id].str_value2);
@@ -145,7 +147,7 @@ void pscg_draw_icon(
     c->pscgElements[id].pre_active = active;
 
     // if there is no string under the icon, no rectangle will be drawn
-    if (c->pscgElements[id].str_value[0] == 0){
+    if (c->pscgElements[id].str_value[0] == 0) {
       return;
     }
 
