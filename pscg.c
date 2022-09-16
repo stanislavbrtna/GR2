@@ -95,7 +95,7 @@ void pscg_garbage_walkaround(uint8_t *strId, uint32_t str_len, uint8_t *max) {
             && (svs_pscg_c->pscgElements[x].valid == 1)) {
         //printf("GR2-GC-DBG changing: %s to %s\n", pscgElements[x].str_value,pscgElements[x].str_value - (uint8_t *)str_len);
         svs_pscg_c->pscgElements[x].str_value
-          = svs_pscg_c->pscgElements[x].str_value - (uint8_t*)str_len;
+          = (void*) ((uint32_t)svs_pscg_c->pscgElements[x].str_value - str_len);
       }
   }
 }
