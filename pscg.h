@@ -127,6 +127,7 @@ void pscg_set_value(uint16_t id, int32_t val, gr2context * c);
 // param
 int32_t pscg_get_param(uint16_t id, gr2context * c);
 void pscg_set_param(uint16_t id, int32_t val, gr2context * c);
+uint16_t pscg_get_param2(uint16_t id, gr2context * c);
 // screen
 void pscg_set_screen(uint16_t id, uint16_t val, gr2context * c);
 

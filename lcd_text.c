@@ -355,7 +355,7 @@ uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, uint16_t touch_x, uint16_t touch
       czFlag = 0;
 
       xstart = xLineCnt;
-      ystart = yLineCnt*CurrentFont[3];
+      ystart = yLineCnt * CurrentFont[3];
 
       if (text[i] > 128) {
         czFlag = 1;
@@ -363,7 +363,7 @@ uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, uint16_t touch_x, uint16_t touch
         i++;
 
         xstop = xLineCnt;
-        ystop = (yLineCnt+1) * CurrentFont[3];
+        ystop = (yLineCnt + 1) * CurrentFont[3];
     }else if (text[i] != '\n') {
       if (text[i] == ' ') {
         xLineCnt += CurrentFont[2];
@@ -387,10 +387,12 @@ uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, uint16_t touch_x, uint16_t touch
 
     if(entFlg == 0) {
       xstop = xLineCnt;
-      ystop = (yLineCnt + 1)*CurrentFont[3];
+      ystop = (yLineCnt + 1) * CurrentFont[3];
     } else {
       entFlg = 0;
     }
+
+    //LCD_DrawRectangle(xstart + 7, ystart + 40, xstop + 7, ystop + 40, 0);
 
     if ((touch_x > xstart) && (touch_x < xstop) && (touch_y > ystart) && (touch_y < ystop)) {
       return i - czFlag;
