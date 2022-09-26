@@ -22,7 +22,7 @@ SOFTWARE.
 
 #include "pscg_draw.h"
 
-void pscg_draw_slider_v(
+void gr2_draw_slider_v(
     int16_t x1,
     int16_t y1,
     int16_t x2,
@@ -102,7 +102,7 @@ void pscg_draw_slider_v(
 }
 
 
-void pscg_draw_slider_v_f(
+void gr2_draw_slider_v_f(
     int16_t x1,
     int16_t y1,
     int16_t x2,
@@ -212,7 +212,7 @@ void pscg_draw_slider_v_f(
 }
 
 
-void pscg_draw_slider_h(
+void gr2_draw_slider_h(
     int16_t x1,
     int16_t y1,
     int16_t x2,
@@ -285,7 +285,7 @@ void pscg_draw_slider_h(
 }
 
 
-void pscg_draw_slider_h_f(
+void gr2_draw_slider_h_f(
     int16_t x1,
     int16_t y1,
     int16_t x2,

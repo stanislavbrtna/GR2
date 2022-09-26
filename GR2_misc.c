@@ -24,7 +24,7 @@ SOFTWARE.
 
 // init, reset, destroy
 
-void gr2_init_context(gr2context * c, pscgElement *pscgElementsArray, uint16_t elementsCount, pscgScreen *pscgScreens, uint16_t screensCount) {
+void gr2_init_context(gr2context * c, gr2Element *pscgElementsArray, uint16_t elementsCount, gr2Screen *pscgScreens, uint16_t screensCount) {
 
   c->elementsMax  = elementsCount;
   c->screensMax   = screensCount;
@@ -80,6 +80,7 @@ void gr2_destroy_screen_lvl2(uint16_t id, gr2context * c) {
   }
 }
 
+
 void gr2_destroy_screen(uint16_t id, gr2context * c) {
   PSCG_BOUNDARY_CHECK_AND_RETURN();
   if (c->pscgElements[id].valid != 1) {
@@ -90,10 +91,11 @@ void gr2_destroy_screen(uint16_t id, gr2context * c) {
   gr2_destroy_screen_lvl2(id, c);
 }
 
-void pscg_destroy(uint16_t id, gr2context * c) {
+
+void gr2_destroy(uint16_t id, gr2context * c) {
   PSCG_BOUNDARY_CHECK_AND_RETURN();
   if (c->pscgElements[id].valid) {
-    if (c->pscgElements[id].type == 0) {
+    if (c->pscgElements[id].type == GR2_TYPE_SCREEN) {
       gr2_destroy_screen(id, c);
     } else {
       c->pscgElements[id].valid = 0;
@@ -136,7 +138,7 @@ void gr2_clear_screen_ev(uint16_t id, gr2context * c) {
   PSCG_BOUNDARY_CHECK_AND_RETURN();
   for(x = 1; x <= c->maxElementsId; x++) {
     if ((c->pscgElements[x].screen_id == id) && (c->pscgElements[x].valid == 1)) {
-      pscg_set_event(x, EV_NONE, c);
+      gr2_set_event(x, EV_NONE, c);
     }
   }
 }
@@ -144,7 +146,7 @@ void gr2_clear_screen_ev(uint16_t id, gr2context * c) {
 void gr2_clear_event(uint16_t id, gr2context * c) {
   PSCG_BOUNDARY_CHECK_AND_RETURN();
   if (c->pscgElements[id].type != 0) {
-    pscg_set_event(id, EV_NONE, c);
+    gr2_set_event(id, EV_NONE, c);
   } else {
     gr2_clear_screen_ev(id, c);
   }

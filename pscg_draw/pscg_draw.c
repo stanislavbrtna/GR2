@@ -34,10 +34,10 @@ uint8_t gr2_get_global_grayout_flag() {
 }
 
 
-int16_t pscg_get_text_align_x(uint16_t id, int16_t x1, int16_t x2, int16_t offset, gr2context * c) {
+int16_t gr2_get_text_align_x(uint16_t id, int16_t x1, int16_t x2, int16_t offset, gr2context * c) {
   uint8_t alignment;
   int16_t x_add = 0;
-  alignment = pscg_text_get_align(id, c);
+  alignment = gr2_text_get_align(id, c);
   if (alignment != GR2_ALIGN_LEFT) {
     if (alignment == GR2_ALIGN_RIGHT) {
       x_add = x2 - x1 - LCD_Text_Get_Width(c->pscgElements[id].str_value, 0) - offset;
@@ -51,7 +51,7 @@ int16_t pscg_get_text_align_x(uint16_t id, int16_t x1, int16_t x2, int16_t offse
   return x_add;
 }
 
-void pscg_draw_end(gr2context * c) {
+void gr2_draw_end(gr2context * c) {
   c->invisible_flag = 0;
 
   if (c->reset_active_element_flag) {

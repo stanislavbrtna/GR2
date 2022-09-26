@@ -24,7 +24,7 @@ SOFTWARE.
 
 uint16_t background_color; //for set text fit
 
-void pscg_draw_text(
+void gr2_draw_text(
     int16_t x1,
     int16_t y1,
     int16_t x2,
@@ -49,7 +49,7 @@ void pscg_draw_text(
 
   // get additional alignment
   int16_t x_add = 0;
-  x_add = pscg_get_text_align_x(id, x1, x2, 10, c);
+  x_add = gr2_get_text_align_x(id, x1, x2, 10, c);
 
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     if (active == 1) {

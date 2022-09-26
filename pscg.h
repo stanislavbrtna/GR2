@@ -63,14 +63,14 @@ SOFTWARE.
 void gr2_reset_context(gr2context *c);
 void gr2_init_context(
                      gr2context *c,
-                     pscgElement *pscgElementsArray,
+                     gr2Element *pscgElementsArray,
                      uint16_t elementsCount,
-                     pscgScreen *pscgScreens,
+                     gr2Screen *pscgScreens,
                      uint16_t screensCount
                     );
 
 // screen touch input
-uint8_t pscg_touch_input(
+uint8_t gr2_touch_input(
                      int16_t x1,
                      int16_t y1,
                      int16_t x2,
@@ -83,7 +83,7 @@ uint8_t pscg_touch_input(
                     );
 
 // screen redraw
-void pscg_draw_screen(
+void gr2_draw_screen(
                      int16_t x1,
                      int16_t y1,
                      int16_t x2,
@@ -94,150 +94,150 @@ void pscg_draw_screen(
                     );
 
 // after the root screen redraw, this function does a cleanup
-void pscg_draw_end(gr2context * c);
+void gr2_draw_end(gr2context * c);
 
 // dumps screen contents to the console
-void pscg_dump_screen(uint16_t id, gr2context * con);
+void gr2_dump_screen(uint16_t id, gr2context * con);
 
 // setting up various context defaults
-void pscg_set_grid_size(uint16_t size, gr2context * c); // sets up default grid size [px]
-void pscg_set_relative_init(uint8_t relativeInitEnabled, gr2context * c); // switches x1 y1 x2 y2 and x y w h coordinates
+void gr2_set_grid_size(uint16_t size, gr2context * c); // sets up default grid size [px]
+void gr2_set_relative_init(uint8_t relativeInitEnabled, gr2context * c); // switches x1 y1 x2 y2 and x y w h coordinates
 
 //======================== GUI element constructors ============================
-uint16_t pscg_add_screen(gr2context * c);
-uint16_t pscg_add_screen_ext(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t screen, gr2context * c);
-uint16_t pscg_add_button(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c);
-uint16_t pscg_add_slider_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c);
-uint16_t pscg_add_slider_h(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c);
-uint16_t pscg_add_text(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c);
-uint16_t pscg_add_progbar_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c);
-uint16_t pscg_add_icon(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint8_t *str2, uint16_t screen, gr2context * c);
-uint16_t pscg_add_frame(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t val, uint16_t screen, gr2context * c);
-uint16_t pscg_add_cbutton(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c);
-uint16_t pscg_add_checkbox(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c);
-uint16_t pscg_add_image(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c);
+uint16_t gr2_add_screen(gr2context * c);
+uint16_t gr2_add_screen_ext(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t screen, gr2context * c);
+uint16_t gr2_add_button(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c);
+uint16_t gr2_add_slider_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c);
+uint16_t gr2_add_slider_h(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c);
+uint16_t gr2_add_text(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c);
+uint16_t gr2_add_progbar_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c);
+uint16_t gr2_add_icon(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint8_t *str2, uint16_t screen, gr2context * c);
+uint16_t gr2_add_frame(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t val, uint16_t screen, gr2context * c);
+uint16_t gr2_add_cbutton(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c);
+uint16_t gr2_add_checkbox(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c);
+uint16_t gr2_add_image(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c);
 
 // destructors
-void pscg_destroy(uint16_t id, gr2context * c);
+void gr2_destroy(uint16_t id, gr2context * c);
 
 //===================== GUI element Getters & Setters ==========================
 // value
-int32_t pscg_get_value(uint16_t id, gr2context * c);
-void pscg_set_value(uint16_t id, int32_t val, gr2context * c);
+int32_t gr2_get_value(uint16_t id, gr2context * c);
+void gr2_set_value(uint16_t id, int32_t val, gr2context * c);
 // param
-int32_t pscg_get_param(uint16_t id, gr2context * c);
-void pscg_set_param(uint16_t id, int32_t val, gr2context * c);
-uint16_t pscg_get_param2(uint16_t id, gr2context * c);
+int32_t gr2_get_param(uint16_t id, gr2context * c);
+void gr2_set_param(uint16_t id, int32_t val, gr2context * c);
+uint16_t gr2_get_param2(uint16_t id, gr2context * c);
 // screen
-void pscg_set_screen(uint16_t id, uint16_t val, gr2context * c);
+void gr2_set_screen(uint16_t id, uint16_t val, gr2context * c);
 
 // coordinates
-uint16_t pscg_get_x1(uint16_t id, gr2context * c);
-uint16_t pscg_get_x2(uint16_t id, gr2context * c);
-uint16_t pscg_get_y1(uint16_t id, gr2context * c);
-uint16_t pscg_get_y2(uint16_t id, gr2context * c);
+uint16_t gr2_get_x1(uint16_t id, gr2context * c);
+uint16_t gr2_get_x2(uint16_t id, gr2context * c);
+uint16_t gr2_get_y1(uint16_t id, gr2context * c);
+uint16_t gr2_get_y2(uint16_t id, gr2context * c);
 
-void pscg_set_x1(uint16_t id, uint16_t val, gr2context * c);
-void pscg_set_x2(uint16_t id, uint16_t val, gr2context * c);
-void pscg_set_y1(uint16_t id, uint16_t val, gr2context * c);
-void pscg_set_y2(uint16_t id, uint16_t val, gr2context * c);
+void gr2_set_x1(uint16_t id, uint16_t val, gr2context * c);
+void gr2_set_x2(uint16_t id, uint16_t val, gr2context * c);
+void gr2_set_y1(uint16_t id, uint16_t val, gr2context * c);
+void gr2_set_y2(uint16_t id, uint16_t val, gr2context * c);
 
-void pscg_set_x1y1x2y2(uint16_t id, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, gr2context * c);
+void gr2_set_x1y1x2y2(uint16_t id, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, gr2context * c);
 
 // string
-void pscg_set_str(uint16_t id, uint8_t *str, gr2context * c);
-uint8_t * pscg_get_str(uint16_t id, gr2context * c);
-void pscg_set_str2(uint16_t id, uint8_t *str, gr2context * c);
+void gr2_set_str(uint16_t id, uint8_t *str, gr2context * c);
+uint8_t * gr2_get_str(uint16_t id, gr2context * c);
+void gr2_set_str2(uint16_t id, uint8_t *str, gr2context * c);
 
 // string alignment
-uint8_t pscg_text_get_align(uint16_t id, gr2context * c);
-void pscg_text_set_align(uint16_t id, uint16_t val, gr2context * c);
+uint8_t gr2_text_get_align(uint16_t id, gr2context * c);
+void gr2_text_set_align(uint16_t id, uint16_t val, gr2context * c);
 
 // modified flag
-void pscg_set_modified(uint16_t id, gr2context * c);
+void gr2_set_modified(uint16_t id, gr2context * c);
 
 // visibility
-void pscg_set_visible(uint16_t id, uint16_t vis, gr2context * c);
-uint8_t pscg_get_visible(uint16_t id, gr2context * c);
+void gr2_set_visible(uint16_t id, uint16_t vis, gr2context * c);
+uint8_t gr2_get_visible(uint16_t id, gr2context * c);
 
 // grayout
-void pscg_set_grayout(uint16_t id, uint8_t val, gr2context * c);
-uint8_t pscg_get_grayout(uint16_t id, gr2context * c);
+void gr2_set_grayout(uint16_t id, uint8_t val, gr2context * c);
+uint8_t gr2_get_grayout(uint16_t id, gr2context * c);
 
 // display only element outline
-void pscg_set_ghost(uint16_t id, uint16_t val, gr2context * c);
-uint8_t pscg_get_ghost(uint16_t id, gr2context * c);
+void gr2_set_ghost(uint16_t id, uint16_t val, gr2context * c);
+uint8_t gr2_get_ghost(uint16_t id, gr2context * c);
 
 // element select parameter
-void pscg_set_select(uint16_t id, uint16_t val, gr2context * c);
-uint8_t pscg_get_select(uint16_t id, gr2context * c);
+void gr2_set_select(uint16_t id, uint16_t val, gr2context * c);
+uint8_t gr2_get_select(uint16_t id, gr2context * c);
 
 // misc text field functions
-void pscg_text_set_size(uint16_t id, uint16_t size, gr2context * c);
+void gr2_text_set_size(uint16_t id, uint16_t size, gr2context * c);
 
-void pscg_text_set_editable(uint16_t id, uint16_t val, gr2context * c);
-uint8_t pscg_text_get_editable(uint16_t id, gr2context * c);
+void gr2_text_set_editable(uint16_t id, uint16_t val, gr2context * c);
+uint8_t gr2_text_get_editable(uint16_t id, gr2context * c);
 
-void pscg_text_set_fit(uint16_t id, uint16_t val, gr2context * c);
-uint8_t pscg_text_get_fit(uint16_t id, gr2context * c);
+void gr2_text_set_fit(uint16_t id, uint16_t val, gr2context * c);
+uint8_t gr2_text_get_fit(uint16_t id, gr2context * c);
 
-void pscg_text_set_pwd(uint16_t id, uint16_t val, gr2context * c);
-uint8_t pscg_text_get_pwd(uint16_t id, gr2context * c);
+void gr2_text_set_pwd(uint16_t id, uint16_t val, gr2context * c);
+uint8_t gr2_text_get_pwd(uint16_t id, gr2context * c);
 
-void pscg_activate_text(uint16_t id, gr2context * c);
-void pscg_text_deactivate(gr2context * c);
-uint8_t pscg_get_text_active(uint16_t id, gr2context * c);
+void gr2_activate_text(uint16_t id, gr2context * c);
+void gr2_text_deactivate(gr2context * c);
+uint8_t gr2_get_text_active(uint16_t id, gr2context * c);
 
 // events
-gr2EventType pscg_get_event(uint16_t id, gr2context * c);
-void pscg_set_event(uint16_t id, gr2EventType val, gr2context * c);
+gr2EventType gr2_get_event(uint16_t id, gr2context * c);
+void gr2_set_event(uint16_t id, gr2EventType val, gr2context * c);
 void gr2_clear_event(uint16_t id, gr2context * c); //works both for elements and screens
 void gr2_clear_screen_ev(uint16_t id, gr2context * c);
 uint8_t gr2_clicked(uint16_t id, gr2context * c); // short for get event released & clear event
 
 //=================== GUI Getters & Setters for screens ========================
-uint16_t pscg_get_xscroll(uint16_t id, gr2context * c);
-uint16_t pscg_get_yscroll(uint16_t id, gr2context * c);
-void pscg_set_xscroll(uint16_t id, int16_t val, gr2context * c);
-void pscg_set_yscroll(uint16_t id, int16_t val, gr2context * c);
-void pscg_set_x_cell(uint16_t id, uint16_t val, gr2context * c);
-void pscg_set_y_cell(uint16_t id, uint16_t val, gr2context * c);
-uint16_t pscg_get_x_cell(uint16_t id, gr2context * c);
-uint16_t pscg_get_y_cell(uint16_t id, gr2context * c);
-void pscg_set_default_font(uint16_t id, uint8_t val, gr2context * c);
-void pscg_set_cell_space_left(uint16_t id, uint16_t val, gr2context * c);
-void pscg_set_cell_space_right(uint16_t id, uint16_t val, gr2context * c);
-void pscg_set_cell_space_top(uint16_t id, uint16_t val, gr2context * c);
-void pscg_set_cell_space_bottom(uint16_t id, uint16_t val, gr2context * c);
+uint16_t gr2_get_xscroll(uint16_t id, gr2context * c);
+uint16_t gr2_get_yscroll(uint16_t id, gr2context * c);
+void gr2_set_xscroll(uint16_t id, int16_t val, gr2context * c);
+void gr2_set_yscroll(uint16_t id, int16_t val, gr2context * c);
+void gr2_set_x_cell(uint16_t id, uint16_t val, gr2context * c);
+void gr2_set_y_cell(uint16_t id, uint16_t val, gr2context * c);
+uint16_t gr2_get_x_cell(uint16_t id, gr2context * c);
+uint16_t gr2_get_y_cell(uint16_t id, gr2context * c);
+void gr2_set_default_font(uint16_t id, uint8_t val, gr2context * c);
+void gr2_set_cell_space_left(uint16_t id, uint16_t val, gr2context * c);
+void gr2_set_cell_space_right(uint16_t id, uint16_t val, gr2context * c);
+void gr2_set_cell_space_top(uint16_t id, uint16_t val, gr2context * c);
+void gr2_set_cell_space_bottom(uint16_t id, uint16_t val, gr2context * c);
 
 // context color getters & setters
-void pscg_set_border_color(uint16_t col, gr2context * c);
-uint16_t pscg_get_border_color(gr2context * c);
-void pscg_set_text_color(uint16_t col, gr2context * c);
-uint16_t pscg_get_text_color(gr2context * c);
-void pscg_set_background_color(uint16_t col, gr2context * c);
-uint16_t pscg_get_background_color(gr2context * c);
-void pscg_set_fill_color(uint16_t col, gr2context * c);
-uint16_t pscg_get_fill_color(gr2context * c);
-void pscg_set_active_color(uint16_t col, gr2context * c);
-uint16_t pscg_get_active_color(gr2context * c);
+void gr2_set_border_color(uint16_t col, gr2context * c);
+uint16_t gr2_get_border_color(gr2context * c);
+void gr2_set_text_color(uint16_t col, gr2context * c);
+uint16_t gr2_get_text_color(gr2context * c);
+void gr2_set_background_color(uint16_t col, gr2context * c);
+uint16_t gr2_get_background_color(gr2context * c);
+void gr2_set_fill_color(uint16_t col, gr2context * c);
+uint16_t gr2_get_fill_color(gr2context * c);
+void gr2_set_active_color(uint16_t col, gr2context * c);
+uint16_t gr2_get_active_color(gr2context * c);
 
 //=================== misc and internaly used functions ========================
 
-uint16_t pscg_get_element_count(gr2context * c);
+uint16_t gr2_get_element_count(gr2context * c);
 void gr2_reset_all(gr2context * c);
 
 void gr2_set_global_grayout_flag(uint8_t val);
 uint8_t gr2_get_global_grayout_flag();
 
 void gr2_cleanup(gr2context * c); //sets correct maxElementId
-void set_pscg_workaround_context(gr2context * c);
+void set_gr2_workaround_context(gr2context * c);
 
-uint16_t pscg_get_tmx(gr2context * c);
-uint16_t pscg_get_tmy(gr2context * c);
+uint16_t gr2_get_tmx(gr2context * c);
+uint16_t gr2_get_tmy(gr2context * c);
 
 void gr2_error(uint8_t *str, gr2context * c);
-void gr2_destroy_screen(uint16_t id, gr2context * c); // deprecated
+void gr2_destroy_screen(uint16_t id, gr2context * c); 
 
 void gr2_error(uint8_t *str, gr2context * c);
 

@@ -24,7 +24,7 @@ SOFTWARE.
 #define GR2_GUI_DRAW_H_
 
 // text align helper
-int16_t pscg_get_text_align_x(
+int16_t gr2_get_text_align_x(
     uint16_t id,
     int16_t x1,
     int16_t x2,
@@ -33,7 +33,7 @@ int16_t pscg_get_text_align_x(
 );
 
 // headers for the element draw functions, used only internaly in the GR2
-void pscg_draw_button(
+void gr2_draw_button(
            int16_t x1,
            int16_t y1,
            int16_t x2,
@@ -44,7 +44,7 @@ void pscg_draw_button(
            gr2context * c
           );
 
-void pscg_draw_cbutton(
+void gr2_draw_cbutton(
            int16_t x1,
            int16_t y1,
            int16_t x2,
@@ -55,7 +55,7 @@ void pscg_draw_cbutton(
            gr2context * c
           );
 
-void pscg_draw_text(
+void gr2_draw_text(
            int16_t x1,
            int16_t y1,
            int16_t x2,
@@ -71,7 +71,7 @@ void pscg_draw_text(
            gr2context * c
           );
 
-void pscg_draw_slider_v(
+void gr2_draw_slider_v(
            int16_t x1,
            int16_t y1,
            int16_t x2,
@@ -83,7 +83,7 @@ void pscg_draw_slider_v(
            gr2context * c
           );
 
-void pscg_draw_slider_h(
+void gr2_draw_slider_h(
            int16_t x1,
            int16_t y1,
            int16_t x2,
@@ -95,7 +95,7 @@ void pscg_draw_slider_h(
            gr2context * c
           );
 
-void pscg_draw_checkbox(
+void gr2_draw_checkbox(
            int16_t x1,
            int16_t y1,
            int16_t x2,
@@ -106,7 +106,7 @@ void pscg_draw_checkbox(
            gr2context * c
           );
 
-void pscg_draw_progbar_v(
+void gr2_draw_progbar_v(
            int16_t x1,
            int16_t y1,
            int16_t x2,
@@ -117,7 +117,7 @@ void pscg_draw_progbar_v(
            gr2context * c
           );
 
-void pscg_draw_progbar_h(
+void gr2_draw_progbar_h(
            int16_t x1,
            int16_t y1,
            int16_t x2,
@@ -128,7 +128,7 @@ void pscg_draw_progbar_h(
            gr2context * c
           );
 
-void pscg_draw_icon(
+void gr2_draw_icon(
            int16_t x1,
            int16_t y1,
            int16_t x2,
@@ -138,7 +138,7 @@ void pscg_draw_icon(
            gr2context * c
           );
 
-void pscg_draw_image(
+void gr2_draw_image(
            int16_t x1,
            int16_t y1,
            int16_t x2,
@@ -147,7 +147,7 @@ void pscg_draw_image(
            gr2context * c
           );
 
-void pscg_draw_slider_v_f(
+void gr2_draw_slider_v_f(
            int16_t x1,
            int16_t y1,
            int16_t x2,
@@ -160,7 +160,7 @@ void pscg_draw_slider_v_f(
            gr2context * c
           );
 
-void pscg_draw_slider_h_f(
+void gr2_draw_slider_h_f(
            int16_t x1,
            int16_t y1,
            int16_t x2,

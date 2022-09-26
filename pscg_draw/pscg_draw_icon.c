@@ -22,7 +22,7 @@ SOFTWARE.
 
 #include "pscg_draw.h"
 
-void pscg_draw_icon(
+void gr2_draw_icon(
     int16_t x1,
     int16_t y1,
     int16_t x2,
@@ -113,7 +113,7 @@ void pscg_draw_icon(
     );
     LCD_Set_Sys_Font(12);
     LCD_DrawText_ext(
-      x1 + pscg_get_text_align_x(id, x1, x1 + 64 * size, 5, c),
+      x1 + gr2_get_text_align_x(id, x1, x1 + 64 * size, 5, c),
       y1 + 5 + 32 * (size + 1),
       tc,
       c->pscgElements[id].str_value
@@ -169,7 +169,7 @@ void pscg_draw_icon(
 
     LCD_Set_Sys_Font(12);
     LCD_DrawText_ext(
-      x1 + pscg_get_text_align_x(id, x1, x1 + 64 * size, 5, c),
+      x1 + gr2_get_text_align_x(id, x1, x1 + 64 * size, 5, c),
       y1 + 5 + 32 * (size + 1),
       tc,
       c->pscgElements[id].str_value

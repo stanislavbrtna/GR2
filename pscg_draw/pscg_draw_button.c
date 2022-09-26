@@ -23,7 +23,7 @@ SOFTWARE.
 #include "pscg_draw.h"
 
 
-void pscg_draw_button(
+void gr2_draw_button(
     int16_t x1,
     int16_t y1,
     int16_t x2,
@@ -48,7 +48,7 @@ void pscg_draw_button(
       }
     }
     LCD_DrawText_ext(
-      x1 + pscg_get_text_align_x(id, x1, x2, c->pscgElements[id].param, c),
+      x1 + gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].param, c),
       y1 + PSCG_TEXT_Y_GAP,
       c->text_color,
       str
@@ -62,7 +62,7 @@ void pscg_draw_button(
   }  else {
     LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->fill_color));
     LCD_DrawText_ext(
-      x1 + pscg_get_text_align_x(id, x1, x2,c->pscgElements[id].param, c),
+      x1 + gr2_get_text_align_x(id, x1, x2,c->pscgElements[id].param, c),
       y1 + PSCG_TEXT_Y_GAP,
       LCD_get_gray16(c->text_color),
       str

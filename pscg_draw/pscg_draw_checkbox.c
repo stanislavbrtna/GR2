@@ -22,7 +22,7 @@ SOFTWARE.
 
 #include "pscg_draw.h"
 
-void pscg_draw_checkbox(
+void gr2_draw_checkbox(
     int16_t x1,
     int16_t y1,
     int16_t x2,

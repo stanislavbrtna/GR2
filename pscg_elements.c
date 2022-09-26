@@ -80,19 +80,19 @@ void pscg_dump_screen_values(uint16_t id, uint16_t val, gr2context * c){
 	if (c->pscgElements[id].type == 0){
 		scrID = c->pscgElements[id].value;
 	} else {
-		printf("pscgElement %u: NOT a screen\n", id);
+		printf("gr2Element %u: NOT a screen\n", id);
 		return;
 	}
 	pscg_indent(val);
-	printf("pscgElement %u, screenID %u x_scroll = %u \n", id, scrID, c->pscgScreens[scrID].x_scroll);
+	printf("gr2Element %u, screenID %u x_scroll = %u \n", id, scrID, c->pscgScreens[scrID].x_scroll);
 	pscg_indent(val);
-	printf("pscgElement %u, screenID %u y_scroll = %u \n", id, scrID, c->pscgScreens[scrID].y_scroll);
+	printf("gr2Element %u, screenID %u y_scroll = %u \n", id, scrID, c->pscgScreens[scrID].y_scroll);
 	pscg_indent(val);
-	printf("pscgElement %u, screenID %u x_cell = %u \n", id, scrID, c->pscgScreens[scrID].x_cell);
+	printf("gr2Element %u, screenID %u x_cell = %u \n", id, scrID, c->pscgScreens[scrID].x_cell);
 	pscg_indent(val);
-	printf("pscgElement %u, screenID %u y_cell = %u \n", id, scrID, c->pscgScreens[scrID].y_cell);
+	printf("gr2Element %u, screenID %u y_cell = %u \n", id, scrID, c->pscgScreens[scrID].y_cell);
 	pscg_indent(val);
-	printf("pscgElement %u, screenID %u default_font = %u \n", id, scrID, c->pscgScreens[scrID].default_font);
+	printf("gr2Element %u, screenID %u default_font = %u \n", id, scrID, c->pscgScreens[scrID].default_font);
 
 }
 
@@ -114,7 +114,7 @@ void pscg_dump_screen_ind(uint16_t id, uint16_t val, gr2context * c) {
 	}
 }
 
-void pscg_dump_screen(uint16_t id, gr2context * c) {
+void gr2_dump_screen(uint16_t id, gr2context * c) {
 	pscg_dump_screen_ind(id, 0, c);
 }
 
@@ -160,7 +160,7 @@ static uint16_t pscg_get_new_id(gr2context * c) {
 	}
 }
 
-uint16_t pscg_add_button(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c){
+uint16_t gr2_add_button(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c){
 	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
@@ -174,7 +174,7 @@ uint16_t pscg_add_button(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uin
 	return i;
 }
 
-uint16_t pscg_add_cbutton(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c){
+uint16_t gr2_add_cbutton(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c){
 	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
@@ -191,7 +191,7 @@ uint16_t pscg_add_cbutton(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, ui
 }
 
 
-uint16_t pscg_add_checkbox(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c) {
+uint16_t gr2_add_checkbox(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c) {
 	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
@@ -206,7 +206,7 @@ uint16_t pscg_add_checkbox(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, u
 	return i;
 }
 
-uint16_t pscg_add_frame(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t val, uint16_t screen, gr2context * c){
+uint16_t gr2_add_frame(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t val, uint16_t screen, gr2context * c){
 	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
@@ -220,7 +220,7 @@ uint16_t pscg_add_frame(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int3
 	return i;
 }
 
-uint16_t pscg_add_icon(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint8_t *str2, uint16_t screen, gr2context * c){
+uint16_t gr2_add_icon(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint8_t *str2, uint16_t screen, gr2context * c){
 	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
@@ -239,7 +239,7 @@ uint16_t pscg_add_icon(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8
 	return i;
 }
 
-uint16_t pscg_add_text(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c){
+uint16_t gr2_add_text(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c){
 	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
@@ -257,7 +257,7 @@ uint16_t pscg_add_text(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8
 	return i;
 }
 
-uint16_t pscg_add_slider_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c){
+uint16_t gr2_add_slider_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c){
 	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
@@ -272,7 +272,7 @@ uint16_t pscg_add_slider_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, i
 	return i;
 }
 
-uint16_t pscg_add_slider_h(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c){
+uint16_t gr2_add_slider_h(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c){
 	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
@@ -289,7 +289,7 @@ uint16_t pscg_add_slider_h(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, i
 }
 
 //vertikální progbar
-uint16_t pscg_add_progbar_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c){
+uint16_t gr2_add_progbar_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c){
 	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
@@ -307,7 +307,7 @@ uint16_t pscg_add_progbar_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, 
 }
 
 // image
-uint16_t pscg_add_image(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c){
+uint16_t gr2_add_image(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint16_t screen, gr2context * c){
 	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
@@ -322,7 +322,7 @@ uint16_t pscg_add_image(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint
 	return i;
 }
 
-uint16_t pscg_add_screen(gr2context * c) {
+uint16_t gr2_add_screen(gr2context * c) {
 	uint16_t i = pscg_get_new_id(c);
 	uint16_t scrI = 0;
 
@@ -361,9 +361,9 @@ uint16_t pscg_add_screen(gr2context * c) {
 	return i;
 }
 
-uint16_t pscg_add_screen_ext(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t screen, gr2context * c) {
+uint16_t gr2_add_screen_ext(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t screen, gr2context * c) {
 	uint16_t id;
-	id = pscg_add_screen(c);
+	id = gr2_add_screen(c);
 	pscg_add_fill_xy(id, x1, y1, x2, y2, c);
 	c->pscgElements[id].event = EV_NONE;
 	c->pscgElements[id].status_reg = 0;

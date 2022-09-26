@@ -22,7 +22,7 @@ SOFTWARE.
 
 #include "pscg_draw.h"
 
-void pscg_draw_progbar_v(
+void gr2_draw_progbar_v(
     int16_t x1,
     int16_t y1,
     int16_t x2,
@@ -62,7 +62,7 @@ void pscg_draw_progbar_v(
 }
 
 
-void pscg_draw_progbar_h(
+void gr2_draw_progbar_h(
     int16_t x1,
     int16_t y1,
     int16_t x2,

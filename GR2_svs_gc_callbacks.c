@@ -23,7 +23,7 @@ SOFTWARE.
 #include "pscg.h"
 gr2context * svs_pscg_c;
 
-void set_pscg_workaround_context(gr2context * c) {
+void set_gr2_workaround_context(gr2context * c) {
   svs_pscg_c = c;
 }
 

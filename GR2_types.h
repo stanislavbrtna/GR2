@@ -84,7 +84,7 @@ typedef struct {
   uint8_t valid;
   gr2EventType event;         // last event
   uint8_t pre_active;         // previous active state, used for redraw
-} pscgElement;
+} gr2Element;
 
 /*
  * Element types:
@@ -122,7 +122,7 @@ typedef struct {
 
   uint8_t valid;
 
-} pscgScreen;
+} gr2Screen;
 
 typedef struct {
   uint16_t elementsUsed;
@@ -131,9 +131,9 @@ typedef struct {
   uint16_t elementsMax;
   uint16_t screensMax;
 
-  pscgElement *pscgElements;
+  gr2Element *pscgElements;
 
-  pscgScreen *pscgScreens;
+  gr2Screen *pscgScreens;
 
   uint16_t maxElementsId;
 
