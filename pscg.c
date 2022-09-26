@@ -490,11 +490,7 @@ void pscg_draw_screen(
       if (con->pscgElements[i].type == GR2_TYPE_CHECKBOX) {
         COUNT_A_B_C_D
         if ((all == 1) || (con->pscgElements[i].modified == 1)) {
-          if (con->pscgElements[i].value == 1) {
-            pscg_draw_checkbox(a, b, c, d, con->pscgElements[i].str_value, 1, i, con);
-          } else {
-            pscg_draw_checkbox(a, b, c, d, con->pscgElements[i].str_value, 0, i, con);
-          }
+          pscg_draw_checkbox(a, b, c, d, con->pscgElements[i].str_value, (uint8_t) con->pscgElements[i].value, i, con);
           con->pscgElements[i].modified = 0;
         }
       }
