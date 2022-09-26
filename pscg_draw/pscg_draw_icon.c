@@ -62,7 +62,7 @@ void pscg_draw_icon(
   //printf("xsize: %d, ysize: %d size: %d txsize: %d ttxt: %s\n",((x2-x1)/64),((y2-y1)/80), size , (15*size)/8, pscgElements[id].str_value);
 
   if (size < 1) {
-    pscg_error((uint8_t *)"PSCG element icon too small!\n", c);
+    gr2_error((uint8_t *)"PSCG element icon too small!\n", c);
     return;
   }
 

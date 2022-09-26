@@ -22,38 +22,6 @@ SOFTWARE.
 
 #include "pscg.h"
 
-void gr2_InitContext(gr2context * c, pscgElement *pscgElementsArray, uint16_t elementsCount, pscgScreen *pscgScreens, uint16_t screensCount) {
-
-  c->elementsMax  = elementsCount;
-  c->screensMax   = screensCount;
-  c->pscgElements = pscgElementsArray;
-  c->pscgScreens  = pscgScreens;
-
-  gr2_ResetContext(c);
-}
-
-void gr2_ResetContext(gr2context * c) {
-
-  pscg_reset_all(c);
-
-  c->textActive                = 0;
-  c->textActiveId              = 0;
-  c->invisible_flag            = 0;
-  c->reset_active_element_flag = 0;
-  c->textMouseX                = 0;
-  c->textMouseY                = 0;
-  c->default_grid_size         = 32;
-  c->default_grid_spacing      = 0;
-  c->pscg_active_element       = 0;
-  c->relative_init             = 0;
-
-  c->border_color     = 0x0000; // black
-  c->text_color       = 0x0000; // black
-  c->background_color = 0xF800; // red
-  c->fill_color       = 0x07E0; // green
-  c->active_color     = 0xFFFF; // white
-}
-
 // Sets redraw flag to all valid elements
 void pscg_redraw_all(gr2context * c) {
   uint16_t x;
@@ -64,15 +32,6 @@ void pscg_redraw_all(gr2context * c) {
   }
 }
 
-gr2context * svs_pscg_c;
-
-void set_pscg_workaround_context(gr2context * c) {
-  svs_pscg_c = c;
-}
-
-void pscg_set_relative_init(uint8_t val, gr2context * c) {
-  c->relative_init = val;
-}
 
 uint8_t gr2_clicked(uint16_t id, gr2context * c) {
   PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
@@ -85,176 +44,10 @@ uint8_t gr2_clicked(uint16_t id, gr2context * c) {
   }
 }
 
-// workarounds for SVS string garbage collecotor
-void pscg_garbage_walkaround(uint8_t *strId, uint32_t str_len, uint8_t *max) {
-  uint16_t x = 0;
-
-  for(x = 1; x <= svs_pscg_c->maxElementsId; x++) {
-      if (((svs_pscg_c->pscgElements[x].str_value) >= strId)
-            && (svs_pscg_c->pscgElements[x].str_value <= max)
-            && (svs_pscg_c->pscgElements[x].valid == 1)) {
-        //printf("GR2-GC-DBG changing: %s to %s\n", pscgElements[x].str_value,pscgElements[x].str_value - (uint8_t *)str_len);
-        svs_pscg_c->pscgElements[x].str_value
-          = (void*) ((uint32_t)svs_pscg_c->pscgElements[x].str_value - str_len);
-      }
-  }
-}
-
-uint8_t pscg_garbage_walkaround2(uint8_t *strId) {
-  uint16_t x = 0;
-
-  for(x = 1; x <= svs_pscg_c->maxElementsId; x++) {
-      if ((svs_pscg_c->pscgElements[x].str_value == strId) && (svs_pscg_c->pscgElements[x].valid == 1)) {
-        //printf("GR2-GC-DBG: valid string:%s", pscgElements[x].str_value);
-        return 1;
-      }
-  }
-  return 0;
-}
-
-void pscg_error_callback_default(uint8_t *str, gr2context * c) {
-  printf("PSCG Error: %s\n", str);
-  (void)(c);
-}
-
-void pscg_error_callback (uint8_t *str, gr2context * c) __attribute__ ((weak, alias ("pscg_error_callback_default")));
-
-void pscg_error(uint8_t *str, gr2context * c) {
-  pscg_error_callback(str, c);
-}
-
-void pscg_reset_all(gr2context * c) {
-  uint16_t x = 0;
-
-  for(x = 1; x <= c->elementsMax; x++) {
-    c->pscgElements[x].valid = 0;
-  }
-  for(x = 1; x <= c->screensMax; x++) {
-    c->pscgScreens[x].valid = 0;
-  }
-  c->screensUsed   = 0;
-  c->elementsUsed  = 0;
-  c->maxElementsId = 0;
-
-  set_global_grayout_flag(0);
-}
-
-
-// this function is here so elements_used is not decremented twice when recursion occurs
-void pscg_destroy_screen_lvl2(uint16_t id, gr2context * c) {
-  uint16_t x;
-  PSCG_BOUNDARY_CHECK_AND_RETURN();
-
-  c->pscgElements[id].valid = 0;
-  c->pscgScreens[c->pscgElements[id].value].valid = 0;
-  c->screensUsed--;
-
-  for(x = 1; x <= c->elementsMax; x++) {
-    if ((c->pscgElements[x].screen_id == id) && (c->pscgElements[x].valid == 1)) {
-      if (c->pscgElements[x].valid == 1) {
-        if (c->pscgElements[x].type == 0) {
-          pscg_destroy_screen_lvl2(x, c);
-        }
-        c->elementsUsed--;
-        c->pscgElements[x].valid = 0;
-      }
-    }
-  }
-}
-
-void pscg_destroy_screen(uint16_t id, gr2context * c) {
-  PSCG_BOUNDARY_CHECK_AND_RETURN();
-  if (c->pscgElements[id].valid != 1) {
-    return;
-  }
-  c->elementsUsed--;
-
-  pscg_destroy_screen_lvl2(id, c);
-}
-
-uint8_t pscg_get_valid(uint16_t id, gr2context * c) {
-  PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
-  return c->pscgElements[id].valid;
-}
-
-void pscg_cleanup(gr2context * c) {
-  uint16_t x;
-  for(x = 1; x <= c->elementsMax; x++) {
-    if (c->pscgElements[x].valid == 1) {
-      c->maxElementsId = x;
-    }
-  }
-}
-
-void pscg_clear_screen_ev(uint16_t id, gr2context * c) {
-  uint16_t x;
-  PSCG_BOUNDARY_CHECK_AND_RETURN();
-  for(x = 1; x <= c->maxElementsId; x++) {
-    if ((c->pscgElements[x].screen_id == id) && (c->pscgElements[x].valid == 1)) {
-      pscg_set_event(x, EV_NONE, c);
-    }
-  }
-}
-
-void pscg_clear_event(uint16_t id, gr2context * c) {
-  PSCG_BOUNDARY_CHECK_AND_RETURN();
-  if (c->pscgElements[id].type != 0) {
-    pscg_set_event(id, EV_NONE, c);
-  } else {
-    pscg_clear_screen_ev(id, c);
-  }
-}
-
-void pscg_destroy(uint16_t id, gr2context * c) {
-  PSCG_BOUNDARY_CHECK_AND_RETURN();
-  if (c->pscgElements[id].valid) {
-    if (c->pscgElements[id].type == 0) {
-      pscg_destroy_screen(id, c);
-    } else {
-      c->pscgElements[id].valid = 0;
-      c->elementsUsed--;
-    }
-  }
-  if (c->pscgElements[c->pscgElements[id].screen_id].valid) {
-    c->pscgElements[c->pscgElements[id].screen_id].modified = 1;
-  }
-}
-
-void pscg_set_value(uint16_t id, int32_t val, gr2context * c) {
-  PSCG_BOUNDARY_CHECK_AND_RETURN();
-
-  if (c->pscgElements[id].type == GR2_TYPE_SCREEN) {
-    return;
-  }
-
-  if ((val != c->pscgElements[id].value) && (c->pscgElements[id].modified == 0)) {
-    if (c->pscgElements[id].modified == 0) {
-      // Store value before item was modified
-      c->pscgElements[id].prev_val = c->pscgElements[id].value;
-    }
-    c->pscgElements[id].modified = 1; // redraw modified
-  }
-  c->pscgElements[id].value = val;
-}
-
 void pscg_text_deactivate(gr2context * c) {
   c->textActive = 0;
   c->pscgElements[c->textActiveId].value = 0;
   c->pscgElements[c->textActiveId].modified = 1;
-}
-
-void pscg_draw_end(gr2context * c) {
-  c->invisible_flag = 0;
-
-  if (c->reset_active_element_flag) {
-    c->pscgElements[c->pscg_active_element].pre_active = 0;
-    c->pscgElements[c->pscg_active_element].modified = 1;
-
-    c->pscg_active_element = 0;
-    c->reset_active_element_flag = 0;
-  }
-
-  set_global_grayout_flag(0);
 }
 
 uint16_t pscg_get_tmx(gr2context * c) {
@@ -292,7 +85,7 @@ void pscg_draw_screen(
   uint16_t background_color;
 
   if (screen > con->elementsMax) {
-    pscg_error("id out of bounds.", con);
+    gr2_error("id out of bounds.", con);
     printf("%s: id out of bounds.\n", __FUNCTION__);
     return;
   }
@@ -309,15 +102,15 @@ void pscg_draw_screen(
     draw_frame_flag = 1;
   }
 
-  if (get_global_grayout_flag() || (con->pscgElements[screen].grayout == 1)) {
+  if (gr2_get_global_grayout_flag() || (con->pscgElements[screen].grayout == 1)) {
     background_color = LCD_get_gray16(con->background_color);
   } else {
     background_color = con->background_color;
   }
 
-  global_grayout_flag = get_global_grayout_flag();
+  global_grayout_flag = gr2_get_global_grayout_flag();
   if ((global_grayout_flag == 0) && (con->pscgElements[screen].grayout == 1)) {
-    set_global_grayout_flag(1);
+    gr2_set_global_grayout_flag(1);
   }
 
   LCD_getDrawArea(&area);
@@ -460,9 +253,9 @@ void pscg_draw_screen(
         COUNT_A_B_C_D
         uint16_t global_grayout_flag;
 
-        global_grayout_flag = get_global_grayout_flag();
+        global_grayout_flag = gr2_get_global_grayout_flag();
         if ((global_grayout_flag == 0) && (con->pscgElements[i].grayout == 1)) {
-          set_global_grayout_flag(1);
+          gr2_set_global_grayout_flag(1);
         }
 
         if (all == 1) {
@@ -474,7 +267,7 @@ void pscg_draw_screen(
           pscg_draw_screen(a, b, c, d, con->pscgElements[i].value, 0, con);
         }
 
-        set_global_grayout_flag(global_grayout_flag);
+        gr2_set_global_grayout_flag(global_grayout_flag);
       }
       if (con->pscgElements[i].type == GR2_TYPE_COLOR_BUTTON) {
         COUNT_A_B_C_D
@@ -515,7 +308,7 @@ void pscg_draw_screen(
     LCD_DrawRectangle(x1, y1, x2, y2, con->border_color);
   }
 
-  set_global_grayout_flag(global_grayout_flag);
+  gr2_set_global_grayout_flag(global_grayout_flag);
 }
 
 uint8_t touch_in_screen(
@@ -644,7 +437,7 @@ uint8_t pscg_touch_input(
   uint8_t retval = 0;
 
   if (screen > con->elementsMax) {
-    pscg_error("id out of bounds.", con);
+    gr2_error("id out of bounds.", con);
     printf("%s: id out of bounds.\n", __FUNCTION__);
     return 0;
   }

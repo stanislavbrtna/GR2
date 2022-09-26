@@ -60,8 +60,8 @@ SOFTWARE.
 #endif
 
 // GR2 context setup
-void gr2_ResetContext(gr2context *c);
-void gr2_InitContext(
+void gr2_reset_context(gr2context *c);
+void gr2_init_context(
                      gr2context *c,
                      pscgElement *pscgElementsArray,
                      uint16_t elementsCount,
@@ -191,8 +191,8 @@ uint8_t pscg_get_text_active(uint16_t id, gr2context * c);
 // events
 gr2EventType pscg_get_event(uint16_t id, gr2context * c);
 void pscg_set_event(uint16_t id, gr2EventType val, gr2context * c);
-void pscg_clear_event(uint16_t id, gr2context * c); //works both for elements and screens
-void pscg_clear_screen_ev(uint16_t id, gr2context * c);
+void gr2_clear_event(uint16_t id, gr2context * c); //works both for elements and screens
+void gr2_clear_screen_ev(uint16_t id, gr2context * c);
 uint8_t gr2_clicked(uint16_t id, gr2context * c); // short for get event released & clear event
 
 //=================== GUI Getters & Setters for screens ========================
@@ -225,22 +225,24 @@ uint16_t pscg_get_active_color(gr2context * c);
 //=================== misc and internaly used functions ========================
 
 uint16_t pscg_get_element_count(gr2context * c);
-void pscg_reset_all(gr2context * c);
+void gr2_reset_all(gr2context * c);
 
-void set_global_grayout_flag(uint8_t val);
-uint8_t get_global_grayout_flag();
+void gr2_set_global_grayout_flag(uint8_t val);
+uint8_t gr2_get_global_grayout_flag();
 
-void pscg_cleanup(gr2context * c); //sets correct maxElementId
+void gr2_cleanup(gr2context * c); //sets correct maxElementId
 void set_pscg_workaround_context(gr2context * c);
 
 uint16_t pscg_get_tmx(gr2context * c);
 uint16_t pscg_get_tmy(gr2context * c);
 
-void pscg_error(uint8_t *str, gr2context * c);
-void pscg_destroy_screen(uint16_t id, gr2context * c); // deprecated
+void gr2_error(uint8_t *str, gr2context * c);
+void gr2_destroy_screen(uint16_t id, gr2context * c); // deprecated
 
-#define PSCG_BOUNDARY_CHECK_AND_RETURN() do{if (id > c->elementsMax) {pscg_error("id out of bounds.", c);printf("%s: id out of bounds.\n", __FUNCTION__);return;} }while(0)
-#define PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO() do{if (id > c->elementsMax) {pscg_error("id out of bounds.", c);printf("%s: id out of bounds.\n", __FUNCTION__);return 0;} }while(0)
+void gr2_error(uint8_t *str, gr2context * c);
+
+#define PSCG_BOUNDARY_CHECK_AND_RETURN() do{if (id > c->elementsMax) {gr2_error("id out of bounds.", c);printf("%s: id out of bounds.\n", __FUNCTION__);return;} }while(0)
+#define PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO() do{if (id > c->elementsMax) {gr2_error("id out of bounds.", c);printf("%s: id out of bounds.\n", __FUNCTION__);return 0;} }while(0)
 
 
 #endif /* PSCG_PSCG_H_ */

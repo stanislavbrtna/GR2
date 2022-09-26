@@ -28,6 +28,11 @@ void pscg_set_grid_size(uint16_t size, gr2context * c){
 	c->default_grid_size = size;
 }
 
+uint8_t pscg_get_valid(uint16_t id, gr2context * c) {
+  PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
+  return c->pscgElements[id].valid;
+}
+
 // color getters and setters
 void pscg_set_border_color(uint16_t col, gr2context * c) {
 	c->border_color = col;
@@ -74,6 +79,23 @@ int32_t pscg_get_value(uint16_t id, gr2context * c) {
 	return c->pscgElements[id].value;
 }
 
+void pscg_set_value(uint16_t id, int32_t val, gr2context * c) {
+  PSCG_BOUNDARY_CHECK_AND_RETURN();
+
+  if (c->pscgElements[id].type == GR2_TYPE_SCREEN) {
+    return;
+  }
+
+  if ((val != c->pscgElements[id].value) && (c->pscgElements[id].modified == 0)) {
+    if (c->pscgElements[id].modified == 0) {
+      // Store value before item was modified
+      c->pscgElements[id].prev_val = c->pscgElements[id].value;
+    }
+    c->pscgElements[id].modified = 1; // redraw modified
+  }
+  c->pscgElements[id].value = val;
+}
+
 uint16_t pscg_get_element_count(gr2context * c) {
 	return c->elementsUsed;
 }
@@ -94,6 +116,10 @@ void pscg_set_visible(uint16_t id, uint16_t vis, gr2context * c) {
 	}
 
 	c->pscgElements[id].visible = vis;
+}
+
+void pscg_set_relative_init(uint8_t val, gr2context * c) {
+  c->relative_init = val;
 }
 
 void pscg_set_grayout(uint16_t id, uint8_t val, gr2context * c) {
@@ -503,7 +529,7 @@ gr2EventType pscg_get_event(uint16_t id, gr2context * c) {
   	return c->pscgElements[id].event;
   } else {
   	if (id != 0) {
-  		pscg_error((uint8_t *)"pscg_get_event: element not valid", c);
+  		gr2_error((uint8_t *)"pscg_get_event: element not valid", c);
   	} else {
   		printf("WARN: pscg_get_event on id Zero!\n");
   	}

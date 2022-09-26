@@ -32,7 +32,7 @@ void pscg_set_max_id(uint16_t id, gr2context * c){
   }
 }
 
-void pscg_error(uint8_t *str, gr2context * c);
+void gr2_error(uint8_t *str, gr2context * c);
 
 void pscg_indent(uint16_t val){
 	uint16_t x;
@@ -153,7 +153,7 @@ static uint16_t pscg_get_new_id(gr2context * c) {
 	    return i;
 	  }
 	  if (i >= c->elementsMax) {
-		  pscg_error((uint8_t *)"Maximum number of elements reached!", c);
+		  gr2_error((uint8_t *)"Maximum number of elements reached!", c);
 		  return 0;
 	  }
 	  i++;
@@ -331,7 +331,7 @@ uint16_t pscg_add_screen(gr2context * c) {
 	    break;
 	  }
 	  if (scrI >= c->screensMax) {
-		  pscg_error((uint8_t *) "Maximum number of screens reached!", c);
+		  gr2_error((uint8_t *) "Maximum number of screens reached!", c);
 		  return 0;
 	  }
 	  scrI++;

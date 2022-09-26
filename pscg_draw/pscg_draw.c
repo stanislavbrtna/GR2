@@ -23,13 +23,16 @@ SOFTWARE.
 
 uint8_t global_grayout_flag;
 
-void set_global_grayout_flag(uint8_t val) {
+
+void gr2_set_global_grayout_flag(uint8_t val) {
   global_grayout_flag = val;
 }
 
-uint8_t get_global_grayout_flag() {
+
+uint8_t gr2_get_global_grayout_flag() {
   return global_grayout_flag;
 }
+
 
 int16_t pscg_get_text_align_x(uint16_t id, int16_t x1, int16_t x2, int16_t offset, gr2context * c) {
   uint8_t alignment;
@@ -46,4 +49,18 @@ int16_t pscg_get_text_align_x(uint16_t id, int16_t x1, int16_t x2, int16_t offse
   }
 
   return x_add;
+}
+
+void pscg_draw_end(gr2context * c) {
+  c->invisible_flag = 0;
+
+  if (c->reset_active_element_flag) {
+    c->pscgElements[c->pscg_active_element].pre_active = 0;
+    c->pscgElements[c->pscg_active_element].modified = 1;
+
+    c->pscg_active_element = 0;
+    c->reset_active_element_flag = 0;
+  }
+
+  gr2_set_global_grayout_flag(0);
 }
