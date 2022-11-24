@@ -347,6 +347,7 @@ uint16_t gr2_add_screen(gr2context * c) {
 	c->pscgScreens[scrI].cell_space_bottom = c->default_grid_spacing;
 	c->pscgScreens[scrI].cell_space_top = c->default_grid_spacing;
 	c->pscgScreens[scrI].default_font = LCD_Get_Font_Size();
+	c->pscgScreens[scrI].kbd_selected = 0;
 
 	pscg_fill_zero_defaults(i, i, c);
 	c->pscgElements[i].type = GR2_TYPE_SCREEN;

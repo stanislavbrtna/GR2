@@ -120,6 +120,8 @@ typedef struct {
 
   uint8_t default_font;
 
+  uint16_t kbd_selected;
+
   uint8_t valid;
 
 } gr2Screen;
