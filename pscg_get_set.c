@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "pscg.h"
+#include "GR2.h"
 
 uint32_t sda_strlen(uint8_t * str);
 

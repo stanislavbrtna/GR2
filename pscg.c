@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "pscg.h"
+#include "GR2.h"
 
 // Sets redraw flag to all valid elements
 void gr2_redraw_all(gr2context * c) {
@@ -657,5 +657,10 @@ uint8_t gr2_touch_input(
       }
     }
   }
+
+  if (retval != 0) {
+    gr2_ki_unselect(screen, con);
+  }
+
   return retval;
 }

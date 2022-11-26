@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "pscg.h"
+#include "GR2.h"
 gr2context * svs_pscg_c;
 
 void set_gr2_workaround_context(gr2context * c) {

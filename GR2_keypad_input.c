@@ -24,6 +24,13 @@ SOFTWARE.
 
 
 uint8_t gr2_ki_get_selectable(uint16_t id, gr2context * con) {
+
+  if(con->pscgElements[id].valid == 0)
+    return 0;
+  
+  if(con->pscgElements[id].visible == 0)
+    return 0;
+
   switch (con->pscgElements[id].type) {
   case GR2_TYPE_BUTTON:
     return 1;
