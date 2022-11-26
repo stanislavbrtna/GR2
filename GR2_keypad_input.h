@@ -27,4 +27,7 @@ SOFTWARE.
 
 typedef enum {GR2_BUTTON_UP, GR2_BUTTON_DOWN, GR2_BUTTON_LEFT,GR2_BUTTON_RIGHT, GR2_BUTTON_OK, GR2_BUTTON_CANCEL} gr2ButtonType;
 
+void gr2_ki_unselect(uint16_t screen, gr2context * con);
+uint8_t gr2_keypad_input(gr2ButtonType button, gr2EventType ev, uint16_t screen, gr2context * con);
+
 #endif

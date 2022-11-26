@@ -77,6 +77,14 @@ uint8_t gr2_ki_select(uint16_t id, gr2context * con) {
 }
 
 
+void gr2_ki_unselect(uint16_t screen, gr2context * con) {
+  if (con->pscgScreens[con->pscgElements[screen].value].kbd_selected != 0) {
+    gr2_set_select(con->pscgScreens[con->pscgElements[screen].value].kbd_selected, 0, con);
+    con->pscgScreens[con->pscgElements[screen].value].kbd_selected = 0;
+  }
+}
+
+
 uint8_t gr2_keypad_input(gr2ButtonType button, gr2EventType ev, uint16_t screen, gr2context * con) {
   uint16_t current_element;
   uint16_t closest_element = 0;
