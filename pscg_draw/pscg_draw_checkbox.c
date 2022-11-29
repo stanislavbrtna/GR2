@@ -60,13 +60,23 @@ void gr2_draw_checkbox(
 
   if((active == 1)) {
     // bigger rectangle
-    LCD_FillRect(
-      x1 + PSCG_CHECKBOX_HSPACE_UP,
-      y1 + PSCG_CHECKBOX_VSPACE_UP,
-      x1 + y2 - y1 - PSCG_CHECKBOX_HSPACE_DN,
-      y2 - PSCG_CHECKBOX_VSPACE_DN,
-      fc
-    );
+    if (gr2_get_select(id, c) == 1) {
+      LCD_FillRect(
+        x1 + PSCG_CHECKBOX_HSPACE_UP,
+        y1 + PSCG_CHECKBOX_VSPACE_UP,
+        x1 + y2 - y1 - PSCG_CHECKBOX_HSPACE_DN,
+        y2 - PSCG_CHECKBOX_VSPACE_DN,
+        ac
+      );
+    } else {
+      LCD_FillRect(
+        x1 + PSCG_CHECKBOX_HSPACE_UP,
+        y1 + PSCG_CHECKBOX_VSPACE_UP,
+        x1 + y2 - y1 - PSCG_CHECKBOX_HSPACE_DN,
+        y2 - PSCG_CHECKBOX_VSPACE_DN,
+        fc
+      );
+    }
     // the inner smaller one
     LCD_FillRect(
       x1 + PSCG_CHECKBOX_HSPACE_UP + PSCG_CHECKBOX_IN_HSPACE,
@@ -84,13 +94,24 @@ void gr2_draw_checkbox(
       tc
     );
   } else if (c->pscg_active_element == id) {
-    LCD_FillRect(
-      x1 + PSCG_CHECKBOX_HSPACE_UP,
-      y1 + PSCG_CHECKBOX_VSPACE_UP,
-      x1 + y2 - y1 - PSCG_CHECKBOX_HSPACE_DN,
-      y2 - PSCG_CHECKBOX_VSPACE_DN,
-      fc
-    );
+    if (gr2_get_select(id, c) == 1) {
+      LCD_FillRect(
+        x1 + PSCG_CHECKBOX_HSPACE_UP,
+        y1 + PSCG_CHECKBOX_VSPACE_UP,
+        x1 + y2 - y1 - PSCG_CHECKBOX_HSPACE_DN,
+        y2 - PSCG_CHECKBOX_VSPACE_DN,
+        ac
+      );
+    } else {
+      LCD_FillRect(
+        x1 + PSCG_CHECKBOX_HSPACE_UP,
+        y1 + PSCG_CHECKBOX_VSPACE_UP,
+        x1 + y2 - y1 - PSCG_CHECKBOX_HSPACE_DN,
+        y2 - PSCG_CHECKBOX_VSPACE_DN,
+        fc
+      );
+    }
+
     LCD_DrawRectangle(
       x1 + PSCG_CHECKBOX_HSPACE_UP + PSCG_CHECKBOX_IN_HSPACE,
       y1 + PSCG_CHECKBOX_VSPACE_UP + PSCG_CHECKBOX_IN_VSPACE,
@@ -100,13 +121,23 @@ void gr2_draw_checkbox(
     );
     c->pscgElements[id].pre_active = 1;
   } else if (active == 0) {
-     LCD_FillRect(
-      x1 + PSCG_CHECKBOX_HSPACE_UP,
-      y1 + PSCG_CHECKBOX_VSPACE_UP,
-      x1 + y2 - y1 - PSCG_CHECKBOX_HSPACE_DN,
-      y2 - PSCG_CHECKBOX_VSPACE_DN,
-      fc
-    );
+    if (gr2_get_select(id, c) == 1) {
+      LCD_FillRect(
+        x1 + PSCG_CHECKBOX_HSPACE_UP,
+        y1 + PSCG_CHECKBOX_VSPACE_UP,
+        x1 + y2 - y1 - PSCG_CHECKBOX_HSPACE_DN,
+        y2 - PSCG_CHECKBOX_VSPACE_DN,
+        ac
+      );
+    } else {
+      LCD_FillRect(
+        x1 + PSCG_CHECKBOX_HSPACE_UP,
+        y1 + PSCG_CHECKBOX_VSPACE_UP,
+        x1 + y2 - y1 - PSCG_CHECKBOX_HSPACE_DN,
+        y2 - PSCG_CHECKBOX_VSPACE_DN,
+        fc
+      );
+    }
   }
 
   // outlineof the larger one

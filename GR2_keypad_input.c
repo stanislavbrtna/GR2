@@ -31,6 +31,9 @@ uint8_t gr2_ki_get_selectable(uint16_t id, gr2context * con) {
   if(con->pscgElements[id].visible == 0)
     return 0;
 
+  if(gr2_get_grayout(id, con) == 1)
+    return 0;
+
   switch (con->pscgElements[id].type) {
   case GR2_TYPE_BUTTON:
     return 1;
@@ -185,7 +188,7 @@ uint8_t gr2_keypad_input(gr2ButtonType button, gr2EventType ev, uint16_t screen,
     current_element = closest_element;
   }
 
-  if (button == GR2_BUTTON_OK && ev != EV_NONE) {
+  if (button == GR2_BUTTON_OK && ev != EV_NONE && gr2_get_event(current_element, con) != ev) {
     gr2_set_event(current_element, ev, con);
   }
 }
