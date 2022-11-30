@@ -66,6 +66,14 @@ uint8_t gr2_ki_get_selectable(uint16_t id, gr2context * con) {
     return 1;
     break;
 
+  case GR2_TYPE_SCREEN:
+    return 1;
+    break;
+
+  case GR2_TYPE_FRAME:
+    return 1;
+    break;
+
   default:
     return 0;
   }
@@ -96,7 +104,7 @@ void gr2_ki_unselect(uint16_t screen, gr2context * con) {
 
 
 uint8_t gr2_keypad_input(gr2ButtonType button, gr2EventType ev, uint16_t screen, gr2context * con) {
-  uint16_t current_element;
+  uint16_t current_element = 0;
   uint16_t closest_element = 0;
 
   if (con->pscgScreens[con->pscgElements[screen].value].kbd_selected == 0 && ev == EV_PRESSED) {
@@ -104,11 +112,15 @@ uint8_t gr2_keypad_input(gr2ButtonType button, gr2EventType ev, uint16_t screen,
       if ((con->pscgElements[i].screen_id == screen) && (i != screen) && (con->pscgElements[i].valid == 1) && gr2_ki_get_selectable(i, con)) {
         current_element = i;
         gr2_ki_select(i, con);
-        return 0;
+        return 1;
       }
     }
   } else {
     current_element = con->pscgScreens[con->pscgElements[screen].value].kbd_selected;
+  }
+
+  if (current_element == 0) {
+    return 0;
   }
 
   // handling sliders
@@ -157,6 +169,41 @@ uint8_t gr2_keypad_input(gr2ButtonType button, gr2EventType ev, uint16_t screen,
         return 1;
       }
     }
+  }
+
+  if (con->pscgElements[current_element].type == GR2_TYPE_FRAME) {
+    uint8_t r;
+
+    r = gr2_keypad_input(button, ev, gr2_get_value(current_element, con), con);
+
+    if (r != 0) {
+      return r;
+    } else {
+      gr2_ki_unselect(gr2_get_value(current_element, con), con);
+    }
+    // else continue
+  }
+
+  if (con->pscgElements[current_element].type == GR2_TYPE_SCREEN && ev != EV_NONE) {
+    uint8_t r = 0;
+
+    r = gr2_keypad_input(button, ev, current_element, con);
+
+    if (r != 0) {
+      return r;
+    } else {
+      gr2_ki_unselect(current_element, con);
+    }
+    // else continue
+  }
+
+  if (button == GR2_BUTTON_OK && ev != EV_NONE && gr2_get_event(current_element, con) != ev) {
+    if (con->pscgElements[current_element].type == GR2_TYPE_TEXT && gr2_text_get_editable(current_element, con)) {
+      gr2_activate_text(current_element, con);
+      return 2;
+    }
+    gr2_set_event(current_element, ev, con);
+    return 1;
   }
 
   if (button == GR2_BUTTON_RIGHT && ev == EV_PRESSED) {
@@ -255,16 +302,11 @@ uint8_t gr2_keypad_input(gr2ButtonType button, gr2EventType ev, uint16_t screen,
 
   if(closest_element != 0) {
     gr2_ki_select(closest_element,con);
-    current_element = closest_element;
-  }
-
-  if (button == GR2_BUTTON_OK && ev != EV_NONE && gr2_get_event(current_element, con) != ev) {
-    if (con->pscgElements[current_element].type == GR2_TYPE_TEXT && gr2_text_get_editable(current_element, con)) {
-      gr2_activate_text(current_element, con);
-      return 2;
-    }
-    gr2_set_event(current_element, ev, con);
     return 1;
   }
-  return 0;
+
+  if (closest_element == 0 && ev == EV_PRESSED)
+    return 0;
+  else
+    return 1;
 }
