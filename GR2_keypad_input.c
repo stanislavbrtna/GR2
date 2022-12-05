@@ -198,10 +198,21 @@ uint8_t gr2_keypad_input(gr2ButtonType button, gr2EventType ev, uint16_t screen,
   }
 
   if (button == GR2_BUTTON_OK && ev != EV_NONE && gr2_get_event(current_element, con) != ev) {
+    
+    if (ev == EV_RELEASED && con->pscgElements[current_element].type == GR2_TYPE_CHECKBOX) {
+      if (con->pscgElements[current_element].value) {
+        con->pscgElements[current_element].value = 0;
+      } else {
+        con->pscgElements[current_element].value = 1;
+      }
+      con->pscg_active_element = 0;
+    }
+  
     if (con->pscgElements[current_element].type == GR2_TYPE_TEXT && gr2_text_get_editable(current_element, con)) {
       gr2_activate_text(current_element, con);
       return 2;
     }
+
     gr2_set_event(current_element, ev, con);
     return 1;
   }
