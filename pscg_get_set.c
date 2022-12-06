@@ -555,6 +555,12 @@ void gr2_activate_text(uint16_t id, gr2context * c) {
 	c->textActiveId = id;
 }
 
+void gr2_text_deactivate(gr2context * c) {
+  c->textActive = 0;
+  c->pscgElements[c->textActiveId].value = 0;
+  c->pscgElements[c->textActiveId].modified = 1;
+}
+
 uint8_t gr2_get_text_active(uint16_t id, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
 	if ((c->textActive == 1) && (c->textActiveId == id)) {

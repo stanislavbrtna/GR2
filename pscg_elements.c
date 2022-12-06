@@ -288,7 +288,7 @@ uint16_t gr2_add_slider_h(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, in
 	return i;
 }
 
-//vertikální progbar
+// vertical progbar
 uint16_t gr2_add_progbar_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32_t param, int32_t value, uint16_t screen, gr2context * c){
 	uint16_t i = pscg_get_new_id(c);
 

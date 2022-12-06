@@ -168,3 +168,37 @@ void gr2_reset_all(gr2context * c) {
 
   gr2_set_global_grayout_flag(0);
 }
+
+// misc
+
+uint8_t gr2_clicked(uint16_t id, gr2context * c) {
+  PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
+  if ((c->pscgElements[id].event == EV_RELEASED)) {
+    gr2_set_event(id, EV_NONE, c);
+    return 1;
+  } else {
+    gr2_set_event(id, EV_NONE, c);
+    return 0;
+  }
+}
+
+
+// Sets redraw flag to all valid elements
+void gr2_redraw_all(gr2context * c) {
+  uint16_t x;
+  for(x = 1; x <= c->elementsMax; x++) {
+      if (c->pscgElements[x].valid == 1) {
+        c->pscgElements[x].modified = 1;
+      }
+  }
+}
+
+
+uint16_t gr2_get_tmx(gr2context * c) {
+  return c->textMouseX;
+}
+
+
+uint16_t gr2_get_tmy(gr2context * c) {
+  return c->textMouseY;
+}
