@@ -75,6 +75,10 @@ void gr2_draw_text(
     LCD_set_fitText(0, 0);
 
     if (editable) {
+      if (gr2_get_select(id, c) == 1) {
+        LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, c->active_color);
+        LCD_DrawRectangle(x1 + 2, y1 + 2, x2 - 2, y2 - 2, c->active_color);
+      }
       LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
     }
   } else {
