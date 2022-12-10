@@ -50,11 +50,11 @@ uint16_t LCD_rotr_x(uint16_t x1, uint16_t y1) {
   }
 
   if (lcd_orientation == OR_ROT_LEFT) {
-    return y1;
+    return lcd_x_size - y1;
   }
 
   if (lcd_orientation == OR_ROT_RIGHT) {
-    return lcd_x_size - y1;
+    return y1;
   }
 
   if (lcd_orientation == OR_UPSIDE_DOWN) {
@@ -70,11 +70,11 @@ uint16_t LCD_rotr_y(uint16_t x1, uint16_t y1) {
   }
 
   if (lcd_orientation == OR_ROT_LEFT) {
-    return lcd_y_size - x1;
+    return x1;
   }
 
   if (lcd_orientation == OR_ROT_RIGHT) {
-    return x1;
+    return lcd_y_size - x1;
   }
 
   if (lcd_orientation == OR_UPSIDE_DOWN) {
