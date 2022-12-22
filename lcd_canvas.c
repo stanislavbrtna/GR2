@@ -45,6 +45,7 @@ int16_t canvas_x;
 int16_t canvas_y;
 
 uint32_t canvas_pos;
+uint16_t canvas_step;
 
 void LCD_canvas_set(int16_t x1, int16_t y1, int16_t x2, int16_t y2) {
   uint16_t prac;
@@ -75,6 +76,7 @@ void LCD_canvas_set(int16_t x1, int16_t y1, int16_t x2, int16_t y2) {
   canvas_height = y2 - y1;
 
   canvas_pos = 0;
+  canvas_step = 1;
 
   //vytvoření draw arey
   if (x1 < draw_area_x1){
@@ -125,7 +127,7 @@ void LCD_canvas_set(int16_t x1, int16_t y1, int16_t x2, int16_t y2) {
     }
   }
 
-  LCD_set_XY(canvas_hardX1, canvas_hardY1, canvas_hardX2, canvas_hardY2);
+  LCD_set_XY(canvas_hardX1, canvas_hardY1, canvas_hardX2, canvas_hardY1);
 }
 
 void LCD_canvas_zero() {
@@ -137,6 +139,11 @@ void LCD_canvas_putcol(uint16_t color) {
 
   current_x = canvas_x + (canvas_pos % (canvas_width + 1));
   current_y = canvas_y + (canvas_pos / (canvas_width + 1));
+
+  if (canvas_pos / (canvas_width + 1) > canvas_step) {
+    LCD_set_XY(canvas_hardX1, canvas_hardY1 + canvas_step, canvas_hardX2, canvas_hardY1 + canvas_step);
+    canvas_step++;
+  }
 
   if ((current_x >= canvas_hardX1)
       && (current_x <= canvas_hardX2)
