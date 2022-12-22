@@ -50,7 +50,7 @@ uint16_t LCD_rotr_x(uint16_t x1, uint16_t y1) {
   }
 
   if (lcd_orientation == OR_ROT_LEFT) {
-    return lcd_x_size - y1;
+    return lcd_y_size - y1;
   }
 
   if (lcd_orientation == OR_ROT_RIGHT) {
@@ -74,7 +74,7 @@ uint16_t LCD_rotr_y(uint16_t x1, uint16_t y1) {
   }
 
   if (lcd_orientation == OR_ROT_RIGHT) {
-    return lcd_y_size - x1;
+    return lcd_x_size - x1;
   }
 
   if (lcd_orientation == OR_UPSIDE_DOWN) {
@@ -169,12 +169,19 @@ void LCD_setSubDrawArea(int16_t x1, int16_t y1, int16_t x2, int16_t y2) {
 }
 
 void LCD_DrawPoint(int16_t x, int16_t y, int16_t color) {
-  if ((x > (int16_t)lcd_x_size) || (x < draw_area_x1) || (x > draw_area_x2))
-    return;
+  if (lcd_orientation == OR_NORMAL || lcd_orientation == OR_UPSIDE_DOWN) {
+    if ((x > (int16_t)lcd_x_size) || (x < draw_area_x1) || (x > draw_area_x2))
+      return;
 
-  if ((y > (int16_t)lcd_y_size) || (y < draw_area_y1) || (y > draw_area_y2))
-    return;
+    if ((y > (int16_t)lcd_y_size) || (y < draw_area_y1) || (y > draw_area_y2))
+      return;
+  } else {
+    if ((x > (int16_t)lcd_y_size) || (x < draw_area_x1) || (x > draw_area_x2))
+      return;
 
+    if ((y > (int16_t)lcd_x_size) || (y < draw_area_y1) || (y > draw_area_y2))
+      return;
+  }
   LCD_set_XY((uint16_t)x, (uint16_t)y, (uint16_t)x, (uint16_t)y);
   LCD_draw_point_wrp(color);
 }
@@ -193,17 +200,32 @@ void LCD_FillRect(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t Color
   int16_t X1, X2, Y1, Y2;
   int32_t i, j;
 
-  if (x1 >= (lcd_x_size )) {
-    x1 = lcd_x_size ;
-  }
-  if (x2 >= (lcd_x_size )) {
-    x2 = lcd_x_size ;
-  }
-  if (y1 >= (lcd_y_size)) {
-    y1 = lcd_y_size;
-  }
-  if (y2 >= (lcd_y_size)) {
-    y2 = lcd_y_size;
+  if (lcd_orientation == OR_NORMAL || lcd_orientation == OR_UPSIDE_DOWN) {
+    if (x1 >= (lcd_x_size )) {
+      x1 = lcd_x_size ;
+    }
+    if (x2 >= (lcd_x_size )) {
+      x2 = lcd_x_size ;
+    }
+    if (y1 >= (lcd_y_size)) {
+      y1 = lcd_y_size;
+    }
+    if (y2 >= (lcd_y_size)) {
+      y2 = lcd_y_size;
+    }
+  } else {
+    if (x1 >= (lcd_y_size )) {
+      x1 = lcd_y_size ;
+    }
+    if (x2 >= (lcd_y_size )) {
+      x2 = lcd_y_size ;
+    }
+    if (y1 >= (lcd_x_size)) {
+      y1 = lcd_x_size;
+    }
+    if (y2 >= (lcd_x_size)) {
+      y2 = lcd_x_size;
+    }
   }
 
   if (x1 <= draw_area_x1) {

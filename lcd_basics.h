@@ -9,7 +9,7 @@
 #define LCD_BASICS_LCD_BASICS_H_
 #include "GR2.h"
 
-typedef enum {OR_NORMAL,OR_ROT_LEFT,OR_ROT_RIGHT,OR_UPSIDE_DOWN} lcdOrientationType;
+typedef enum {OR_NORMAL, OR_ROT_LEFT, OR_ROT_RIGHT, OR_UPSIDE_DOWN} lcdOrientationType;
 
 typedef struct {
   int16_t x1;

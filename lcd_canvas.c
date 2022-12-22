@@ -125,10 +125,10 @@ void LCD_canvas_set(int16_t x1, int16_t y1, int16_t x2, int16_t y2) {
     }
   }
 
-  lcd_hw_set_xy(canvas_hardX1, canvas_hardY1, canvas_hardX2, canvas_hardY2);
+  LCD_set_XY(canvas_hardX1, canvas_hardY1, canvas_hardX2, canvas_hardY2);
 }
 
-void LCD_canvas_zero(){
+void LCD_canvas_zero() {
   canvas_pos = 0;
 }
 
