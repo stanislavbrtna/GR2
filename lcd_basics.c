@@ -147,10 +147,7 @@ void LCD_getDrawArea(LCD_drawArea *a) {
 }
 
 void LCD_setDrawAreaS(LCD_drawArea *a) {
-  draw_area_x1 = a->x1;
-  draw_area_x2 = a->x2;
-  draw_area_y1 = a->y1;
-  draw_area_y2 = a->y2;
+  LCD_setDrawArea(a->x1, a->y1, a->x2, a->y2);  
 }
 
 void LCD_setSubDrawArea(int16_t x1, int16_t y1, int16_t x2, int16_t y2) {

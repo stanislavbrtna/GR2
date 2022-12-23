@@ -28,6 +28,7 @@ extern volatile int16_t draw_area_y2;
 
 extern uint16_t lcd_x_size;
 extern uint16_t lcd_y_size;
+extern lcdOrientationType lcd_orientation;
 
 int16_t canvas_drawAreaX1;
 int16_t canvas_drawAreaY1;
@@ -50,6 +51,9 @@ uint16_t canvas_step;
 void LCD_canvas_set(int16_t x1, int16_t y1, int16_t x2, int16_t y2) {
   uint16_t prac;
 
+  uint16_t lcd_x_size_r;
+  uint16_t lcd_y_size_r;
+
   if (x2 < x1){
     prac = x1;
     x1 = x2;
@@ -60,6 +64,14 @@ void LCD_canvas_set(int16_t x1, int16_t y1, int16_t x2, int16_t y2) {
     prac = y1;
     y1 = y2;
     y2 = prac;
+  }
+
+  if (lcd_orientation == OR_NORMAL || lcd_orientation == OR_UPSIDE_DOWN) {
+    lcd_x_size_r = lcd_x_size;
+    lcd_y_size_r = lcd_y_size;
+  } else {
+    lcd_x_size_r = lcd_y_size;
+    lcd_y_size_r = lcd_x_size;
   }
 
   canvas_drawAreaX1 = x1;
@@ -79,37 +91,37 @@ void LCD_canvas_set(int16_t x1, int16_t y1, int16_t x2, int16_t y2) {
   canvas_step = 1;
 
   //vytvoření draw arey
-  if (x1 < draw_area_x1){
+  if (x1 < draw_area_x1) {
     canvas_hardX1 = draw_area_x1;
   } else {
-    if (y2 < 0) {
+    if (x1 < 0) {
       canvas_hardX1 = 0;
-    } else if (x1 > lcd_x_size) {
-      canvas_hardX1 = lcd_x_size;
+    } else if (x1 > lcd_x_size_r) {
+      canvas_hardX1 = lcd_x_size_r;
     } else {
       canvas_hardX1 = x1;
     }
   }
 
-  if (x2 > draw_area_x2){
+  if (x2 > draw_area_x2) {
     canvas_hardX2 = draw_area_x2;
   } else {
     if (x2 < 0) {
       canvas_hardX2 = 0;
-    } else if (x2 > lcd_x_size) {
-      canvas_hardX2 = lcd_x_size;
+    } else if (x2 > lcd_x_size_r) {
+      canvas_hardX2 = lcd_x_size_r;
     } else {
       canvas_hardX2 = x2;
     }
   }
 
-  if (y1 < draw_area_y1){
+  if (y1 < draw_area_y1) {
     canvas_hardY1 = draw_area_y1;
   } else {
-    if (y2 < 0) {
+    if (y1 < 0) {
       canvas_hardY1 = 0;
-    } else if (y1 > lcd_y_size) {
-      canvas_hardY1 = lcd_y_size;
+    } else if (y1 > lcd_y_size_r) {
+      canvas_hardY1 = lcd_y_size_r;
     } else {
       canvas_hardY1 = y1;
     }
@@ -120,8 +132,8 @@ void LCD_canvas_set(int16_t x1, int16_t y1, int16_t x2, int16_t y2) {
   } else {
     if (y2 < 0) {
       canvas_hardY2 = 0;
-    } else if (y2 > lcd_y_size) {
-      canvas_hardY2 = lcd_y_size;
+    } else if (y2 > lcd_y_size_r) {
+      canvas_hardY2 = lcd_y_size_r;
     } else {
       canvas_hardY2 = y2;
     }
@@ -140,9 +152,11 @@ void LCD_canvas_putcol(uint16_t color) {
   current_x = canvas_x + (canvas_pos % (canvas_width + 1));
   current_y = canvas_y + (canvas_pos / (canvas_width + 1));
 
-  if (canvas_pos / (canvas_width + 1) > canvas_step) {
-    LCD_set_XY(canvas_hardX1, canvas_hardY1 + canvas_step, canvas_hardX2, canvas_hardY1 + canvas_step);
-    canvas_step++;
+  if (( (int16_t)(canvas_pos / (canvas_width + 1)) + canvas_y) > canvas_hardY1 && canvas_step + canvas_hardY1 < canvas_hardY2) {
+    if ( (int16_t)(canvas_pos / (canvas_width + 1) + canvas_y) > canvas_step + canvas_hardY1) {
+      LCD_set_XY(canvas_hardX1, canvas_hardY1 + canvas_step, canvas_hardX2, canvas_hardY1 + canvas_step);
+      canvas_step++;
+    }
   }
 
   if ((current_x >= canvas_hardX1)
