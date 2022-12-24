@@ -28,23 +28,23 @@ void LCD_set_orientation(lcdOrientationType orient);
 uint16_t LCD_rotr_x(uint16_t x1, uint16_t y1);
 uint16_t LCD_rotr_y(uint16_t x1, uint16_t y1);
 
-//getters
+// Getters
 uint16_t LCD_get_x_size();
 uint16_t LCD_get_y_size();
 
-//draw area functions
+// Draw area functions
 void LCD_setDrawArea(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
 void LCD_setSubDrawArea(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
 void LCD_getDrawArea(LCD_drawArea *a);
 void LCD_setDrawAreaS(LCD_drawArea *a);
 
-//color functions
+// Color functions
 uint16_t LCD_MixColor(uint8_t r, uint8_t g,uint8_t b);
 uint16_t LCD_get_gray16(uint16_t color);
 uint16_t LCD_color_darken(uint16_t color, uint8_t val);
 uint16_t LCD_color_lighten(uint16_t color, uint8_t val);
 
-//draw functions
+// Draw functions
 void LCD_DrawPoint(int16_t x, int16_t y, int16_t color);
 void LCD_Fill(uint16_t color);
 void LCD_DrawLine(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t color);
@@ -53,6 +53,9 @@ void LCD_FillRect(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t Color
 
 void LCD_DrawCircle(int16_t x0, int16_t y0, uint16_t radius, uint16_t color);
 void LCD_FillCircle(int16_t x0, int16_t y0, uint16_t radius, uint16_t color);
+
+// Low level
+void LCD_set_XY(uint16_t x1, uint16_t y1,uint16_t x2,uint16_t y2);
 
 // deprecated
 void LCD_DrawText(int16_t x, int16_t y, uint16_t color,uint16_t bg_color, uint8_t *text, uint8_t scale);
