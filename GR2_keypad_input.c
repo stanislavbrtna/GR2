@@ -313,6 +313,21 @@ uint8_t gr2_keypad_input(gr2ButtonType button, gr2EventType ev, uint16_t screen,
 
   if(closest_element != 0) {
     gr2_ki_select(closest_element,con);
+
+    if (con->pscgElements[closest_element].type == GR2_TYPE_SCREEN || con->pscgElements[closest_element].type == GR2_TYPE_FRAME) {
+      uint8_t r = 0;
+
+      if (con->pscgElements[closest_element].type == GR2_TYPE_SCREEN)
+        r = gr2_keypad_input(button, ev, closest_element, con);
+      if (con->pscgElements[closest_element].type == GR2_TYPE_FRAME)
+        r = gr2_keypad_input(button, ev, gr2_get_value(closest_element, con), con);
+
+      if (r != 0) {
+        return r;
+      } else {
+        gr2_ki_unselect(closest_element, con);
+      }
+    }
     return 1;
   }
 
