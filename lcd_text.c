@@ -207,18 +207,21 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
 
   while (0 != text[i]) {
 
-    if (blockStart != blockEnd && i == blockStart ) {
-      color = blockColor;
-    }
-
-    if (blockStart != blockEnd && i == blockEnd) {
-      color = colorOld;
-    }
-
     //bitbang utf8
     if (text[i] > 128) {
       yprac = y + yLineCnt * CurrentFont[3] + fontCorector_cz;
-      xLineCnt += LCD_DrawChar(x + xLineCnt, yprac, color,  LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
+      if (blockStart != blockEnd && i >= blockStart && i < blockEnd) {
+        LCD_FillRect(
+          x + xLineCnt,
+          y + yLineCnt * CurrentFont[3],
+          x + xLineCnt + LCD_Char_Get_Width(LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz),
+          y + (yLineCnt + 1) * CurrentFont[3],
+          color
+        ); 
+        xLineCnt += LCD_DrawChar(x + xLineCnt, yprac, blockColor,  LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
+      } else {
+        xLineCnt += LCD_DrawChar(x + xLineCnt, yprac, color,  LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
+      }
       i++;
     } else {
       if (text[i] != '\n') {
@@ -250,6 +253,16 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
         if (text[i] == ' ') {
           lastspace = i;
           lastX = xLineCnt;
+          if (blockStart != blockEnd && i >= blockStart && i < blockEnd) {
+            LCD_FillRect(
+              x + xLineCnt,
+              y + yLineCnt * CurrentFont[3],
+              x + xLineCnt + CurrentFont[2],
+              y + (yLineCnt + 1) * CurrentFont[3],
+              color
+            );
+          }
+
           xLineCnt += CurrentFont[2];
         } else if (text[i] == 9) { // tab
           lastspace = i;
@@ -257,7 +270,20 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
           xLineCnt =  (xLineCnt/(CurrentFont[2] * 4) + 1) * (CurrentFont[2] * 4);
         } else {
           outChar = text[i];
-          xLineCnt += LCD_DrawChar(x + xLineCnt, y + yLineCnt * CurrentFont[3], color, outChar, CurrentFont);
+
+          if (blockStart != blockEnd && i >= blockStart && i < blockEnd) {
+            LCD_FillRect(
+              x + xLineCnt,
+              y + yLineCnt * CurrentFont[3],
+              x + xLineCnt + LCD_Char_Get_Width(outChar, CurrentFont),
+              y + (yLineCnt + 1) * CurrentFont[3],
+              color
+            );
+            xLineCnt += LCD_DrawChar(x + xLineCnt, y + yLineCnt * CurrentFont[3], blockColor, outChar, CurrentFont);
+          } else {
+            xLineCnt += LCD_DrawChar(x + xLineCnt, y + yLineCnt * CurrentFont[3], color, outChar, CurrentFont);
+          }
+          
         }
 
       } else {
