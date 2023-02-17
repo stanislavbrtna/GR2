@@ -40,6 +40,10 @@ const uint8_t * CurrentFont;
 const uint8_t * CurrentFont_cz;
 uint8_t CurrentSize; // current font size
 int32_t fontCorector_cz;
+uint32_t blockStart;
+uint32_t blockEnd;
+uint16_t blockColor;
+
 
 // background color of the text field, ugly hack for fitting text
 extern uint16_t background_color;
@@ -76,6 +80,12 @@ uint16_t LCD_Draw_Get_Font_Height() {
 
 uint16_t LCD_Draw_Get_Font_Width() {
   return (uint16_t)CurrentFont[2];
+}
+
+void LCD_set_text_block(uint32_t start, uint32_t end, uint16_t color) {
+  blockStart = start;
+  blockEnd = end;
+  blockColor = color;
 }
 
 void LCD_Set_Sys_Font(uint8_t size) {
@@ -189,12 +199,22 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
   uint16_t lastX     = 0;
   uint16_t xLineCnt  = 0;
   uint16_t yLineCnt  = 0;
-  uint8_t outChar    = 0;
+  uint8_t  outChar   = 0;
   uint16_t yprac;
+  uint16_t colorOld = color;
 
   fitTextBreakpoint = 0;
 
   while (0 != text[i]) {
+
+    if (blockStart != blockEnd && i == blockStart ) {
+      color = ~colorOld;
+    }
+
+    if (blockStart != blockEnd && i == blockEnd) {
+      color = colorOld;
+    }
+
     //bitbang utf8
     if (text[i] > 128) {
       yprac = y + yLineCnt * CurrentFont[3] + fontCorector_cz;
@@ -275,6 +295,8 @@ void LCD_Text_Draw_Cursor_Pwd(int16_t x, int16_t y, uint8_t *text, uint16_t Colo
   LCD_DrawLine(x + xplus, y, x + xplus, y + CurrentFont[3], Color);
 }
 
+// returns width of a string, up to the count paramterer,
+// if count == 0, width of whole string is returned (this si used for cursor drawing)
 uint16_t LCD_Text_Get_Width(uint8_t *text, uint16_t count) {
   uint32_t i        = 0;
   uint16_t xLineCnt = 0;

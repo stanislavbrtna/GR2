@@ -176,7 +176,7 @@ void gr2_draw_screen(
         if ((all == 1) || (con->pscgElements[i].modified == 1)) {
           //DBG
           //printf("redrawing: %s\n",con->pscgElements[i].str_value);
-          gr2_draw_text(a,b,c,d,con->pscgElements[i].str_value,con->pscgElements[i].value,gr2_text_get_editable(i,con) , con->pscgElements[i].param, con->pscgElements[i].param2, gr2_text_get_fit(i, con), gr2_text_get_pwd(i, con), i, con);
+          gr2_draw_text(a, b, c, d, i, con);
           con->pscgElements[i].modified = 0;
         }
       }
@@ -515,19 +515,17 @@ uint8_t gr2_touch_input(
             a = get_a(touch_x, touch_y, x1, y1, x2, y2, i, screen, con);
             b = y1 + con->pscgElements[i].y1 * con->pscgScreens[scrID].y_cell - con->pscgScreens[scrID].y_scroll;
 
+            
             if (gr2_text_get_editable(i, con)) {
               if (event == EV_RELEASED) {
                 if (con->textActive == 0) {
                   retval = 2; //magic return value for opening the sw keyboard
-                } else {
-                  gr2_text_deactivate(con);
                 }
+                gr2_activate_text(i, con);
                 con->pscg_active_element = 0;
-                con->pscgElements[i].value = 1;
-                con->textActive            = 1;
-                con->textActiveId          = i;
               }
             }
+          
 
             // store current absolute touch coordinates for cursor detection
             if (con->pscgElements[i].value == 1) {

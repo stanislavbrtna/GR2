@@ -164,6 +164,10 @@ uint8_t gr2_get_visible(uint16_t id, gr2context * c);
 void gr2_set_grayout(uint16_t id, uint8_t val, gr2context * c);
 uint8_t gr2_get_grayout(uint16_t id, gr2context * c);
 
+// enable block text selection
+void gr2_set_block_enable(uint16_t id, uint16_t val, gr2context * c);
+uint8_t gr2_get_block_enable(uint16_t id, gr2context * c);
+
 // display only element outline
 void gr2_set_ghost(uint16_t id, uint16_t val, gr2context * c);
 uint8_t gr2_get_ghost(uint16_t id, gr2context * c);

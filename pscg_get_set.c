@@ -274,6 +274,26 @@ uint8_t gr2_get_ghost(uint16_t id, gr2context * c) {
 	}
 }
 
+
+void gr2_set_block_enable(uint16_t id, uint16_t val, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if (val == 1) {
+		c->pscgElements[id].status_reg |= GR2_BLOCK_TEXT_B;
+	} else {
+		c->pscgElements[id].status_reg &= ~GR2_BLOCK_TEXT_B;
+	}
+}
+
+uint8_t gr2_get_block_enable(uint16_t id, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
+	if (c->pscgElements[id].status_reg & GR2_BLOCK_TEXT_B) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+
 void gr2_set_select(uint16_t id, uint16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
 	if (val == 1) {
@@ -547,12 +567,17 @@ void gr2_set_event(uint16_t id, gr2EventType val, gr2context * c) {
 
 void gr2_activate_text(uint16_t id, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
-	if (c->textActive == 1){
+	if (c->textActiveId == id && c->textActive == 1) {
+		return;
+	}
+	if (c->textActive == 1) {
 		gr2_text_deactivate(c);
 	}
 	c->pscgElements[id].value = 1;
 	c->textActive = 1;
 	c->textActiveId = id;
+	c->textBlockStart = 0;
+    c->textBlockEnd = 0;
 }
 
 void gr2_text_deactivate(gr2context * c) {

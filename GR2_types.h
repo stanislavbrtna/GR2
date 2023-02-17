@@ -25,6 +25,7 @@ SOFTWARE.
 
 #define GR2_TEXT_EDITABLE_B 1
 #define GR2_TEXT_FIT_B 2
+#define GR2_BLOCK_TEXT_B 256
 #define GR2_GHOST_B 512
 #define GR2_SELECT_B 1024
 #define GR2_TEXT_PWD_B 2048
@@ -69,7 +70,7 @@ typedef struct {
   // bit5 32
   // bit6 64
   // bit7 128
-  // bit8 256
+  // bit8 - text copy/paste enabled
   // bit9 - ghost
   // bit10 - select
   // bit11 - pwd
@@ -138,6 +139,9 @@ typedef struct {
   gr2Screen *pscgScreens;
 
   uint16_t maxElementsId;
+
+  uint32_t textBlockStart;
+  uint32_t textBlockEnd;
 
   uint8_t textActive;
   uint16_t textActiveId;

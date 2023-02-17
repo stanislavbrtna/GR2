@@ -60,13 +60,6 @@ void gr2_draw_text(
            int16_t y1,
            int16_t x2,
            int16_t y2,
-           uint8_t *str,
-           uint8_t active,
-           uint8_t editable,
-           uint16_t cursor,
-           uint16_t font_size,
-           uint8_t fit,
-           uint8_t pwd,
            uint16_t id,
            gr2context * c
           );
