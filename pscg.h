@@ -200,6 +200,9 @@ void gr2_clear_event(uint16_t id, gr2context * c); //works both for elements and
 void gr2_clear_screen_ev(uint16_t id, gr2context * c);
 uint8_t gr2_clicked(uint16_t id, gr2context * c); // short for get event released & clear event
 
+// misc handlers
+uint8_t gr2_cursor_handler(uint16_t id, uint32_t ms_counter, gr2context * con);
+
 //=================== GUI Getters & Setters for screens ========================
 uint16_t gr2_get_xscroll(uint16_t id, gr2context * c);
 uint16_t gr2_get_yscroll(uint16_t id, gr2context * c);
