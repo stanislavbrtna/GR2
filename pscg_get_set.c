@@ -122,6 +122,10 @@ void gr2_set_relative_init(uint8_t val, gr2context * c) {
   c->relative_init = val;
 }
 
+uint8_t gr2_get_relative_init(gr2context * c) {
+  return c->relative_init;
+}
+
 void gr2_set_grayout(uint16_t id, uint8_t val, gr2context * c) {
   PSCG_BOUNDARY_CHECK_AND_RETURN();
   if (val != c->pscgElements[id].grayout) {

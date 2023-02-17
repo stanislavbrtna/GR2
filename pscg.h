@@ -102,6 +102,7 @@ void gr2_dump_screen(uint16_t id, gr2context * con);
 // setting up various context defaults
 void gr2_set_grid_size(uint16_t size, gr2context * c); // sets up default grid size [px]
 void gr2_set_relative_init(uint8_t relativeInitEnabled, gr2context * c); // switches x1 y1 x2 y2 and x y w h coordinates
+uint8_t gr2_get_relative_init(gr2context * c);
 
 //======================== GUI element constructors ============================
 uint16_t gr2_add_screen(gr2context * c);
