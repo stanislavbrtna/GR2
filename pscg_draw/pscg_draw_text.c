@@ -49,7 +49,9 @@ void gr2_draw_text(
       LCD_FillRect(x1, y1, x2, y2, c->active_color);
       LCD_set_text_block(c->textBlockStart, c->textBlockEnd, c->fill_color);
       if (gr2_text_get_pwd(id, c) == 0) {
-        LCD_Text_Draw_Cursor(x_add + x1, y1 + 5, c->pscgElements[id].str_value, c->pscgElements[id].param, c->text_color);
+        if (c->textBlockStart == c->textBlockEnd) {
+          LCD_Text_Draw_Cursor(x_add + x1, y1 + 5, c->pscgElements[id].str_value, c->pscgElements[id].param, c->text_color);
+        }
       } else {
         LCD_Text_Draw_Cursor_Pwd(x_add + x1, y1 + 5, c->pscgElements[id].str_value, c->text_color);
       }
