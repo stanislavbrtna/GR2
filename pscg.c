@@ -175,7 +175,9 @@ void gr2_draw_screen(
         COUNT_A_B_C_D
         if ((all == 1) || (con->pscgElements[i].modified == 1)) {
           //DBG
-          //printf("redrawing: %s\n",con->pscgElements[i].str_value);
+          //static uint32_t ix;
+          //printf("%u redrawing: %s\n", ix, con->pscgElements[i].str_value);
+          //ix++;
           gr2_draw_text(a, b, c, d, i, con);
           con->pscgElements[i].modified = 0;
         }
@@ -537,7 +539,6 @@ uint8_t gr2_touch_input(
                 con->textMouseX = touch_x - a - (gr2_get_text_align_x(i, x1, x2, 10, con) - 26);
               }
               con->textMouseY = touch_y - b - 5;
-              con->pscgElements[i].modified = 1;
               con->pscgElements[i].event    = event;
             }
           }
