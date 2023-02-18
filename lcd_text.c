@@ -192,6 +192,8 @@ uint16_t LCD_get_ext_char_num(uint8_t b1, uint8_t b2) {
   return 0;
 }
 
+#define LCD_BLOCK_SELECT_SPACER 3*(yLineCnt == 0) // make the first line of the block taller
+
 void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
   uint32_t i         = 0;
   uint32_t lw_det    = 0;
@@ -213,7 +215,7 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
       if (blockStart != blockEnd && i >= blockStart && i < blockEnd) {
         LCD_FillRect(
           x + xLineCnt,
-          y + yLineCnt * CurrentFont[3],
+          y + yLineCnt * CurrentFont[3] - LCD_BLOCK_SELECT_SPACER,
           x + xLineCnt + LCD_Char_Get_Width(LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz),
           y + (yLineCnt + 1) * CurrentFont[3],
           color
@@ -230,7 +232,7 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
             if (lw_det != lastspace) {
               LCD_FillRect(
                            x + lastX,
-                           y + yLineCnt*CurrentFont[3],
+                           y + yLineCnt*CurrentFont[3] - LCD_BLOCK_SELECT_SPACER,
                            fitTextMax,
                            y + (yLineCnt + 1)*CurrentFont[3],
                            background_color
@@ -256,7 +258,7 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
           if (blockStart != blockEnd && i >= blockStart && i < blockEnd) {
             LCD_FillRect(
               x + xLineCnt,
-              y + yLineCnt * CurrentFont[3],
+              y + yLineCnt * CurrentFont[3] - LCD_BLOCK_SELECT_SPACER,
               x + xLineCnt + CurrentFont[2],
               y + (yLineCnt + 1) * CurrentFont[3],
               color
@@ -274,7 +276,7 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
           if (blockStart != blockEnd && i >= blockStart && i < blockEnd) {
             LCD_FillRect(
               x + xLineCnt,
-              y + yLineCnt * CurrentFont[3],
+              y + yLineCnt * CurrentFont[3] - LCD_BLOCK_SELECT_SPACER,
               x + xLineCnt + LCD_Char_Get_Width(outChar, CurrentFont),
               y + (yLineCnt + 1) * CurrentFont[3],
               color

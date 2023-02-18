@@ -50,7 +50,6 @@ uint8_t gr2_cursor_handler(uint16_t id, uint32_t ms_counter, gr2context * con) {
     ) {
       blockEventTimer = 0;
       gr2_set_event(id, EV_NONE, con);
-      printf("R1\n");
       return 1;
     } else {
         gr2_set_param(id, temp, con);
@@ -97,7 +96,6 @@ uint8_t gr2_cursor_handler(uint16_t id, uint32_t ms_counter, gr2context * con) {
 
     if (blockEventTimer + 1200 <= ms_counter && blockEventTimer != 0) {
       blockEventTimer = 0;
-      printf("R2\n");
       return 1;
     }
   }
