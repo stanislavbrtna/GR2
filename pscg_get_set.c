@@ -577,11 +577,12 @@ void gr2_activate_text(uint16_t id, gr2context * c) {
 	if (c->textActive == 1) {
 		gr2_text_deactivate(c);
 	}
-	c->pscgElements[id].value = 1;
-	c->textActive = 1;
-	c->textActiveId = id;
+	c->pscgElements[id].value    = 1;
+	c->pscgElements[id].modified = 1;
+	c->textActive     = 1;
+	c->textActiveId   = id;
 	c->textBlockStart = 0;
-    c->textBlockEnd = 0;
+    c->textBlockEnd   = 0;
 }
 
 void gr2_text_deactivate(gr2context * c) {
