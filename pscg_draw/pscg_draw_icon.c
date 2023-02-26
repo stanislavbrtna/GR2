@@ -22,6 +22,7 @@ SOFTWARE.
 
 #include "pscg_draw.h"
 
+
 void gr2_draw_icon(
     int16_t x1,
     int16_t y1,
@@ -104,19 +105,19 @@ void gr2_draw_icon(
       y1 + 2 + 32 * (size + 1) + 8 * ((22 * size) / 8) + 2,
       ac
     );
-    LCD_DrawRectangle(
-      x1,
-      y1 + 2 + 32 * (size + 1),
-      x1 + 32 * (size + 1),
-      y1 + 2 + 32 * (size + 1) + 8 * ((22 * size) / 8) + 2,
-      bc
-    );
     LCD_Set_Sys_Font(12);
     LCD_DrawText_ext(
       x1 + gr2_get_text_align_x(id, x1, x1 + 64 * size, 5, c),
       y1 + 5 + 32 * (size + 1),
       tc,
       c->pscgElements[id].str_value
+    );
+    LCD_DrawRectangle(
+      x1,
+      y1 + 2 + 32 * (size + 1),
+      x1 + 32 * (size + 1),
+      y1 + 2 + 32 * (size + 1) + 8 * ((22 * size) / 8) + 2,
+      bc
     );
   } else if (active == 0) {
 #ifdef PPM_SUPPORT_ENABLED
@@ -159,20 +160,19 @@ void gr2_draw_icon(
       y1 + 2 + 32 * (size + 1) + 8 * ((22 * size) / 8) + 2,
       c->background_color
     );
-    LCD_DrawRectangle(
-      x1,
-      y1 + 2 + 32 * (size + 1),
-      x1 + 32 * (size + 1),
-      y1 + 2 + 32 * (size + 1) + 8 * ((22 * size) / 8) + 2,
-      c->border_color
-    );
-
     LCD_Set_Sys_Font(12);
     LCD_DrawText_ext(
       x1 + gr2_get_text_align_x(id, x1, x1 + 64 * size, 5, c),
       y1 + 5 + 32 * (size + 1),
       tc,
       c->pscgElements[id].str_value
+    );
+    LCD_DrawRectangle(
+      x1,
+      y1 + 2 + 32 * (size + 1),
+      x1 + 32 * (size + 1),
+      y1 + 2 + 32 * (size + 1) + 8 * ((22 * size) / 8) + 2,
+      c->border_color
     );
   }
   LCD_Set_Sys_Font(curr_font);
