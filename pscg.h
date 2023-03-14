@@ -157,6 +157,9 @@ void gr2_text_set_align(uint16_t id, uint16_t val, gr2context * c);
 // modified flag
 void gr2_set_modified(uint16_t id, gr2context * c);
 
+// slider size
+void gr2_set_slider_size(uint16_t id, uint16_t val, gr2context * c);
+
 // visibility
 void gr2_set_visible(uint16_t id, uint16_t vis, gr2context * c);
 uint8_t gr2_get_visible(uint16_t id, gr2context * c);
@@ -234,6 +237,9 @@ uint16_t gr2_get_active_color(gr2context * c);
 
 uint16_t gr2_get_element_count(gr2context * c);
 void gr2_reset_all(gr2context * c);
+
+uint16_t gr2_get_element_width(uint16_t id, gr2context * con);
+uint16_t gr2_get_element_height(uint16_t id, gr2context * con);
 
 void gr2_set_global_grayout_flag(uint8_t val);
 uint8_t gr2_get_global_grayout_flag();

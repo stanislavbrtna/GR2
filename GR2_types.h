@@ -155,6 +155,8 @@ typedef struct {
   uint16_t default_grid_size;
   uint16_t default_grid_spacing;
 
+  uint16_t default_slider_size;
+
   uint8_t pscg_active_element;
 
   uint8_t relative_init;

@@ -32,6 +32,31 @@ b=y1+con->pscgElements[i].y1*con->pscgScreens[scrID].y_cell-con->pscgScreens[scr
 c=x1+con->pscgElements[i].x2*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll-1 - con->pscgScreens[scrID].cell_space_right; \
 d=y1+con->pscgElements[i].y2*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll-1 - con->pscgScreens[scrID].cell_space_bottom; \
 
+
+uint16_t gr2_get_element_width(uint16_t id, gr2context * con) {
+  uint16_t scrID = con->pscgElements[con->pscgElements[id].screen_id].value;
+  int16_t a, b, c, d;
+  int16_t x1 = 0;
+  int16_t y1 = 0;
+  uint16_t i = id;
+
+  COUNT_A_B_C_D
+
+  return (uint16_t)(c - a);
+}
+
+uint16_t gr2_get_element_height(uint16_t id, gr2context * con) {
+  uint16_t scrID = con->pscgElements[con->pscgElements[id].screen_id].value;
+  int16_t a, b, c, d;
+  int16_t x1 = 0;
+  int16_t y1 = 0;
+  uint16_t i = id;
+
+  COUNT_A_B_C_D
+
+  return (uint16_t)(d - b);
+}
+
 void gr2_draw_screen(
                     int16_t x1,
                     int16_t y1,
@@ -165,9 +190,9 @@ void gr2_draw_screen(
         if (all == 1 ||
             (con->pscgElements[i].modified == 1 && con->pscgElements[i].value == con->pscgElements[i].prev_val)
         ) {
-          gr2_draw_slider_v(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param,con->pscgElements[i].value,i, con);
+          gr2_draw_slider_v(a,b,c,d, con->pscgElements[i].param2, con->pscgElements[i].param,con->pscgElements[i].value,i, con);
         } else if(con->pscgElements[i].modified != 0) {
-          gr2_draw_slider_v_f(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param, con->pscgElements[i].value,con->pscgElements[i].prev_val,i,con);
+          gr2_draw_slider_v_f(a,b,c,d, con->pscgElements[i].param2, con->pscgElements[i].param, con->pscgElements[i].value,con->pscgElements[i].prev_val,i,con);
         }
         con->pscgElements[i].modified = 0;
       }
@@ -209,9 +234,9 @@ void gr2_draw_screen(
         if (all == 1 ||
             (con->pscgElements[i].modified == 1 && con->pscgElements[i].value == con->pscgElements[i].prev_val)
         ) {
-          gr2_draw_slider_h(a, b, c, d, con->pscgScreens[scrID].x_cell, con->pscgElements[i].param, con->pscgElements[i].value, i, con);
+          gr2_draw_slider_h(a, b, c, d, con->pscgElements[i].param2, con->pscgElements[i].param, con->pscgElements[i].value, i, con);
         } else if(con->pscgElements[i].modified != 0) {
-          gr2_draw_slider_h_f(a,b,c,d,con->pscgScreens[scrID].x_cell, con->pscgElements[i].param,con->pscgElements[i].value, con->pscgElements[i].prev_val,i, con);
+          gr2_draw_slider_h_f(a,b,c,d, con->pscgElements[i].param2, con->pscgElements[i].param,con->pscgElements[i].value, con->pscgElements[i].prev_val,i, con);
         }
         con->pscgElements[i].modified = 0;
       }
@@ -485,8 +510,8 @@ uint8_t gr2_touch_input(
           if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con) && (con->pscg_active_element == 0)) || (con->pscg_active_element == i)) {
             con->pscgElements[i].event = event;
             con->pscgElements[i].prev_val = con->pscgElements[i].value;
-            d -= con->pscgScreens[scrID].x_cell/2;
-            b += con->pscgScreens[scrID].x_cell/2;
+            d -= con->pscgElements[i].param2/2;
+            b += con->pscgElements[i].param2/2;
 
             if ((touch_y > b) && (touch_y < d)) {
               gr2_set_value(i,(int32_t)( ((float)(touch_y-b)*(float)con->pscgElements[i].param)/(float)(d-b)), con);
@@ -568,8 +593,8 @@ uint8_t gr2_touch_input(
           if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con) && (con->pscg_active_element == 0)) || (con->pscg_active_element == i)) {
             con->pscgElements[i].event    = event;
             con->pscgElements[i].prev_val = con->pscgElements[i].value;
-            a += con->pscgScreens[scrID].x_cell/2;
-            c -= con->pscgScreens[scrID].x_cell/2;
+            a += con->pscgElements[i].param2/2;
+            c -= con->pscgElements[i].param2/2;
             if ((touch_x > a) && (touch_x < c)) {
               gr2_set_value(i, (int32_t)((float)con->pscgElements[i].param) * ((float)(touch_x - a) / (float)(c - a)), con);
             } else if((touch_x < a) && (con->pscgElements[i].value != 0)) {

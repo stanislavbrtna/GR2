@@ -49,6 +49,7 @@ void gr2_reset_context(gr2context * c) {
   c->default_grid_spacing      = 0;
   c->pscg_active_element       = 0;
   c->relative_init             = 0;
+  c->default_slider_size       = 32;
 
   c->border_color     = 0x0000; // black
   c->text_color       = 0x0000; // black

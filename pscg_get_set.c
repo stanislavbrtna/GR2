@@ -162,6 +162,30 @@ void gr2_set_modified(uint16_t id, gr2context * c) {
 	c->pscgElements[id].modified = 1;
 }
 
+void gr2_set_slider_size(uint16_t id, uint16_t val, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+
+	if (c->pscgElements[id].type == GR2_TYPE_SLIDER_H) {
+		if (val < gr2_get_element_width(id, c)) {
+			c->pscgElements[id].param2 = val;
+		} else {
+			c->pscgElements[id].param2 = gr2_get_element_width(id, c);
+		}
+		c->pscgElements[id].modified = 1;
+		return;
+	}
+
+	if (c->pscgElements[id].type == GR2_TYPE_SLIDER_V) {
+		if (val < gr2_get_element_height(id, c)) {
+			c->pscgElements[id].param2 = val;
+		} else {
+			c->pscgElements[id].param2 = gr2_get_element_height(id, c);
+		}
+		c->pscgElements[id].modified = 1;
+		return;
+	}
+}
+
 void gr2_text_set_editable(uint16_t id, uint16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
 	if (c->pscgElements[id].type == GR2_TYPE_TEXT) {
