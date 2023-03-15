@@ -47,7 +47,11 @@ void gr2_draw_text(
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     if (c->pscgElements[id].value == 1) {
       LCD_FillRect(x1, y1, x2, y2, c->active_color);
-      LCD_set_text_block(c->textBlockStart, c->textBlockEnd, c->fill_color);
+      if (c->textBlockStart != 0 || c->textBlockEnd != 0) {
+        LCD_set_text_block(c->textBlockStart - 1, c->textBlockEnd, c->fill_color);
+      } else {
+        LCD_set_text_block(0, 0, 0);
+      }
       if (gr2_text_get_pwd(id, c) == 0) {
         if (c->textBlockStart == c->textBlockEnd) {
           LCD_Text_Draw_Cursor(x_add + x1, y1 + 5, c->pscgElements[id].str_value, c->pscgElements[id].param, c->text_color);
