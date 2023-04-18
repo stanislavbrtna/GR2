@@ -172,7 +172,6 @@ void LCD_canvas_putcol(uint16_t color) {
 
 uint8_t LCD_canvas_get_y_overflow() {
   if (canvas_y + (canvas_pos / (canvas_width + 1)) > canvas_hardY2) {
-    printf("draw ended at %d\n");
     return 1;
   } else {
     return 0;

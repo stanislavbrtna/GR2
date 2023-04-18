@@ -240,7 +240,7 @@ void gr2_draw_screen(
           //static uint32_t ix;
           //printf("%u redrawing: %s\n", ix, con->pscgElements[i].str_value);
           //ix++;
-          if (con->pscgElements[screen].str_value != 0) {
+          if (con->pscgElements[screen].str_value != 0 && all == 0) {
             gr2_draw_screen_bg(a, b, c + 1, d, x1, y1, screen, con);
           }
           gr2_draw_text(a, b, c, d, i, con);
