@@ -341,6 +341,7 @@ uint8_t gr2_get_select(uint16_t id, gr2context * c) {
 	}
 }
 
+// sets sizes 12, 18 (default), 32, 70, 87
 void gr2_text_set_size(uint16_t id, uint16_t size, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
 	if (size != c->pscgElements[id].param2) {
