@@ -57,6 +57,37 @@ uint16_t gr2_get_element_height(uint16_t id, gr2context * con) {
   return (uint16_t)(d - b);
 }
 
+
+void gr2_draw_screen_bg(int16_t x1,
+                        int16_t y1,
+                        int16_t x2,
+                        int16_t y2,
+                        int16_t imgX1,
+                        int16_t imgY1,
+                        uint16_t id,
+                        gr2context * c) {
+  LCD_drawArea area;
+  LCD_setSubDrawArea(x1, y1, x2, y2);
+  LCD_getDrawArea(&area);
+
+#ifdef PPM_SUPPORT_ENABLED
+  printf("drawing0 %s, x1: %d, y1: %d\n", c->pscgElements[id].str_value, x1, y1);
+  if (svp_fexists(c->pscgElements[id].str_value)) {
+    draw_ppm(imgX1, imgY1, c->pscgElements[id].value, c->pscgElements[id].str_value);
+    //printf("drawing1 %s, x1: %d, y1: %d\n", c->pscgElements[id].str_value, x1, y1);
+  }  else {
+    LCD_FillRect(x1, y1, x2, y2, c->active_color);
+    LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
+    LCD_DrawLine(x1, y1, x2, y2, c->border_color);
+    LCD_DrawLine(x1, y2, x2, y1, c->border_color);
+  }
+#else
+  LCD_FillRect(x1, y1, x2, y2, c->background_color);
+#endif
+  LCD_setDrawAreaS(&area); //draw_ppm changes subdraw area, so it must be restored
+}
+
+
 void gr2_draw_screen(
                     int16_t x1,
                     int16_t y1,
@@ -107,7 +138,11 @@ void gr2_draw_screen(
 
   if (all == 1) {
     draw_frame_flag = 1;
-    LCD_FillRect(x1, y1, x2, y2, background_color);
+    if (con->pscgElements[screen].str_value != 0) {
+      gr2_draw_screen_bg(x1, y1, x2, y2, x1, y1, screen, con);
+    } else {
+      LCD_FillRect(x1, y1, x2, y2, background_color);
+    }
   } else if (all == 2) {
     for (i = 1; i <= con->maxElementsId; i++) {
       if ((con->pscgElements[i].screen_id == screen) && (i != screen) && (con->pscgElements[i].valid == 1)) {
@@ -121,7 +156,11 @@ void gr2_draw_screen(
         }
 
         COUNT_A_B_C_D_old
-        LCD_FillRect(a, b, c + 1, d, background_color);
+        if (con->pscgElements[screen].str_value != 0) {
+          gr2_draw_screen_bg(a, b, c + 1, d, x1, y1, screen, con);
+        } else {
+          LCD_FillRect(a, b, c + 1, d, background_color);
+        }
       }
     }
     all = 1; //aby se znovu překreslily prvky
@@ -203,6 +242,9 @@ void gr2_draw_screen(
           //static uint32_t ix;
           //printf("%u redrawing: %s\n", ix, con->pscgElements[i].str_value);
           //ix++;
+          if (con->pscgElements[screen].str_value != 0) {
+            gr2_draw_screen_bg(a, b, c + 1, d, x1, y1, screen, con);
+          }
           gr2_draw_text(a, b, c, d, i, con);
           con->pscgElements[i].modified = 0;
         }

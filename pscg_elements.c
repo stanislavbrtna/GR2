@@ -144,6 +144,7 @@ static void pscg_fill_zero_defaults(uint16_t i, uint16_t screen_id, gr2context *
 	c->pscgElements[i].param2 = 0;
 	c->pscgElements[i].screen_id = screen_id;
 	c->pscgElements[i].modified = 0;
+	c->pscgElements[i].str_value = 0;
 }
 
 static uint16_t pscg_get_new_id(gr2context * c) {

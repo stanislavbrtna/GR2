@@ -61,7 +61,9 @@ void gr2_draw_text(
       }
       
     } else {
-      LCD_FillRect(x1, y1, x2, y2, c->background_color);
+      if (c->pscgElements[c->pscgElements[id].screen_id].str_value == 0) {
+        LCD_FillRect(x1, y1, x2, y2, c->background_color);
+      }
     }
 
     LCD_set_fitText(gr2_text_get_fit(id, c), x2);
