@@ -71,10 +71,8 @@ void gr2_draw_screen_bg(int16_t x1,
   LCD_getDrawArea(&area);
 
 #ifdef PPM_SUPPORT_ENABLED
-  printf("drawing0 %s, x1: %d, y1: %d\n", c->pscgElements[id].str_value, x1, y1);
   if (svp_fexists(c->pscgElements[id].str_value)) {
     draw_ppm(imgX1, imgY1, c->pscgElements[id].value, c->pscgElements[id].str_value);
-    //printf("drawing1 %s, x1: %d, y1: %d\n", c->pscgElements[id].str_value, x1, y1);
   }  else {
     LCD_FillRect(x1, y1, x2, y2, c->active_color);
     LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);

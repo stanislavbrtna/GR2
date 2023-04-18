@@ -30,4 +30,6 @@ void LCD_canvas_set(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
 void LCD_canvas_zero(); // resets the buffer pointer
 void LCD_canvas_putcol(uint16_t color);
 
+// gets if we draw under the canvas
+uint8_t LCD_canvas_get_y_overflow(); // used to end draw of p16
 #endif
