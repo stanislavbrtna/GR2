@@ -67,8 +67,9 @@ void gr2_draw_screen_bg(int16_t x1,
                         uint16_t id,
                         gr2context * c) {
   LCD_drawArea area;
-  LCD_setSubDrawArea(x1, y1, x2, y2);
   LCD_getDrawArea(&area);
+  LCD_setSubDrawArea(x1, y1, x2, y2);
+  
 
 #ifdef PPM_SUPPORT_ENABLED
   if (svp_fexists(c->pscgElements[id].str_value)) {
@@ -176,7 +177,11 @@ void gr2_draw_screen(
           && (con->pscgElements[i].modified == 1)) {
 
         COUNT_A_B_C_D
-        LCD_FillRect(a, b, c, d, con->background_color);
+        if (con->pscgElements[screen].str_value != 0) {
+          gr2_draw_screen_bg(a, b, c, d, x1, y1, screen, con);
+        } else {
+          LCD_FillRect(a, b, c, d, background_color);
+        }
         con->pscgElements[i].modified = 0;
       }
     }
