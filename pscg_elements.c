@@ -357,6 +357,10 @@ uint16_t gr2_add_screen(gr2context * c) {
 	pscg_add_fill_xy(i, 0, 0, 1, 1, c);
 	c->pscgElements[i].modified = 1; // new screen will get redrawn
 	c->pscgElements[i].value = (int32_t)scrI;
+	c->pscgElements[i].param = 1;
+
+	// str is used for optional p16 background
+	// param is used for image scaling
 
 	pscg_set_max_id(i, c);
 	c->elementsUsed++;

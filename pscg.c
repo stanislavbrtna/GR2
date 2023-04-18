@@ -72,7 +72,7 @@ void gr2_draw_screen_bg(int16_t x1,
 
 #ifdef PPM_SUPPORT_ENABLED
   if (svp_fexists(c->pscgElements[id].str_value)) {
-    draw_ppm(imgX1, imgY1, c->pscgElements[id].value, c->pscgElements[id].str_value);
+    sda_draw_p16_scaled(imgX1, imgY1, c->pscgElements[id].param, c->pscgElements[id].param, c->pscgElements[id].str_value);
   }  else {
     LCD_FillRect(x1, y1, x2, y2, c->active_color);
     LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
