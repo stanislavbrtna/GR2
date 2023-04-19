@@ -30,6 +30,7 @@ void LCD_DrawText_Pwd(int16_t x, int16_t y, uint16_t color, uint8_t *text);
 void LCD_Text_Draw_Cursor_Pwd(int16_t x, int16_t y, uint8_t *text, uint16_t Color);
 void LCD_set_text_block(uint32_t start, uint32_t end, uint16_t color);
 uint16_t LCD_Text_Get_Width(uint8_t *text, uint16_t count); //if count == 0 maximum line width is returned
+uint16_t LCD_Text_Get_Height(uint8_t *text, uint16_t count); //if count == 0 maximum line height is returned
 uint16_t LCD_Draw_Get_Font_Height();
 uint16_t LCD_Draw_Get_Font_Width();
 uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, uint16_t touch_x, uint16_t touch_y);
