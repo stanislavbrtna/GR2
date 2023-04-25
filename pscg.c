@@ -137,7 +137,7 @@ void gr2_draw_screen(
 
   if (all == 1) {
     draw_frame_flag = 1;
-    if (con->pscgElements[screen].str_value != 0) {
+    if (con->pscgElements[screen].str_value != 0 && gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t*) "") != 1) {
       gr2_draw_screen_bg(x1, y1, x2, y2, x1, y1, screen, con);
     } else {
       LCD_FillRect(x1, y1, x2, y2, background_color);

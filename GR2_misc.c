@@ -203,3 +203,24 @@ uint16_t gr2_get_tmx(gr2context * c) {
 uint16_t gr2_get_tmy(gr2context * c) {
   return c->textMouseY;
 }
+
+uint8_t gr2_strcmp(uint8_t *a, uint8_t *b) {
+  uint32_t i = 0;
+
+  if (a == 0 || b == 0) {
+    return 0;
+  }
+
+  while(a[i] != 0 || b[i] != 0) {
+    if (a[i] != b[i]) {
+      return 0;
+    }
+    i++;
+  }
+
+  if (a[i] != b[i]) {
+    return 0;
+  }
+
+  return 1;
+}

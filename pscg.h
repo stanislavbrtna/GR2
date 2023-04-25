@@ -255,6 +255,8 @@ void gr2_destroy_screen(uint16_t id, gr2context * c);
 
 void gr2_error(uint8_t *str, gr2context * c);
 
+uint8_t gr2_strcmp(uint8_t *a, uint8_t *b);
+
 #define PSCG_BOUNDARY_CHECK_AND_RETURN() do{if (id > c->elementsMax) {gr2_error("id out of bounds.", c);printf("%s: id out of bounds.\n", __FUNCTION__);return;} }while(0)
 #define PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO() do{if (id > c->elementsMax) {gr2_error("id out of bounds.", c);printf("%s: id out of bounds.\n", __FUNCTION__);return 0;} }while(0)
 
