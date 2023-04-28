@@ -57,6 +57,10 @@ uint16_t gr2_get_element_height(uint16_t id, gr2context * con) {
   return (uint16_t)(d - b);
 }
 
+#ifdef PPM_SUPPORT_ENABLED
+uint8_t svp_fexists(uint8_t *fname);
+uint8_t sda_draw_p16_scaled(uint16_t x, uint16_t y, int16_t scale_w, int16_t scale_h, uint8_t *filename);
+#endif
 
 void gr2_draw_screen_bg(int16_t x1,
                         int16_t y1,
@@ -200,6 +204,13 @@ void gr2_draw_screen(
         && (i != screen)
         && (con->pscgElements[i].valid == 1)
         && (con->pscgElements[i].visible == 1)) {
+      
+      // skip drawing elements outside the screen
+      COUNT_A_B_C_D
+      if ((c < x1 - 1) || (a > x2 + 1) || (b > y2 + 1) || (c < y1 - 1)) {
+        continue;
+      }
+
       if (con->pscgElements[i].type == GR2_TYPE_SCREEN) {
         COUNT_A_B_C_D
         //printf("PSCGdbg: DrawScreen a:%u b:%u c:%u d:%u id:%u mode: ", a,b,c,d, i);
