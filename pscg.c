@@ -207,7 +207,7 @@ void gr2_draw_screen(
       
       // skip drawing elements outside the screen
       COUNT_A_B_C_D
-      if ((c < x1 - 1) || (a > x2 + 1) || (b > y2 + 1) || (c < y1 - 1)) {
+      if ((a > x2 + 1) || (b > y2 + 1) || (c < x1 - 1) || (d < y1 - 1)) {
         continue;
       }
 
