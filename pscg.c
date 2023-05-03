@@ -22,12 +22,14 @@ SOFTWARE.
 
 #include "GR2.h"
 
-#define COUNT_A_B_C_D_old a=x1+con->pscgElements[i].x1*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll_old + con->pscgScreens[scrID].cell_space_left;; \
+#define COUNT_A_B_C_D_old \
+a=x1+con->pscgElements[i].x1*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll_old + con->pscgScreens[scrID].cell_space_left; \
 b=y1+con->pscgElements[i].y1*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll_old + con->pscgScreens[scrID].cell_space_top; \
 c=x1+con->pscgElements[i].x2*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll_old-1 - con->pscgScreens[scrID].cell_space_right; \
 d=y1+con->pscgElements[i].y2*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll_old-1 - con->pscgScreens[scrID].cell_space_bottom; \
 
-#define COUNT_A_B_C_D a=x1+con->pscgElements[i].x1*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll + con->pscgScreens[scrID].cell_space_left; \
+#define COUNT_A_B_C_D \
+a=x1+con->pscgElements[i].x1*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll + con->pscgScreens[scrID].cell_space_left; \
 b=y1+con->pscgElements[i].y1*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll + con->pscgScreens[scrID].cell_space_top; \
 c=x1+con->pscgElements[i].x2*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll-1 - con->pscgScreens[scrID].cell_space_right; \
 d=y1+con->pscgElements[i].y2*con->pscgScreens[scrID].y_cell-con->pscgScreens[scrID].y_scroll-1 - con->pscgScreens[scrID].cell_space_bottom; \
@@ -166,6 +168,9 @@ void gr2_draw_screen(
         }
       }
     }
+    con->pscgScreens[scrID].x_scroll_old = con->pscgScreens[scrID].x_scroll;
+    con->pscgScreens[scrID].y_scroll_old = con->pscgScreens[scrID].y_scroll;
+
     all = 1; //aby se znovu překreslily prvky
   }
 
