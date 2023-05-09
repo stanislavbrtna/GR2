@@ -66,7 +66,7 @@ void LCD_Draw_Set_Font(uint8_t *font) {
   }
 
   if (font == font32) {
-    fontCorector_cz = 0;
+    fontCorector_cz = -5;
     CurrentFont_cz  = font32_cz;
     CurrentSize     = 32;
   }
@@ -105,7 +105,7 @@ void LCD_Set_Sys_Font(uint8_t size) {
 
   if (size == 32) {
     CurrentSize     = 32;
-    fontCorector_cz = 0;
+    fontCorector_cz = -5;
     CurrentFont     = font32;
     CurrentFont_cz  = font32_cz;
   }
