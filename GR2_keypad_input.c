@@ -127,8 +127,15 @@ uint8_t gr2_keypad_input(gr2ButtonType button, gr2EventType ev, uint16_t screen,
 
     if (con->pscgElements[current_element].type == GR2_TYPE_SLIDER_H) {
       if (button == GR2_BUTTON_RIGHT && ev == EV_PRESSED) {
-        if (gr2_get_value(current_element, con) + gr2_get_param(current_element, con)/10 < gr2_get_param(current_element, con)) {
-          gr2_set_value(current_element, gr2_get_value(current_element, con) + gr2_get_param(current_element, con)/10, con);
+        int32_t inc = 0;
+        if (gr2_get_param(current_element, con)/10 > 0) {
+          inc = gr2_get_param(current_element, con)/10;
+        } else {
+          inc = 1;
+        }
+
+        if (gr2_get_value(current_element, con) + inc < gr2_get_param(current_element, con)) {
+          gr2_set_value(current_element, gr2_get_value(current_element, con) + inc, con);
         } else {
           gr2_set_value(current_element, gr2_get_param(current_element, con), con);
         }
@@ -137,8 +144,15 @@ uint8_t gr2_keypad_input(gr2ButtonType button, gr2EventType ev, uint16_t screen,
       }
 
       if (button == GR2_BUTTON_LEFT && ev == EV_PRESSED) {
-        if (gr2_get_value(current_element, con) - gr2_get_param(current_element, con)/10 > 0) {
-          gr2_set_value(current_element, gr2_get_value(current_element, con) - gr2_get_param(current_element, con)/10, con);
+        int32_t inc = 0;
+        if (gr2_get_param(current_element, con)/10 > 0) {
+          inc = gr2_get_param(current_element, con)/10;
+        } else {
+          inc = 1;
+        }
+
+        if (gr2_get_value(current_element, con) - inc > 0) {
+          gr2_set_value(current_element, gr2_get_value(current_element, con) - inc, con);
         } else {
           gr2_set_value(current_element, 0, con);
         }
@@ -149,8 +163,14 @@ uint8_t gr2_keypad_input(gr2ButtonType button, gr2EventType ev, uint16_t screen,
 
     if (con->pscgElements[current_element].type == GR2_TYPE_SLIDER_V) {
       if (button == GR2_BUTTON_DOWN && ev == EV_PRESSED) {
-        if (gr2_get_value(current_element, con) + gr2_get_param(current_element, con)/10 < gr2_get_param(current_element, con)) {
-          gr2_set_value(current_element, gr2_get_value(current_element, con) + gr2_get_param(current_element, con)/10, con);
+        int32_t inc = 0;
+        if (gr2_get_param(current_element, con)/10 > 0) {
+          inc = gr2_get_param(current_element, con)/10;
+        } else {
+          inc = 1;
+        }
+        if (gr2_get_value(current_element, con) + inc < gr2_get_param(current_element, con)) {
+          gr2_set_value(current_element, gr2_get_value(current_element, con) + inc, con);
         } else {
           gr2_set_value(current_element, gr2_get_param(current_element, con), con);
         }
@@ -159,8 +179,15 @@ uint8_t gr2_keypad_input(gr2ButtonType button, gr2EventType ev, uint16_t screen,
       }
 
       if (button == GR2_BUTTON_UP && ev == EV_PRESSED) {
-        if (gr2_get_value(current_element, con) - gr2_get_param(current_element, con)/10 > 0) {
-          gr2_set_value(current_element, gr2_get_value(current_element, con) - gr2_get_param(current_element, con)/10, con);
+        int32_t inc = 0;
+        if (gr2_get_param(current_element, con)/10 > 0) {
+          inc = gr2_get_param(current_element, con)/10;
+        } else {
+          inc = 1;
+        }
+        
+        if (gr2_get_value(current_element, con) - inc > 0) {
+          gr2_set_value(current_element, gr2_get_value(current_element, con) - inc, con);
         } else {
           gr2_set_value(current_element, 0, con);
         }
