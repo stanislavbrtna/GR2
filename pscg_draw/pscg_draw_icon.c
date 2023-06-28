@@ -53,7 +53,11 @@ void gr2_draw_icon(
   if (((x2 - x1 + 1) / 32 - 1) > ((y2 - y1 + 1) / 80)) {
     size = ((y2 - y1 + 1) / 80);
   } else {
-    size = ((x2 - x1 + 1) / 32 - 1);
+    if (c->pscgElements[id].str_value[0] == 0) {
+      size = ((x2 - x1 + 1) / 32);
+    } else {
+      size = ((x2 - x1 + 1) / 32 - 1);
+    }
   }
 
   LCD_setSubDrawArea(x1, y1, x1 + 32 * (size + 1), y2); // set sub-draw area
