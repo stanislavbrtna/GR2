@@ -110,7 +110,7 @@ void gr2_draw_screen(
   uint16_t background_color;
 
   if (screen > con->elementsMax) {
-    gr2_error("id out of bounds.", con);
+    gr2_error((uint8_t *)"id out of bounds.", con);
     printf("%s: id out of bounds.\n", __FUNCTION__);
     return;
   }
@@ -489,7 +489,7 @@ uint8_t gr2_touch_input(
   uint8_t retval = 0;
 
   if (screen > con->elementsMax) {
-    gr2_error("id out of bounds.", con);
+    gr2_error((uint8_t *)"id out of bounds.", con);
     printf("%s: id out of bounds.\n", __FUNCTION__);
     return 0;
   }

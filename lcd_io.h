@@ -14,5 +14,4 @@
 void lcd_Init();
 void lcd_hw_set_xy(uint16_t x1, uint16_t y1,uint16_t x2,uint16_t y2);
 void lcd_hw_Draw_Point(uint16_t color);
-
 #endif /* LCD_IO_H_ */

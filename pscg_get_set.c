@@ -233,12 +233,13 @@ uint8_t gr2_text_get_align(uint16_t id, gr2context * c) {
 	if (!(c->pscgElements[id].status_reg & GR2_T_ALIGN_B1) && !(c->pscgElements[id].status_reg & GR2_T_ALIGN_B2)) {
 		return GR2_ALIGN_LEFT;
 	}
-	if (c->pscgElements[id].status_reg & GR2_T_ALIGN_B1 && !(c->pscgElements[id].status_reg & GR2_T_ALIGN_B2)) {
+	if ((c->pscgElements[id].status_reg & GR2_T_ALIGN_B1) && !(c->pscgElements[id].status_reg & GR2_T_ALIGN_B2)) {
 		return GR2_ALIGN_RIGHT;
 	}
-	if (!(c->pscgElements[id].status_reg & GR2_T_ALIGN_B1) && c->pscgElements[id].status_reg & GR2_T_ALIGN_B2) {
+	if (!(c->pscgElements[id].status_reg & GR2_T_ALIGN_B1) && (c->pscgElements[id].status_reg & GR2_T_ALIGN_B2)) {
 		return GR2_ALIGN_CENTER;
 	}
+	return GR2_ALIGN_LEFT;
 }
 
 

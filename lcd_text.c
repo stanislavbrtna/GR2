@@ -203,7 +203,6 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
   uint16_t yLineCnt  = 0;
   uint8_t  outChar   = 0;
   uint16_t yprac;
-  uint16_t colorOld = color;
 
   fitTextBreakpoint = 0;
 
