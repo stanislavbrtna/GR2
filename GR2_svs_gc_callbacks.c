@@ -29,20 +29,20 @@ void set_gr2_workaround_context(gr2context * c) {
 
 
 // workarounds for SVS string garbage collecotor
-void pscg_garbage_walkaround(uint8_t *strId, uint32_t str_len, uint8_t *max) {
+void gr2_garbage_workaround(uint8_t *strId, uint32_t str_len, uint8_t *max) {
   uint16_t x = 0;
 
   for(x = 1; x <= svs_pscg_c->maxElementsId; x++) {
-      if (((svs_pscg_c->pscgElements[x].str_value) >= strId)
+      if (((svs_pscg_c->pscgElements[x].str_value) > strId)
             && (svs_pscg_c->pscgElements[x].str_value <= max)
             && (svs_pscg_c->pscgElements[x].valid == 1))
       {
-        //printf("GR2-GC-DBG changing: %s to %s\n", pscgElements[x].str_value,pscgElements[x].str_value - (uint8_t *)str_len);
+        //printf("GR2-GC-DBG changing: %s \n", svs_pscg_c->pscgElements[x].str_value - (uint8_t *)str_len);
         svs_pscg_c->pscgElements[x].str_value
           = (void*) ((uint32_t)svs_pscg_c->pscgElements[x].str_value - str_len);
       }
 
-      if (((svs_pscg_c->pscgElements[x].str_value2) >= strId)
+      if (((svs_pscg_c->pscgElements[x].str_value2) > strId)
             && (svs_pscg_c->pscgElements[x].str_value2 <= max)
             && (svs_pscg_c->pscgElements[x].valid == 1))
       {
@@ -54,7 +54,7 @@ void pscg_garbage_walkaround(uint8_t *strId, uint32_t str_len, uint8_t *max) {
 }
 
 
-uint8_t pscg_garbage_walkaround2(uint8_t *strId) {
+uint8_t gr2_garbage_workaround2(uint8_t *strId) {
   uint16_t x = 0;
 
   for(x = 1; x <= svs_pscg_c->maxElementsId; x++) {
