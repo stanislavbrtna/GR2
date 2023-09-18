@@ -81,7 +81,7 @@ void gr2_draw_screen_bg(int16_t x1,
   if (svp_fexists(c->pscgElements[id].str_value)) {
     sda_draw_p16_scaled(imgX1, imgY1, c->pscgElements[id].param, c->pscgElements[id].param, c->pscgElements[id].str_value);
   }  else {
-    LCD_FillRect(x1, y1, x2, y2, c->active_color);
+    LCD_FillRect(x1, y1, x2, y2, c->fill_color);
     LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
     LCD_DrawLine(x1, y1, x2, y2, c->border_color);
     LCD_DrawLine(x1, y2, x2, y1, c->border_color);

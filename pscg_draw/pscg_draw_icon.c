@@ -142,7 +142,12 @@ void gr2_draw_icon(
       svp_ppm_set_pmc(0, 0);
       sda_p16_set_alpha(0, 0, c->background_color);
     } else {
-      LCD_FillRect(x1, y1, x1 + 64 * size, y1 + 64 * size, fc);
+      if (c->pscgElements[id].status_reg & GR2_SELECT_B) {
+        LCD_FillRect(x1, y1, x1 + 64 * size, y1 + 64 * size, ac);
+      } else {
+        LCD_FillRect(x1, y1, x1 + 64 * size, y1 + 64 * size, fc);
+      }
+
       LCD_DrawRectangle(x1, y1, x1 + 64 * size, y1 + 64 * size, bc);
       LCD_DrawLine(x1, y1, x1 + 64 * size, y1 + 64 * size, bc);
       LCD_DrawLine(x1, y1 + 64 * size, x1 + 64 * size, y1, bc);
