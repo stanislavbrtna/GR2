@@ -74,7 +74,7 @@ void gr2_draw_screen_bg(int16_t x1,
                         gr2context * c) {
   LCD_drawArea area;
   LCD_getDrawArea(&area);
-  LCD_setSubDrawArea(x1, y1, x2, y2);
+  LCD_setSubDrawArea(x1, y1, x2, y2 + 1);
   
 
 #ifdef PPM_SUPPORT_ENABLED
@@ -625,8 +625,8 @@ uint8_t gr2_touch_input(
                 con->textMouseX = touch_x - a - (gr2_get_text_align_x(i, x1, x2, 10, con) - 26);
               }
               con->textMouseY = touch_y - b - 5;
-              con->pscgElements[i].event    = event;
             }
+            con->pscgElements[i].event = event;
           }
         }
       }
