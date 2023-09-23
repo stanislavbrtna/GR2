@@ -374,3 +374,9 @@ uint8_t gr2_keypad_input(gr2ButtonType button, gr2EventType ev, uint16_t screen,
   else
     return 1;
 }
+
+
+uint16_t gr2_ki_get_selected(uint16_t id, gr2context *c) {
+  PSCG_BOUNDARY_CHECK_AND_RETURN();
+  return c->pscgScreens[c->pscgElements[id].value].kbd_selected;
+}
