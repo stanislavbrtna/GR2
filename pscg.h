@@ -183,6 +183,7 @@ uint8_t gr2_get_select(uint16_t id, gr2context * c);
 
 // misc text field functions
 void gr2_text_set_size(uint16_t id, uint16_t size, gr2context * c);
+uint16_t gr2_text_get_size(uint16_t id, gr2context * c);
 
 void gr2_text_set_editable(uint16_t id, uint16_t val, gr2context * c);
 uint8_t gr2_text_get_editable(uint16_t id, gr2context * c);

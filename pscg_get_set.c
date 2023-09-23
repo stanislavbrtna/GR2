@@ -351,6 +351,11 @@ void gr2_text_set_size(uint16_t id, uint16_t size, gr2context * c) {
 	c->pscgElements[id].param2 = size;
 }
 
+uint16_t gr2_text_get_size(uint16_t id, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	return c->pscgElements[id].param2;
+}
+
 void gr2_set_str(uint16_t id, uint8_t *str, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
  	// always redraw
