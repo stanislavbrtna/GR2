@@ -479,6 +479,11 @@ void gr2_set_screen(uint16_t id, uint16_t val, gr2context * c) {
 	c->pscgElements[id].screen_id = val;
 }
 
+uint16_t gr2_get_screen(uint16_t id, gr2context *c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	return c->pscgElements[id].screen_id;
+}
+
 uint16_t gr2_get_xscroll(uint16_t id, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
 	return c->pscgScreens[c->pscgElements[id].value].x_scroll;
