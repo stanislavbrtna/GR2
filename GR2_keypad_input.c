@@ -67,7 +67,18 @@ uint8_t gr2_ki_get_selectable(uint16_t id, gr2context * con) {
     break;
 
   case GR2_TYPE_SCREEN:
-    return 1;
+    // to get only screens with something selectable
+    for (uint16_t i = 1; i <= con->maxElementsId; i++) {
+      if (
+          (con->pscgElements[i].screen_id == id)
+          && (i != id)
+          && (con->pscgElements[i].valid == 1)
+          && gr2_ki_get_selectable(i, con)
+        ) {
+        return 1;
+      }
+    }
+    return 0;
     break;
 
   case GR2_TYPE_FRAME:
@@ -114,6 +125,7 @@ uint8_t gr2_keypad_input(gr2ButtonType button, gr2EventType ev, uint16_t screen,
         return 1;
       }
     }
+    return 0;
   } else {
     current_element = con->pscgScreens[con->pscgElements[screen].value].kbd_selected;
   }
