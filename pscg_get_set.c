@@ -352,7 +352,7 @@ void gr2_text_set_size(uint16_t id, uint16_t size, gr2context * c) {
 }
 
 uint16_t gr2_text_get_size(uint16_t id, gr2context * c) {
-	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
 	return c->pscgElements[id].param2;
 }
 
@@ -485,7 +485,7 @@ void gr2_set_screen(uint16_t id, uint16_t val, gr2context * c) {
 }
 
 uint16_t gr2_get_screen(uint16_t id, gr2context *c) {
-	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
 	return c->pscgElements[id].screen_id;
 }
 
