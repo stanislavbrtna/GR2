@@ -107,11 +107,10 @@ void pscg_dump_screen_ind(uint16_t id, uint16_t val, gr2context * c) {
     if ((c->pscgElements[x].screen_id == id) && (c->pscgElements[x].valid == 1)) {
       if ((c->pscgElements[x].type == 0) && (x != id)) {
         pscg_dump_screen_ind(x, val++, c);
-
       }
       pscg_dump_element(x, val, c);
     }
-	}
+  }
 }
 
 void gr2_dump_screen(uint16_t id, gr2context * c) {
@@ -126,25 +125,24 @@ static void pscg_add_fill_xy(uint16_t i, uint16_t x1, uint16_t y1, uint16_t x2, 
 		c->pscgElements[i].x2 = x1 + x2;
 		c->pscgElements[i].y2 = y1 + y2;
 	} else {
-
 		c->pscgElements[i].x2 = x2;
 		c->pscgElements[i].y2 = y2;
 	}
 }
 
 static void pscg_fill_zero_defaults(uint16_t i, uint16_t screen_id, gr2context * c) {
-	c->pscgElements[i].event = EV_NONE;
+	c->pscgElements[i].event      = EV_NONE;
 	c->pscgElements[i].status_reg = 0;
 	c->pscgElements[i].pre_active = 0;
-	c->pscgElements[i].valid = 1;
-	c->pscgElements[i].value = 0;
-	c->pscgElements[i].visible = 1;
-	c->pscgElements[i].grayout = 0;
-	c->pscgElements[i].param = 0;
-	c->pscgElements[i].param2 = 0;
-	c->pscgElements[i].screen_id = screen_id;
-	c->pscgElements[i].modified = 0;
-	c->pscgElements[i].str_value = 0;
+	c->pscgElements[i].valid      = 1;
+	c->pscgElements[i].value      = 0;
+	c->pscgElements[i].visible    = 1;
+	c->pscgElements[i].grayout    = 0;
+	c->pscgElements[i].param      = 0;
+	c->pscgElements[i].param2     = 0;
+	c->pscgElements[i].screen_id  = screen_id;
+	c->pscgElements[i].modified   = 0;
+	c->pscgElements[i].str_value  = 0;
 }
 
 static uint16_t pscg_get_new_id(gr2context * c) {

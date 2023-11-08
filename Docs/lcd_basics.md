@@ -55,7 +55,7 @@ Rectangle (outline):
 
     void LCD_DrawRectangle(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t color);
 
-Rectangle(filled):
+Rectangle (filled):
 
     void LCD_FillRect(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t Color);
 Circle (outline):

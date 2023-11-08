@@ -24,7 +24,7 @@ SOFTWARE.
 
 uint32_t sda_strlen(uint8_t * str);
 
-void gr2_set_grid_size(uint16_t size, gr2context * c){
+void gr2_set_grid_size(uint16_t size, gr2context * c) {
 	c->default_grid_size = size;
 }
 
@@ -409,7 +409,11 @@ void gr2_set_x1(uint16_t id, uint16_t val, gr2context * c) {
 		c->pscgElements[id].modified = 1;
 		c->pscgElements[c->pscgElements[id].screen_id].modified = 1;
 	}
-	c->pscgElements[id].x1 = val;
+	if (c->relative_init) {
+		c->pscgElements[id].x2 = c->pscgElements[id].x2 - c->pscgElements[id].x1 + val;
+	}
+
+	c->pscgElements[id].x1 = val;	
 }
 
 void gr2_set_x2(uint16_t id, uint16_t val, gr2context * c) {
@@ -435,6 +439,10 @@ void gr2_set_y1(uint16_t id, uint16_t val, gr2context * c) {
 		c->pscgElements[id].modified = 1;
 		c->pscgElements[c->pscgElements[id].screen_id].modified = 1;
 	}
+	if (c->relative_init) {
+		c->pscgElements[id].y2 = c->pscgElements[id].y2 - c->pscgElements[id].y1 + val;
+	}
+
 	c->pscgElements[id].y1 = val;
 }
 
@@ -476,6 +484,24 @@ void gr2_set_x1y1x2y2(
 		c->pscgElements[id].x2 = x2;
 		c->pscgElements[id].y2 = y2;
 	}
+}
+
+void gr2_set_x1y1wh(
+		uint16_t id,
+		uint16_t x1,
+		uint16_t y1,
+		uint16_t w,
+		uint16_t h,
+		gr2context * c
+		) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	c->pscgElements[id].modified = 1;
+	c->pscgElements[c->pscgElements[id].screen_id].modified = 1;
+	c->pscgElements[id].x1 = x1;
+	c->pscgElements[id].y1 = y1;
+
+    c->pscgElements[id].x2 = x1 + w;
+	c->pscgElements[id].y2 = y1 + h;
 }
 
 void gr2_set_screen(uint16_t id, uint16_t val, gr2context * c) {

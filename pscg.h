@@ -146,6 +146,8 @@ void gr2_set_y2(uint16_t id, uint16_t val, gr2context * c);
 
 void gr2_set_x1y1x2y2(uint16_t id, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, gr2context * c);
 
+void gr2_set_x1y1wh(uint16_t id, uint16_t x1, uint16_t y1, uint16_t w, uint16_t h, gr2context * c);
+
 // string
 void gr2_set_str(uint16_t id, uint8_t *str, gr2context * c);
 uint8_t * gr2_get_str(uint16_t id, gr2context * c);
