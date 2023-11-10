@@ -88,6 +88,10 @@ void LCD_set_orientation(lcdOrientationType orient) {
   lcd_orientation = orient;
 }
 
+lcdOrientationType LCD_get_orientation() {
+  return lcd_orientation;
+}
+
 void LCD_draw_point_wrp(uint16_t color) {
   lcd_hw_Draw_Point(color);
 }
@@ -98,6 +102,14 @@ uint16_t LCD_get_x_size() {
 
 uint16_t LCD_get_y_size() {
   return lcd_y_size;
+}
+
+void LCD_set_x_size(uint16_t val) {
+  lcd_x_size = val;
+}
+
+void LCD_set_y_size(uint16_t val) {
+  lcd_y_size = val;
 }
 
 uint8_t LCD_init(uint16_t x_size, uint16_t y_size, lcdOrientationType orient) {
