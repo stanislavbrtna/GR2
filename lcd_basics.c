@@ -420,6 +420,42 @@ void LCD_DrawCircle(int16_t x0, int16_t y0, uint16_t radius, uint16_t color) {
 }
 
 
+void LCD_DrawCirclePart(int16_t x0, int16_t y0, uint16_t radius, uint8_t part, uint16_t color) {
+  int16_t x = radius;
+  int16_t y = 0;
+  int16_t err = 0;
+
+  while (x >= y) {
+    if(part == 3) {
+      LCD_DrawPoint(x0 + x, y0 + y, color);
+      LCD_DrawPoint(x0 + y, y0 + x, color);
+    }
+
+    if(part == 2) {
+      LCD_DrawPoint(x0 - y, y0 + x, color);
+      LCD_DrawPoint(x0 - x, y0 + y, color);
+    }
+
+    if(part == 0) {
+      LCD_DrawPoint(x0 - x, y0 - y, color);
+      LCD_DrawPoint(x0 - y, y0 - x, color);
+    }
+
+    if(part == 1) {
+      LCD_DrawPoint(x0 + y, y0 - x, color);
+      LCD_DrawPoint(x0 + x, y0 - y, color);
+    }
+
+    y += 1;
+    err += 1 + 2*y;
+    if (2*(err-x) + 1 > 0) {
+      x -= 1;
+      err += 1 - 2 * x;
+    }
+  }
+}
+
+
 void LCD_FillCircle(int16_t x0, int16_t y0, uint16_t radius, uint16_t color) {
   int16_t x = radius;
   int16_t y = 0;
@@ -434,6 +470,64 @@ void LCD_FillCircle(int16_t x0, int16_t y0, uint16_t radius, uint16_t color) {
     for (i = y0 - x; i <= y0 + x; i++) {
       LCD_DrawPoint(x0 + y, i, color);
       LCD_DrawPoint(x0 - y, i, color);
+    }
+
+    y += 1;
+    err += 1 + 2*y;
+    if (2 * (err - x) + 1 > 0){
+      x -= 1;
+      err += 1 - 2*x;
+    }
+  }
+}
+
+
+void LCD_FillCirclePart(int16_t x0, int16_t y0, uint16_t radius, uint8_t part, uint16_t color) {
+  int16_t x = radius;
+  int16_t y = 0;
+  int16_t err = 0;
+  uint16_t i;
+
+  while (x >= y) {
+
+    if (part == 0) {
+      for (i = y0 - y; i <= y0; i++) {
+        LCD_DrawPoint(x0 - x, i, color);
+      }
+      
+      for (i = y0 - x; i <= y0; i++) {
+        LCD_DrawPoint(x0 - y, i, color);
+      }
+    }
+
+    if (part == 1) {
+      for (i = y0 - y; i <= y0; i++) {
+        LCD_DrawPoint(x0 + x, i, color);
+      }
+      
+      for (i = y0 - x; i <= y0; i++) {
+        LCD_DrawPoint(x0 + y, i, color);
+      }
+    }
+
+    if (part == 2) {
+      for (i = y0; i <= y0 + y; i++) {
+        LCD_DrawPoint(x0 - x, i, color);
+      }
+      
+      for (i = y0; i <= y0 + x; i++) {
+        LCD_DrawPoint(x0 - y, i, color);
+      }
+    }
+
+    if (part == 3) {
+      for (i = y0; i <= y0 + y; i++) {
+        LCD_DrawPoint(x0 + x, i, color);
+      }
+      
+      for (i = y0; i <= y0 + x; i++) {
+        LCD_DrawPoint(x0 + y, i, color);
+      }
     }
 
     y += 1;

@@ -52,7 +52,9 @@ void LCD_DrawRectangle(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t 
 void LCD_FillRect(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t Color);
 
 void LCD_DrawCircle(int16_t x0, int16_t y0, uint16_t radius, uint16_t color);
+void LCD_DrawCirclePart(int16_t x0, int16_t y0, uint16_t radius, uint8_t part, uint16_t color);
 void LCD_FillCircle(int16_t x0, int16_t y0, uint16_t radius, uint16_t color);
+void LCD_FillCirclePart(int16_t x0, int16_t y0, uint16_t radius, uint8_t part, uint16_t color);
 
 // Misc
 void LCD_set_x_size(uint16_t val);
