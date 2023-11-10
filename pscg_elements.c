@@ -262,7 +262,7 @@ uint16_t gr2_add_slider_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, in
 	pscg_fill_zero_defaults(i, screen, c);
 	c->pscgElements[i].type = GR2_TYPE_SLIDER_V;
 	pscg_add_fill_xy(i, x1, y1, x2, y2, c);
-	c->pscgElements[i].param2 = c->default_slider_size;
+	c->pscgElements[i].param2 = c->default_slider_size*2;
 	c->pscgElements[i].param = param; //pozici slideru ovlivňuje value/param
 	c->pscgElements[i].value = value;
 	c->pscgElements[i].prev_val = value;
