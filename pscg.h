@@ -215,6 +215,11 @@ uint16_t gr2_get_xscroll(uint16_t id, gr2context * c);
 uint16_t gr2_get_yscroll(uint16_t id, gr2context * c);
 void gr2_set_xscroll(uint16_t id, int16_t val, gr2context * c);
 void gr2_set_yscroll(uint16_t id, int16_t val, gr2context * c);
+
+// overrides also x_scroll_old, prevents scrolling artifacts
+void gr2_set_xscroll_initial(uint16_t id, int16_t val, gr2context * c);
+void gr2_set_yscroll_initial(uint16_t id, int16_t val, gr2context * c);
+
 void gr2_set_x_cell(uint16_t id, uint16_t val, gr2context * c);
 void gr2_set_y_cell(uint16_t id, uint16_t val, gr2context * c);
 uint16_t gr2_get_x_cell(uint16_t id, gr2context * c);
@@ -224,6 +229,7 @@ void gr2_set_cell_space_left(uint16_t id, uint16_t val, gr2context * c);
 void gr2_set_cell_space_right(uint16_t id, uint16_t val, gr2context * c);
 void gr2_set_cell_space_top(uint16_t id, uint16_t val, gr2context * c);
 void gr2_set_cell_space_bottom(uint16_t id, uint16_t val, gr2context * c);
+void gr2_set_cell_spacing(uint16_t id, uint16_t left, uint16_t right, uint16_t top, uint16_t bottom, gr2context * c);
 
 // context color getters & setters
 void gr2_set_border_color(uint16_t col, gr2context * c);

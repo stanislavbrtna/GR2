@@ -535,6 +535,17 @@ void gr2_set_xscroll(uint16_t id, int16_t val, gr2context * c) {
 	c->pscgScreens[c->pscgElements[id].value].x_scroll = val;
 }
 
+// overrides also x_scroll_old, prevents scrolling artifacts
+void gr2_set_xscroll_initial(uint16_t id, int16_t val, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if ((val != c->pscgScreens[c->pscgElements[id].value].x_scroll) && (c->pscgElements[id].modified == 0)) {
+		c->pscgElements[id].modified = 2;
+	}
+
+	c->pscgScreens[c->pscgElements[id].value].x_scroll_old = val;
+	c->pscgScreens[c->pscgElements[id].value].x_scroll = val;
+}
+
 void gr2_set_default_font(uint16_t id, uint8_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
 	c->pscgScreens[c->pscgElements[id].value].default_font = val;
@@ -549,6 +560,23 @@ void gr2_set_yscroll(uint16_t id, int16_t val, gr2context * c) {
 	c->pscgScreens[c->pscgElements[id].value].y_scroll_old
 		= c->pscgScreens[c->pscgElements[id].value].y_scroll;
 	c->pscgScreens[c->pscgElements[id].value].y_scroll = val;
+}
+
+void gr2_set_yscroll_initial(uint16_t id, int16_t val, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if ((val != c->pscgScreens[c->pscgElements[id].value].y_scroll) && (c->pscgElements[id].modified == 0)) {
+		c->pscgElements[id].modified = 2;
+	}
+	c->pscgScreens[c->pscgElements[id].value].y_scroll_old = val;
+	c->pscgScreens[c->pscgElements[id].value].y_scroll = val;
+}
+
+void gr2_set_cell_spacing(uint16_t id, uint16_t left, uint16_t right, uint16_t top, uint16_t bottom, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	gr2_set_cell_space_left(id, left, c);
+	gr2_set_cell_space_right(id, right, c);
+	gr2_set_cell_space_top(id, top, c);
+	gr2_set_cell_space_bottom(id, bottom, c);
 }
 
 void gr2_set_cell_space_left(uint16_t id, uint16_t val, gr2context * c) {
