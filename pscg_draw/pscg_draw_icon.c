@@ -63,8 +63,6 @@ static void draw_text_box(int32_t x1, int32_t y1, int32_t x2, uint8_t state, uin
     text_stop = x2 - x1;
   }
 
-  LCD_FillRect(x1, y1, x2, y1 + LCD_Draw_Get_Font_Height() + V_OFFSET, c->background_color);
-
   if (state == 1) {
     LCD_FillRect(
       x1 + text_start,
@@ -157,8 +155,6 @@ void gr2_draw_icon(
 
   if(size != 0) {
     box_ystart = y1 + img_h*size + 2;
-  } else {
-    box_ystart = y1 + img_h/2;
   }
 
   if(box_ystart > y2 && c->pscgElements[id].str_value[0] != 0) {
@@ -171,7 +167,7 @@ void gr2_draw_icon(
 
   // special case for desription behind icon...
   if(size == 0) {
-    box_ystart = y1 + 3;
+    box_ystart = y1 - c->pscgElements[id].param2/2 + img_h/4 - 3;
     box_xstart = x1 + img_w/2 + 5;
   }
 
