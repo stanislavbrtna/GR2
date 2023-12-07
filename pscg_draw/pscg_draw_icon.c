@@ -22,6 +22,85 @@ SOFTWARE.
 
 #include "pscg_draw.h"
 
+#define H_OFFSET 8
+#define V_OFFSET 4
+
+static void draw_text_box(int32_t x1, int32_t y1, int32_t x2, uint8_t state, uint16_t id, uint8_t align, gr2context *c) {
+  uint16_t bc, fc, ac, tc, ba;
+
+  int16_t text_start;
+  int16_t text_stop;
+
+  uint8_t curr_font;
+  curr_font = LCD_Get_Font_Size();
+
+  if (state == 2) { //grayout
+    bc = LCD_get_gray16(c->border_color);
+    fc = LCD_get_gray16(c->fill_color);
+    ac = LCD_get_gray16(c->active_color);
+    tc = LCD_get_gray16(c->text_color);
+    ba = LCD_get_gray16(c->background_color);
+  } else {
+    bc = c->border_color;
+    fc = c->fill_color;
+    ac = c->active_color;
+    tc = c->text_color;
+    ba = c->background_color;
+  }
+
+  LCD_Set_Sys_Font(c->pscgElements[id].param2);
+
+  LCD_setSubDrawArea(x1, y1, x2, y1 + LCD_Draw_Get_Font_Height() + V_OFFSET); 
+
+  text_start = gr2_get_text_align_x(id, x1 + H_OFFSET, x2 - H_OFFSET, 0, c);
+  text_stop = text_start + LCD_Text_Get_Width(c->pscgElements[id].str_value, 0) + H_OFFSET*2 - 3;
+
+  if(x1 + text_start < x1) {
+    text_start = 0;
+  }
+
+  if(x1 + text_stop > x2) {
+    text_stop = x2 - x1;
+  }
+
+  LCD_FillRect(x1, y1, x2, y1 + LCD_Draw_Get_Font_Height() + V_OFFSET, c->background_color);
+
+  if (state == 1) {
+    LCD_FillRect(
+      x1 + text_start,
+      y1,
+      x1 + text_stop,
+      y1 + LCD_Draw_Get_Font_Height() + V_OFFSET,
+      ac
+    );
+  } else {
+    LCD_FillRect(
+      x1 + text_start,
+      y1,
+      x1 + text_stop,
+      y1 + LCD_Draw_Get_Font_Height() + V_OFFSET,
+      ba
+    );
+  }
+  
+  LCD_DrawText_ext(
+    x1 + text_start + H_OFFSET,
+    y1 + 3,
+    tc,
+    c->pscgElements[id].str_value
+  );
+
+  LCD_DrawRectangle(
+    x1 + text_start,
+    y1,
+    x1 + text_stop,
+    y1 + LCD_Draw_Get_Font_Height() + V_OFFSET,
+    bc
+  );
+
+  LCD_Set_Sys_Font(curr_font);
+}
+
 
 void gr2_draw_icon(
     int16_t x1,
@@ -35,8 +114,12 @@ void gr2_draw_icon(
   LCD_drawArea area;
   uint16_t size = 0;
   uint16_t bc, fc, ac, tc;
-  uint8_t curr_font;
-  curr_font = LCD_Get_Font_Size();
+  
+  int32_t box_x2;
+  int32_t box_ystart;
+  int32_t box_xstart = x1;
+
+  int32_t img_x1 = x1;
 
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     bc = c->border_color;
@@ -50,25 +133,46 @@ void gr2_draw_icon(
     tc = LCD_get_gray16(c->text_color);
   }
 
-  if (((x2 - x1 + 1) / 32 - 1) > ((y2 - y1 + 1) / 80)) {
-    size = ((y2 - y1 + 1) / 80);
-  } else {
-    if (c->pscgElements[id].str_value[0] == 0) {
-      size = ((x2 - x1 + 1) / 32);
-    } else {
-      size = ((x2 - x1 + 1) / 32 - 1);
-    }
+  // get the image info
+  int32_t img_w = 64, img_h = 64;
+
+  if (svp_fexists(c->pscgElements[id].str_value2)) {
+    img_w = sda_img_get_width(c->pscgElements[id].str_value2);
+    img_h = sda_img_get_height(c->pscgElements[id].str_value2);
   }
 
-  LCD_setSubDrawArea(x1, y1, x1 + 32 * (size + 1), y2); // set sub-draw area
+  // compute the required icon scale width
+  if(((x2 - x1 + 1) / img_w) < ((y2 - y1  + 1) / img_h)) {
+    size = (x2 - x1 + 1) / img_w;
+  } else {
+    size = (y2 - y1  + 1) / img_h;
+  }
+  
+
+  LCD_setSubDrawArea(x1, y1, x2 + 1, y2); // set sub-draw area
 
   LCD_getDrawArea(&area); // store the area
 
-  //printf("xsize: %d, ysize: %d size: %d txsize: %d ttxt: %s\n",((x2-x1)/64),((y2-y1)/80), size , (15*size)/8, pscgElements[id].str_value);
+  //printf("size: %d, txt: %s\n", size, c->pscgElements[id].str_value);
 
-  if (size < 1) {
-    gr2_error((uint8_t *)"PSCG element icon too small!\n", c);
-    return;
+  if(size != 0) {
+    box_ystart = y1 + img_h*size + 2;
+  } else {
+    box_ystart = y1 + img_h/2;
+  }
+
+  if(box_ystart > y2 && c->pscgElements[id].str_value[0] != 0) {
+    printf("%s: element too small!\n", __FUNCTION__);
+  }
+
+  if(size != 0) { // center the icon
+    img_x1 = x1 + (x2 - x1)/2 - (img_w*size)/2;
+  }
+
+  // special case for desription behind icon...
+  if(size == 0) {
+    box_ystart = y1 + 3;
+    box_xstart = x1 + img_w/2 + 5;
   }
 
   if ((active == 1) && (c->pscgElements[id].pre_active == 0)) {
@@ -78,13 +182,11 @@ void gr2_draw_icon(
       if (c->pscgElements[id].param != 0) {
         sda_p16_set_alpha(1, c->pscgElements[id].param - 1, c->background_color);
       }
-      if (ppm_get_width(c->pscgElements[id].str_value2) == 32) {
-        draw_ppm(x1, y1, size + 1, c->pscgElements[id].str_value2);
-      } else if (ppm_get_width(c->pscgElements[id].str_value2) == 64) {
-        draw_ppm(x1, y1, size, c->pscgElements[id].str_value2);
-      }
+      sda_img_set_mix_color(1, ac);
+      sda_img_draw(img_x1, y1, size, size, c->pscgElements[id].str_value2);
+
       sda_p16_set_alpha(0, 0, c->background_color);
-      svp_ppm_set_pmc(0, 0);
+      sda_img_set_mix_color(0, ac);
     } else {
       // if there is no icon, will draw empty rectangle
       LCD_FillRect(x1, y1, x1 + 64 * size, y1 + 64 * size, ac);
@@ -102,27 +204,8 @@ void gr2_draw_icon(
       return;
     }
 
-    LCD_FillRect(
-      x1,
-      y1 + 2 + 32 * (size + 1),
-      x1 + 32 * (size + 1),
-      y1 + 2 + 32 * (size + 1) + 8 * ((22 * size) / 8) + 2,
-      ac
-    );
-    LCD_Set_Sys_Font(12);
-    LCD_DrawText_ext(
-      x1 + gr2_get_text_align_x(id, x1, x1 + 64 * size, 5, c),
-      y1 + 5 + 32 * (size + 1),
-      tc,
-      c->pscgElements[id].str_value
-    );
-    LCD_DrawRectangle(
-      x1,
-      y1 + 2 + 32 * (size + 1),
-      x1 + 32 * (size + 1),
-      y1 + 2 + 32 * (size + 1) + 8 * ((22 * size) / 8) + 2,
-      bc
-    );
+    draw_text_box(box_xstart, box_ystart, x2, 1, id, 0, c);
+
   } else if (active == 0) {
 #ifdef PPM_SUPPORT_ENABLED
     if (svp_fexists(c->pscgElements[id].str_value2)) {
@@ -130,16 +213,14 @@ void gr2_draw_icon(
         sda_p16_set_alpha(1, c->pscgElements[id].param - 1, c->background_color);
       }
       if (c->pscgElements[id].grayout == 1) {
-        svp_ppm_set_pmc(1, ac);
+        sda_img_set_mix_color(1, ac);
       } else if (c->pscgElements[id].status_reg & GR2_SELECT_B) {
-        svp_ppm_set_pmc(1, ac);
+        sda_img_set_mix_color(1, ac);
       }
-      if (ppm_get_width(c->pscgElements[id].str_value2) == 32) {
-        draw_ppm(x1, y1, size + 1, c->pscgElements[id].str_value2);
-      } else if (ppm_get_width(c->pscgElements[id].str_value2) == 64) {
-        draw_ppm(x1, y1, size, c->pscgElements[id].str_value2);
-      }
-      svp_ppm_set_pmc(0, 0);
+      
+      sda_img_draw(img_x1, y1, size, size, c->pscgElements[id].str_value2);
+
+      sda_img_set_mix_color(0, ac);
       sda_p16_set_alpha(0, 0, c->background_color);
     } else {
       if (c->pscgElements[id].status_reg & GR2_SELECT_B) {
@@ -162,27 +243,13 @@ void gr2_draw_icon(
     }
 
     LCD_setDrawAreaS(&area); // restore sub draw area
-    LCD_FillRect(
-      x1,
-      y1 + 2 + 32 * (size + 1),
-      x1 + 32 * (size + 1),
-      y1 + 2 + 32 * (size + 1) + 8 * ((22 * size) / 8) + 2,
-      c->background_color
-    );
-    LCD_Set_Sys_Font(12);
-    LCD_DrawText_ext(
-      x1 + gr2_get_text_align_x(id, x1, x1 + 64 * size, 5, c),
-      y1 + 5 + 32 * (size + 1),
-      tc,
-      c->pscgElements[id].str_value
-    );
-    LCD_DrawRectangle(
-      x1,
-      y1 + 2 + 32 * (size + 1),
-      x1 + 32 * (size + 1),
-      y1 + 2 + 32 * (size + 1) + 8 * ((22 * size) / 8) + 2,
-      c->border_color
-    );
+    
+    if (c->pscgElements[id].grayout == 1) {
+      draw_text_box(box_xstart, box_ystart, x2, 2, id, 0, c);
+    } else if (c->pscgElements[id].status_reg & GR2_SELECT_B) {
+      draw_text_box(box_xstart, box_ystart, x2, 1, id, 0, c);
+    } else {
+      draw_text_box(box_xstart, box_ystart, x2, 0, id, 0, c);
+    }
   }
-  LCD_Set_Sys_Font(curr_font);
 }

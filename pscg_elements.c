@@ -228,12 +228,8 @@ uint16_t gr2_add_icon(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_
 	c->pscgElements[i].type = GR2_TYPE_ICON;
 	pscg_add_fill_xy(i, x1, y1, x2, y2, c);
 	c->pscgElements[i].str_value = str;
-	c->pscgElements[i].str_value2 = str2; //name of .ppm file with size 32x32 or 64x64
-	//param:
-	//0 pokud není vykreslena
-	//1 pokud je vykreslena jako neaktivní
-	//2 pokud je vykreslena jako aktivní
-
+	c->pscgElements[i].str_value2 = str2; //name of .ppm/.p16 file with size 32x32 or 64x64
+	c->pscgElements[i].param2 = 12; // default font is font 12
 	pscg_set_max_id(i, c);
 	c->elementsUsed++;
 

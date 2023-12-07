@@ -44,8 +44,15 @@ typedef enum {EV_NONE,EV_PRESSED, EV_HOLD,EV_LONGHOLD, EV_RELEASED, EV_DRAGOUT} 
 #include "lcd_canvas.h"
 
 #ifdef PPM_SUPPORT_ENABLED
+// to be deprecated
 void svp_ppm_set_pmc(uint8_t enable, uint16_t color);
 void draw_ppm(uint16_t x,uint16_t y,uint8_t scale, uint8_t *filename);
+
+// now using img api
+void sda_img_set_mix_color(uint8_t enable, uint16_t color);
+void sda_img_draw(int16_t x, int16_t y, int16_t scale_w, int16_t scale_h, uint8_t *filename);
+uint16_t sda_img_get_width(uint8_t *filename);
+uint16_t sda_img_get_height(uint8_t *filename);
 #endif
 
 #include "pscg.h"
