@@ -36,7 +36,11 @@ void gr2_draw_image(
 
 #ifdef PPM_SUPPORT_ENABLED
   if (svp_fexists(c->pscgElements[id].str_value)) {
+    if (c->pscgElements[id].param != 0) {
+      sda_p16_set_alpha(1, c->pscgElements[id].param - 1, c->background_color);
+    }
     sda_img_draw(x1, y1, c->pscgElements[id].value, c->pscgElements[id].value, c->pscgElements[id].str_value);
+    sda_p16_set_alpha(0, 0, c->background_color);
   }  else {
     LCD_FillRect(x1, y1, x2, y2, c->active_color);
     LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
