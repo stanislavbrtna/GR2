@@ -36,7 +36,7 @@ void gr2_draw_image(
 
 #ifdef PPM_SUPPORT_ENABLED
   if (svp_fexists(c->pscgElements[id].str_value)) {
-    draw_ppm(x1, y1, c->pscgElements[id].value, c->pscgElements[id].str_value);
+    sda_img_draw(x1, y1, c->pscgElements[id].value, c->pscgElements[id].value, c->pscgElements[id].str_value);
   }  else {
     LCD_FillRect(x1, y1, x2, y2, c->active_color);
     LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
