@@ -42,7 +42,7 @@ int16_t gr2_get_text_align_x(uint16_t id, int16_t x1, int16_t x2, int16_t offset
     if (alignment == GR2_ALIGN_RIGHT) {
       x_add = x2 - x1 - LCD_Text_Get_Width(c->pscgElements[id].str_value, 0) - offset;
     } else if (alignment == GR2_ALIGN_CENTER) {
-      x_add = (x2 - x1)/2 - LCD_Text_Get_Width(c->pscgElements[id].str_value, 0)/2;
+      x_add = (x2 - x1)/2 - LCD_Text_Get_Width(c->pscgElements[id].str_value, 0)/2 + 1;
     }
   } else {
     x_add += offset;
