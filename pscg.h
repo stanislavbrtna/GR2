@@ -211,8 +211,8 @@ uint8_t gr2_clicked(uint16_t id, gr2context * c); // short for get event release
 uint8_t gr2_cursor_handler(uint16_t id, uint32_t ms_counter, gr2context * con);
 
 //=================== GUI Getters & Setters for screens ========================
-uint16_t gr2_get_xscroll(uint16_t id, gr2context * c);
-uint16_t gr2_get_yscroll(uint16_t id, gr2context * c);
+int16_t gr2_get_xscroll(uint16_t id, gr2context * c);
+int16_t gr2_get_yscroll(uint16_t id, gr2context * c);
 void gr2_set_xscroll(uint16_t id, int16_t val, gr2context * c);
 void gr2_set_yscroll(uint16_t id, int16_t val, gr2context * c);
 

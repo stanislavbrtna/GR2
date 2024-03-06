@@ -515,12 +515,12 @@ uint16_t gr2_get_screen(uint16_t id, gr2context *c) {
 	return c->pscgElements[id].screen_id;
 }
 
-uint16_t gr2_get_xscroll(uint16_t id, gr2context * c) {
+int16_t gr2_get_xscroll(uint16_t id, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
 	return c->pscgScreens[c->pscgElements[id].value].x_scroll;
 }
 
-uint16_t gr2_get_yscroll(uint16_t id, gr2context * c) {
+int16_t gr2_get_yscroll(uint16_t id, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
 	return c->pscgScreens[c->pscgElements[id].value].y_scroll;
 }
