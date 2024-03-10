@@ -84,6 +84,10 @@ void gr2_draw_text(
         LCD_DrawRectangle(x1 + 2, y1 + 2, x2 - 2, y2 - 2, c->active_color);
       }
       LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
+    } else {
+      if (gr2_get_select(id, c) == 1) {
+        LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
+      }
     }
   } else {
     // grayed out
