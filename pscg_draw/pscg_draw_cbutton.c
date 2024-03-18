@@ -35,9 +35,9 @@ void gr2_draw_cbutton(
   LCD_setSubDrawArea(x1, y1, x2, y2);
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0))  {
     if ((active == 1) && (c->pscgElements[id].pre_active == 0)) {
-      LCD_FillRect(x1, y1, x2, y2, c->active_color);
+      gr2_button_draw_bg(x1, y1, x2, y2, c->active_color, c->pscgElements[id].status_reg);
     } else if (active == 0) {
-      LCD_FillRect(x1, y1, x2, y2, c->pscgElements[id].value);
+      gr2_button_draw_bg(x1, y1, x2, y2, c->pscgElements[id].value, c->pscgElements[id].status_reg);
     }
     LCD_DrawText_ext(
       x1 + gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].param, c),
@@ -45,11 +45,9 @@ void gr2_draw_cbutton(
       ~c->pscgElements[id].value,
       str
     );
-    LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
-    LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, c->border_color);
+    gr2_button_draw_frame(x1, y1, x2, y2, c->border_color, c->pscgElements[id].status_reg);
     if (c->pscgElements[id].status_reg & GR2_SELECT_B) {
-      LCD_DrawRectangle(x1 + 5, y1 + 4, x2 - 5, y2 - 4, ~c->pscgElements[id].value);
-      LCD_DrawRectangle(x1 + 4, y1 + 3, x2 - 4, y2 - 3, ~c->pscgElements[id].value);
+      gr2_button_draw_frame(x1 + 4, y1 + 3, x2 - 4, y2 - 3, ~c->pscgElements[id].value, c->pscgElements[id].status_reg);
     }
   }  else {
     LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->pscgElements[id].value));
@@ -59,8 +57,7 @@ void gr2_draw_cbutton(
       LCD_get_gray16(~c->pscgElements[id].value),
       str
     );
-    LCD_DrawRectangle(x1, y1, x2, y2, LCD_get_gray16(c->border_color));
-    LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, LCD_get_gray16(c->border_color));
+    gr2_button_draw_frame(x1, y1, x2, y2, LCD_get_gray16(c->border_color), c->pscgElements[id].status_reg);
   }
   c->pscgElements[id].pre_active = active;
 }

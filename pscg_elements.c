@@ -145,6 +145,8 @@ static void pscg_fill_zero_defaults(uint16_t i, uint16_t screen_id, gr2context *
 	c->pscgElements[i].str_value  = 0;
 
 	c->pscgElements[screen_id].modified = 1;
+
+	gr2_set_rounded(i, c->rounded_init, c);
 }
 
 static uint16_t pscg_get_new_id(gr2context * c) {
@@ -165,7 +167,6 @@ uint16_t gr2_add_button(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint
 	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
-	gr2_set_rounded(i, c->rounded_init, c);
 	c->pscgElements[i].type = GR2_TYPE_BUTTON;
 	pscg_add_fill_xy(i, x1, y1, x2, y2, c);
 	c->pscgElements[i].str_value = str;
