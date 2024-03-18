@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2017 Stanislav Brtna
+Copyright (c) 2024 Stanislav Brtna
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,44 +20,49 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef GR2_H
-#define GR2_H
+#ifndef GR2_CONFIG_H
+#define GR2_CONFIG_H
 
+// Populates defaults for config options
 
-// GR2 version 2.4
-#define GR2_VERSION 240
-
-#ifdef PC
-#include <stdio.h>
-#include <stdint.h>
+#ifndef GR2_ROUNDED_DEFAULT
+#define GR2_ROUNDED_DEFAULT 1
 #endif
 
-#if defined(STM32F405xx) || defined(STM32F411xE) || defined(STM32F407xx)
-#include "stm32f4xx.h"
-#include "stm32f4xx_hal.h"
-#include "stm32f4xx_hal_cortex.h"
+#ifndef PSCG_TEXT_Y_GAP
+#define PSCG_TEXT_Y_GAP 8
 #endif
 
-typedef enum {EV_NONE,EV_PRESSED, EV_HOLD,EV_LONGHOLD, EV_RELEASED, EV_DRAGOUT} gr2EventType;
-
-#include "lcd_io.h"
-#include "lcd_basics.h"
-#include "lcd_text.h"
-#include "lcd_canvas.h"
-
-#ifdef PPM_SUPPORT_ENABLED
-// to be deprecated
-void svp_ppm_set_pmc(uint8_t enable, uint16_t color);
-void draw_ppm(uint16_t x,uint16_t y,uint8_t scale, uint8_t *filename);
-
-// now using img api
-void sda_img_set_mix_color(uint8_t enable, uint16_t color);
-void sda_img_draw(int16_t x, int16_t y, int16_t scale_w, int16_t scale_h, uint8_t *filename);
-uint16_t sda_img_get_width(uint8_t *filename);
-uint16_t sda_img_get_height(uint8_t *filename);
+#ifndef PSCG_CHECKBOX_HSPACE_UP
+#define PSCG_CHECKBOX_HSPACE_UP 5
 #endif
 
-#include "pscg.h"
-#include "GR2_keypad_input.h"
+#ifndef PSCG_CHECKBOX_VSPACE_UP
+#define PSCG_CHECKBOX_VSPACE_UP 5
+#endif
+
+#ifndef PSCG_CHECKBOX_HSPACE_DN
+#define PSCG_CHECKBOX_HSPACE_DN 5
+#endif
+
+#ifndef PSCG_CHECKBOX_VSPACE_DN
+#define PSCG_CHECKBOX_VSPACE_DN 5
+#endif
+
+#ifndef PSCG_CHECKBOX_IN_HSPACE
+#define PSCG_CHECKBOX_IN_HSPACE 5
+#endif
+
+#ifndef PSCG_CHECKBOX_IN_VSPACE
+#define PSCG_CHECKBOX_IN_VSPACE 5
+#endif
+
+#ifndef PSCG_CHECKBOX_TEXT_GAP
+#define PSCG_CHECKBOX_TEXT_GAP 5
+#endif
+
+#ifndef GR2_ROUND_RADIUS
+#define GR2_ROUND_RADIUS 4
+#endif
 
 #endif

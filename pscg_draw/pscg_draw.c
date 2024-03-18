@@ -64,3 +64,45 @@ void gr2_draw_end(gr2context * c) {
 
   gr2_set_global_grayout_flag(0);
 }
+
+
+void gr2_button_draw_bg (int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t col, uint16_t stat) {
+  if(stat & GR2_ROUNDED_B) {
+    LCD_FillRect(x1, y1 + GR2_ROUND_RADIUS, x2, y2 - GR2_ROUND_RADIUS, col);
+    LCD_FillRect(x1 + GR2_ROUND_RADIUS, y1, x2 - GR2_ROUND_RADIUS, y1 + GR2_ROUND_RADIUS, col);
+    LCD_FillRect(x1 + GR2_ROUND_RADIUS, y2 - GR2_ROUND_RADIUS, x2 - GR2_ROUND_RADIUS, y2, col);
+
+    LCD_FillCirclePart(x1 + GR2_ROUND_RADIUS, y1 + GR2_ROUND_RADIUS, GR2_ROUND_RADIUS, 0, col);
+    LCD_FillCirclePart(x2 - GR2_ROUND_RADIUS, y1 + GR2_ROUND_RADIUS, GR2_ROUND_RADIUS, 1, col);
+    LCD_FillCirclePart(x1 + GR2_ROUND_RADIUS, y2 - GR2_ROUND_RADIUS, GR2_ROUND_RADIUS, 2, col);
+    LCD_FillCirclePart(x2 - GR2_ROUND_RADIUS, y2 - GR2_ROUND_RADIUS, GR2_ROUND_RADIUS, 3, col);
+  } else {
+    LCD_FillRect(x1, y1, x2, y2, col);
+  }
+}
+
+
+void gr2_button_draw_frame(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t col, uint16_t stat) {
+  if(stat & GR2_ROUNDED_B) {
+    LCD_FillRect(x1 + GR2_ROUND_RADIUS, y1, x2 - GR2_ROUND_RADIUS, y1 + 1, col);
+    LCD_FillRect(x1 + GR2_ROUND_RADIUS, y2 - 1, x2 - GR2_ROUND_RADIUS, y2, col);
+
+    LCD_FillRect(x1, y1 + GR2_ROUND_RADIUS, x1 + 1, y2 - GR2_ROUND_RADIUS, col);
+    LCD_FillRect(x2 - 1, y1 + GR2_ROUND_RADIUS, x2, y2 - GR2_ROUND_RADIUS, col);
+
+    LCD_DrawCirclePart(x1 + GR2_ROUND_RADIUS, y1 + GR2_ROUND_RADIUS, GR2_ROUND_RADIUS, 0, col);
+    LCD_DrawCirclePart(x1 + GR2_ROUND_RADIUS, y1 + GR2_ROUND_RADIUS + 1, GR2_ROUND_RADIUS, 0, col);
+
+    LCD_DrawCirclePart(x2 - GR2_ROUND_RADIUS, y1 + GR2_ROUND_RADIUS, GR2_ROUND_RADIUS, 1, col);
+    LCD_DrawCirclePart(x2 - GR2_ROUND_RADIUS, y1 + GR2_ROUND_RADIUS + 1, GR2_ROUND_RADIUS, 1, col);
+
+    LCD_DrawCirclePart(x1 + GR2_ROUND_RADIUS, y2 - GR2_ROUND_RADIUS, GR2_ROUND_RADIUS, 2, col);
+    LCD_DrawCirclePart(x1 + GR2_ROUND_RADIUS, y2 - GR2_ROUND_RADIUS - 1, GR2_ROUND_RADIUS, 2, col);
+
+    LCD_DrawCirclePart(x2 - GR2_ROUND_RADIUS, y2 - GR2_ROUND_RADIUS, GR2_ROUND_RADIUS, 3, col);
+    LCD_DrawCirclePart(x2 - GR2_ROUND_RADIUS, y2 - GR2_ROUND_RADIUS - 1, GR2_ROUND_RADIUS, 3, col);
+  } else {
+    LCD_DrawRectangle(x1, y1, x2, y2, col);
+    LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, col);
+  }
+}

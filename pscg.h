@@ -27,37 +27,7 @@ SOFTWARE.
 #include "GR2_types.h"
 #include "GR2_gui_draw.h"
 
-#ifndef PSCG_TEXT_Y_GAP
-#define PSCG_TEXT_Y_GAP 8
-#endif
-
-#ifndef PSCG_CHECKBOX_HSPACE_UP
-#define PSCG_CHECKBOX_HSPACE_UP 5
-#endif
-
-#ifndef PSCG_CHECKBOX_VSPACE_UP
-#define PSCG_CHECKBOX_VSPACE_UP 5
-#endif
-
-#ifndef PSCG_CHECKBOX_HSPACE_DN
-#define PSCG_CHECKBOX_HSPACE_DN 5
-#endif
-
-#ifndef PSCG_CHECKBOX_VSPACE_DN
-#define PSCG_CHECKBOX_VSPACE_DN 5
-#endif
-
-#ifndef PSCG_CHECKBOX_IN_HSPACE
-#define PSCG_CHECKBOX_IN_HSPACE 5
-#endif
-
-#ifndef PSCG_CHECKBOX_IN_VSPACE
-#define PSCG_CHECKBOX_IN_VSPACE 5
-#endif
-
-#ifndef PSCG_CHECKBOX_TEXT_GAP
-#define PSCG_CHECKBOX_TEXT_GAP 5
-#endif
+#include "GR2_config.h"
 
 // GR2 context setup
 void gr2_reset_context(gr2context *c);
@@ -182,6 +152,10 @@ uint8_t gr2_get_ghost(uint16_t id, gr2context * c);
 // element select parameter
 void gr2_set_select(uint16_t id, uint16_t val, gr2context * c);
 uint8_t gr2_get_select(uint16_t id, gr2context * c);
+
+// Rounded modificator
+void gr2_set_rounded(uint16_t id, uint16_t val, gr2context * c);
+uint8_t gr2_get_rounded(uint16_t id, gr2context * c);
 
 // misc text field functions
 void gr2_text_set_size(uint16_t id, uint16_t size, gr2context * c);

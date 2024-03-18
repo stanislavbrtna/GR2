@@ -30,4 +30,7 @@ void sda_p16_set_alpha(uint8_t enable, uint16_t color, uint16_t bg_color);
 
 extern uint8_t global_grayout_flag;
 
+void gr2_button_draw_bg (int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t col, uint16_t stat);
+void gr2_button_draw_frame(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t col, uint16_t stat);
+
 

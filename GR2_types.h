@@ -31,6 +31,7 @@ SOFTWARE.
 #define GR2_TEXT_PWD_B 2048
 #define GR2_T_ALIGN_B1 4096
 #define GR2_T_ALIGN_B2 8192
+#define GR2_ROUNDED_B  16384
 
 #define GR2_TYPE_SCREEN 0
 #define GR2_TYPE_BUTTON 1
@@ -76,6 +77,7 @@ typedef struct {
   // bit11 - pwd
   // bit12 - text align bit 1
   // bit13 - text align bit 2
+  // bit14 - rounded mode
   // TODO: move visibility and grayout to position 7, 8
   uint16_t screen_id;         // id of the parent screen
   volatile uint16_t modified; // modified flag, modified elements are redrawn
@@ -100,7 +102,7 @@ typedef struct {
  *  8 - frame
  *  9 - color button
  * 10 - checkBox
- * 11 - image (ppm)
+ * 11 - image (ppm/p16)
  *
  */
 
@@ -119,11 +121,11 @@ typedef struct {
   uint16_t cell_space_top;
   uint16_t cell_space_bottom;
 
-  uint8_t default_font;
+  uint8_t  default_font;
 
   uint16_t kbd_selected;
 
-  uint8_t valid;
+  uint8_t  valid;
 
 } gr2Screen;
 
@@ -160,6 +162,7 @@ typedef struct {
   uint8_t pscg_active_element;
 
   uint8_t relative_init;
+  uint8_t rounded_init;
 
   uint16_t border_color;     // black
   uint16_t text_color;       // black

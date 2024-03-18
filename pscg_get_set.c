@@ -342,6 +342,27 @@ uint8_t gr2_get_select(uint16_t id, gr2context * c) {
 	}
 }
 
+
+void gr2_set_rounded(uint16_t id, uint16_t val, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if (val == 1) {
+		c->pscgElements[id].status_reg |= GR2_ROUNDED_B;
+	} else {
+		c->pscgElements[id].status_reg &= ~GR2_ROUNDED_B;
+	}
+	c->pscgElements[id].modified = 1;
+}
+
+uint8_t gr2_get_rounded(uint16_t id, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
+	if (c->pscgElements[id].status_reg & GR2_ROUNDED_B) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+
 // sets sizes 12, 18 (default), 32, 70, 87
 void gr2_text_set_size(uint16_t id, uint16_t size, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
