@@ -84,6 +84,7 @@ void gr2_draw_text(
         LCD_DrawRectangle(x1 + 2, y1 + 2, x2 - 2, y2 - 2, c->active_color);
       }
       LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
+      LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, c->border_color);
     } else {
       if (gr2_get_select(id, c) == 1) {
         LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
@@ -114,6 +115,7 @@ void gr2_draw_text(
 
     if (gr2_text_get_editable(id, c)) {
       LCD_DrawRectangle(x1, y1, x2, y2, LCD_get_gray16(c->border_color));
+      LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, LCD_get_gray16(c->border_color));
     }
   }
 
