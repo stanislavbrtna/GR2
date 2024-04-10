@@ -223,14 +223,14 @@ uint16_t gr2_add_frame(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, int32
 	return i;
 }
 
-uint16_t gr2_add_icon(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint8_t *str2, uint16_t screen, gr2context * c){
+uint16_t gr2_add_icon(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t *str, uint8_t *icon, uint16_t screen, gr2context * c){
 	uint16_t i = pscg_get_new_id(c);
 
 	pscg_fill_zero_defaults(i, screen, c);
 	c->pscgElements[i].type = GR2_TYPE_ICON;
 	pscg_add_fill_xy(i, x1, y1, x2, y2, c);
 	c->pscgElements[i].str_value = str;
-	c->pscgElements[i].str_value2 = str2; //name of .ppm/.p16 file with size 32x32 or 64x64
+	c->pscgElements[i].str_value2 = icon; //name of .ppm/.p16 file with size 32x32 or 64x64
 	c->pscgElements[i].param2 = 12; // default font is font 12
 	pscg_set_max_id(i, c);
 	c->elementsUsed++;
