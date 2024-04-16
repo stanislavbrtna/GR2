@@ -393,6 +393,13 @@ void gr2_set_str2(uint16_t id, uint8_t *str, gr2context * c) {
 
 uint8_t * gr2_get_str(uint16_t id, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
+
+	if (c->pscgElements[id].str_value == 0) {
+		printf("%s: string value out of bounds! Empty string returned. (element id: %u)\n", __FUNCTION__, id);
+		gr2_error((uint8_t *)"gr2_get_str: pointer out of bounds!", c);
+		return "";
+	}
+
 	return c->pscgElements[id].str_value;
 }
 
