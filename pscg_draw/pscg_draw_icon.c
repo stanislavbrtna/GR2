@@ -113,7 +113,6 @@ void gr2_draw_icon(
   uint16_t size = 0;
   uint16_t bc, fc, ac, tc;
   
-  int32_t box_x2;
   int32_t box_ystart;
   int32_t box_xstart = x1;
 
