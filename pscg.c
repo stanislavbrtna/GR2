@@ -161,7 +161,7 @@ void gr2_draw_screen(
         }
 
         COUNT_A_B_C_D_old
-        if (con->pscgElements[screen].str_value != 0) {
+        if (con->pscgElements[screen].str_value != 0 && gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t*) "") != 1) {
           gr2_draw_screen_bg(a, b, c + 1, d, x1, y1, screen, con);
         } else {
           LCD_FillRect(a, b, c + 1, d, background_color);
@@ -186,7 +186,7 @@ void gr2_draw_screen(
           && (con->pscgElements[i].modified == 1)) {
 
         COUNT_A_B_C_D
-        if (con->pscgElements[screen].str_value != 0) {
+        if (con->pscgElements[screen].str_value != 0 && gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t*) "") != 1) {
           gr2_draw_screen_bg(a, b, c, d, x1, y1, screen, con);
         } else {
           LCD_FillRect(a, b, c, d, background_color);
@@ -257,11 +257,7 @@ void gr2_draw_screen(
       if (con->pscgElements[i].type == GR2_TYPE_TEXT) {
         COUNT_A_B_C_D
         if ((all == 1) || (con->pscgElements[i].modified == 1)) {
-          //DBG
-          //static uint32_t ix;
-          //printf("%u redrawing: %s\n", ix, con->pscgElements[i].str_value);
-          //ix++;
-          if (con->pscgElements[screen].str_value != 0 && all == 0) {
+          if (con->pscgElements[screen].str_value != 0 && all == 0 && gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t*) "") != 1) {
             gr2_draw_screen_bg(a, b, c + 1, d, x1, y1, screen, con);
           }
           gr2_draw_text(a, b, c, d, i, con);
