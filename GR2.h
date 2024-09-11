@@ -45,7 +45,7 @@ typedef enum {EV_NONE,EV_PRESSED, EV_HOLD,EV_LONGHOLD, EV_RELEASED, EV_DRAGOUT} 
 #include "lcd_text.h"
 #include "lcd_canvas.h"
 
-#ifdef PPM_SUPPORT_ENABLED
+#ifdef PPM_SUPPORT_ENABLED //TODO: rename this to something like ENABLE_SDA_OS_APIS
 // to be deprecated
 void svp_ppm_set_pmc(uint8_t enable, uint16_t color);
 void draw_ppm(uint16_t x,uint16_t y,uint8_t scale, uint8_t *filename);
@@ -55,6 +55,11 @@ void sda_img_set_mix_color(uint8_t enable, uint16_t color);
 void sda_img_draw(int16_t x, int16_t y, int16_t scale_w, int16_t scale_h, uint8_t *filename);
 uint16_t sda_img_get_width(uint8_t *filename);
 uint16_t sda_img_get_height(uint8_t *filename);
+
+// sda icons api
+uint8_t sda_draw_sic_file(int16_t x1, int16_t y1, uint16_t front_color, uint16_t back_color, uint8_t * fname);
+uint8_t sda_sic_get_last_width();
+
 #endif
 
 #include "pscg.h"

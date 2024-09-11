@@ -143,6 +143,7 @@ static void pscg_fill_zero_defaults(uint16_t i, uint16_t screen_id, gr2context *
 	c->pscgElements[i].screen_id  = screen_id;
 	c->pscgElements[i].modified   = 0;
 	c->pscgElements[i].str_value  = 0;
+	c->pscgElements[i].str_value2 = 0;
 
 	c->pscgElements[screen_id].modified = 1;
 
