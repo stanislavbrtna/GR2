@@ -208,7 +208,10 @@ void gr2_draw_icon(
         sda_p16_set_alpha(1, c->pscgElements[id].param - 1, bac);
       }
 
-      if(c->pscgElements[id].grayout == 1 || global_grayout_flag) {
+      if(c->pscgElements[id].grayout == 1
+         || global_grayout_flag
+         || c->pscgElements[id].status_reg & GR2_SELECT_B
+      ) {
         sda_img_set_mix_color(1, ac);
       }
       
