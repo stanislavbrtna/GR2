@@ -53,10 +53,15 @@ static void draw_slider(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t 
   if (grayout == 0) {
     ac = c->active_color;
     bc = c->border_color;
-    bac = c->background_color;
   } else {
     ac = LCD_get_gray16(c->active_color);
     bc = LCD_get_gray16(c->border_color);
+  }
+
+  if (global_grayout_flag) {
+    bac = LCD_get_gray16(c->background_color);
+  } else {
+    bac = c->background_color;
   }
 
   LCD_FillRect(x1, y1 + GR2_SLIDER_RADIUS, x2, y2 - GR2_SLIDER_RADIUS, ac);
@@ -111,10 +116,16 @@ static void draw_slider(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t 
       }
     }
   }
-
-  
 }
 #endif
+
+static void slider_clear_bg(int16_t x1, int16_t y1, int16_t x2, int16_t y2, gr2context * c) {
+  if (global_grayout_flag) {
+    LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->background_color));
+  } else {
+    LCD_FillRect(x1, y1, x2, y2, c->background_color);
+  }
+}
 
 void gr2_draw_slider_v(
     int16_t x1,
@@ -131,8 +142,9 @@ void gr2_draw_slider_v(
   uint16_t width = x2 - x1;
 
   LCD_setSubDrawArea(x1, y1, x2, y2);
-
-  LCD_FillRect(x1, y1, x2, y2, c->background_color); // clear
+  
+  // clear
+  slider_clear_bg(x1, y1, x2, y2, c);
 
   slider_pos = (int32_t)(((float)value / (float)param) * ((float)(y2 - y1 - slider_size)));
 
@@ -215,10 +227,7 @@ void gr2_draw_slider_v_f(
   }
 
   // clear old slider from screen
-  LCD_FillRect(
-    x1, y1 + slider_pos_o, x2, y1 + slider_pos_o + slider_size + 1,
-    c->background_color
-  );
+  slider_clear_bg(x1, y1 + slider_pos_o, x2, y1 + slider_pos_o + slider_size + 1, c);
 
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     if (slider_pos >= slider_pos_o) {
@@ -291,7 +300,7 @@ void gr2_draw_slider_h(
   uint16_t height = 0;
   height = y2 - y1;
 
-  LCD_FillRect(x1, y1, x2, y2 + 1, c->background_color);
+  slider_clear_bg(x1, y1, x2, y1 + 1, c);
 
   slider_pos = (int32_t)(((float)value/(float)param)*((float)(x2 - x1 - slider_size)));
 
@@ -367,10 +376,7 @@ void gr2_draw_slider_h_f(
   }
 
   // remove old slider
-  LCD_FillRect(
-    x1 + slider_pos_o, y1, x1 + slider_pos_o + slider_size, y2,
-    c->background_color
-  );
+  slider_clear_bg(x1 + slider_pos_o, y1, x1 + slider_pos_o + slider_size, y2, c);
 
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     if (slider_pos >= slider_pos_o) {
