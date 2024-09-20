@@ -157,6 +157,14 @@ void gr2_set_param(uint16_t id, int32_t val, gr2context * c) {
 	c->pscgElements[id].param = val;
 }
 
+void gr2_set_param2(uint16_t id, int32_t val, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if (val != c->pscgElements[id].param2) {
+		c->pscgElements[id].modified = 1;
+	}
+	c->pscgElements[id].param2 = val;
+}
+
 void gr2_set_modified(uint16_t id, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
 	c->pscgElements[id].modified = 1;

@@ -161,10 +161,12 @@ void gr2_draw_screen(
         }
 
         COUNT_A_B_C_D_old
-        if (con->pscgElements[screen].str_value != 0 && gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t*) "") != 1) {
-          gr2_draw_screen_bg(a, b, c + 1, d, x1, y1, screen, con);
-        } else {
-          LCD_FillRect(a, b, c + 1, d, background_color);
+        if(con->pscgElements[screen].param2 == 0) {
+          if (con->pscgElements[screen].str_value != 0 && gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t*) "") != 1) {
+            gr2_draw_screen_bg(a, b, c + 1, d, x1, y1, screen, con);
+          } else {
+            LCD_FillRect(a, b, c + 1, d, background_color);
+          }
         }
       }
     }

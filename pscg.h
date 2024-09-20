@@ -99,6 +99,7 @@ void gr2_set_value(uint16_t id, int32_t val, gr2context * c);
 int32_t gr2_get_param(uint16_t id, gr2context * c);
 void gr2_set_param(uint16_t id, int32_t val, gr2context * c);
 uint16_t gr2_get_param2(uint16_t id, gr2context * c);
+void gr2_set_param2(uint16_t id, int32_t val, gr2context * c);
 // screen
 void gr2_set_screen(uint16_t id, uint16_t val, gr2context * c);
 uint16_t gr2_get_screen(uint16_t id, gr2context *c);

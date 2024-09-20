@@ -45,7 +45,7 @@ void gr2_draw_text(
   x_add = gr2_get_text_align_x(id, x1, x2, 10, c);
 
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
-    if (c->pscgElements[id].value == 1) {
+    if (c->pscgElements[id].value == 1) { // active
       LCD_FillRect(x1, y1, x2, y2, c->active_color);
       if (c->textBlockStart != 0 || c->textBlockEnd != 0) {
         LCD_set_text_block(c->textBlockStart - 1, c->textBlockEnd, c->fill_color);
