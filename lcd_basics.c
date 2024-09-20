@@ -268,7 +268,6 @@ void LCD_FillRect(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t Color
       LCD_draw_point_wrp(Color);
     }
   }
-  LCD_set_XY(0, 0, lcd_x_size, lcd_y_size);
 #endif
 
 #ifdef STM_BSP_FILL
