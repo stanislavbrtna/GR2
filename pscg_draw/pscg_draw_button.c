@@ -60,7 +60,7 @@ void gr2_draw_button(
 
     if(c->pscgElements[id].str_value2 != 0 && !gr2_strcmp(c->pscgElements[id].str_value2, "")) {
 #ifdef PPM_SUPPORT_ENABLED
-      sda_draw_sic_file(x1 + 2, y1 + 2, c->text_color, bg_color, c->pscgElements[id].str_value2);
+      sda_draw_sic_file(x1 + 2 + c->pscgElements[id].param/2, y1 + 1, c->text_color, bg_color, c->pscgElements[id].str_value2);
       sic_width = sda_sic_get_last_width();
 #endif
     }
@@ -83,7 +83,7 @@ void gr2_draw_button(
 
     if(c->pscgElements[id].str_value2 != 0 && !gr2_strcmp(c->pscgElements[id].str_value2, "")) {
 #ifdef PPM_SUPPORT_ENABLED
-      sda_draw_sic_file(x1 + 2, y1 + 2, c->text_color, LCD_get_gray16(c->fill_color), c->pscgElements[id].str_value2);
+      sda_draw_sic_file(x1 + 2 + c->pscgElements[id].param/2, y1 + 1, c->text_color, LCD_get_gray16(c->fill_color), c->pscgElements[id].str_value2);
       sic_width = sda_sic_get_last_width();
 #endif
     }
