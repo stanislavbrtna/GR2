@@ -232,8 +232,9 @@ uint8_t gr2_get_global_grayout_flag();
 void gr2_cleanup(gr2context * c); //sets correct maxElementId
 void set_gr2_workaround_context(gr2context * c);
 
-uint16_t gr2_get_tmx(gr2context * c);
-uint16_t gr2_get_tmy(gr2context * c);
+int16_t  gr2_get_tmx(gr2context * c);
+int16_t  gr2_get_tmy(gr2context * c);
+uint16_t gr2_get_text_max_width(gr2context * c);
 
 void gr2_error(uint8_t *str, gr2context * c);
 void gr2_destroy_screen(uint16_t id, gr2context * c); 

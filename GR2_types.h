@@ -136,8 +136,9 @@ typedef struct {
   uint8_t  invisible_flag;
   uint8_t  reset_active_element_flag;
 
-  uint16_t textMouseX;
-  uint16_t textMouseY;
+  int16_t  textMouseX;
+  int16_t  textMouseY;
+  uint16_t textMaxWidth;
 
   uint16_t default_grid_size;
   uint16_t default_grid_spacing;

@@ -45,6 +45,7 @@ void gr2_reset_context(gr2context * c) {
   c->reset_active_element_flag = 0;
   c->textMouseX                = 0;
   c->textMouseY                = 0;
+  c->textMaxWidth              = 0;
   c->default_grid_size         = 32;
   c->default_grid_spacing      = 0;
   c->pscg_active_element       = 0;
@@ -196,13 +197,17 @@ void gr2_redraw_all(gr2context * c) {
 }
 
 
-uint16_t gr2_get_tmx(gr2context * c) {
+int16_t gr2_get_tmx(gr2context * c) {
   return c->textMouseX;
 }
 
 
-uint16_t gr2_get_tmy(gr2context * c) {
+int16_t gr2_get_tmy(gr2context * c) {
   return c->textMouseY;
+}
+
+uint16_t gr2_get_text_max_width(gr2context * c) {
+  return c->textMaxWidth;
 }
 
 uint8_t gr2_strcmp(uint8_t *a, uint8_t *b) {

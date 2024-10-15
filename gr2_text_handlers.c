@@ -41,8 +41,7 @@ uint8_t gr2_cursor_handler(uint16_t id, uint32_t ms_counter, gr2context * con) {
     curr_font = LCD_Get_Font_Size();
     LCD_Set_Sys_Font(gr2_get_param2(id, con));
 
-    temp = LCD_Text_Get_Cursor_Pos(gr2_get_str(id, con), gr2_get_tmx(con), gr2_get_tmy(con));
-    
+    temp = LCD_Text_Get_Cursor_Pos(gr2_get_str(id, con), gr2_get_tmx(con), gr2_get_tmy(con), gr2_get_text_max_width(con));
     LCD_Set_Sys_Font(curr_font);
 
     if ((con->textBlockStart != 0 || con->textBlockEnd != 0)
@@ -55,11 +54,11 @@ uint8_t gr2_cursor_handler(uint16_t id, uint32_t ms_counter, gr2context * con) {
     } else {
         gr2_set_param(id, temp, con);
         if (gr2_get_event(id, con) == EV_PRESSED) {
-        blockEventTimer = ms_counter;
-        con->textBlockStart = 0;
-        con->textBlockEnd = 0;
-        cursor_pre = temp;
-      }
+          blockEventTimer = ms_counter;
+          con->textBlockStart = 0;
+          con->textBlockEnd = 0;
+          cursor_pre = temp;
+        }
     }
     //printf("t: %u bs: %u be: %u\n", temp, con->textBlockStart, con->textBlockEnd);
   }
@@ -72,7 +71,7 @@ uint8_t gr2_cursor_handler(uint16_t id, uint32_t ms_counter, gr2context * con) {
     curr_font = LCD_Get_Font_Size();
     LCD_Set_Sys_Font(gr2_get_param2(id, con));
 
-    temp = LCD_Text_Get_Cursor_Pos(gr2_get_str(id, con), gr2_get_tmx(con), gr2_get_tmy(con));
+    temp = LCD_Text_Get_Cursor_Pos(gr2_get_str(id, con), gr2_get_tmx(con), gr2_get_tmy(con), gr2_get_text_max_width(con));
     
     LCD_Set_Sys_Font(curr_font);
 
@@ -89,6 +88,8 @@ uint8_t gr2_cursor_handler(uint16_t id, uint32_t ms_counter, gr2context * con) {
             con->textBlockStart = temp + 1;
             con->textBlockEnd = gr2_get_param(id, con);
           }
+          //printf("param: %u, temp: %u\n", gr2_get_param(id, con), temp);
+          //printf("bs: %u, be:%u\n", con->textBlockStart, con->textBlockEnd);
           gr2_set_modified(id, con);
           cursor_pre = temp;
         }

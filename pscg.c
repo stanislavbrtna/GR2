@@ -612,7 +612,6 @@ uint8_t gr2_touch_input(
               }
             }
           
-
             // store current absolute touch coordinates for cursor detection
             if (con->pscgElements[i].value == 1) {
               if (gr2_text_get_align(i, con) == GR2_ALIGN_LEFT) {
@@ -621,6 +620,12 @@ uint8_t gr2_touch_input(
                 con->textMouseX = touch_x - a - (gr2_get_text_align_x(i, x1, x2, 10, con) - 52);
               } else if (gr2_text_get_align(i, con) == GR2_ALIGN_CENTER) {
                 con->textMouseX = touch_x - a - (gr2_get_text_align_x(i, x1, x2, 10, con) - 26);
+              }
+              if(gr2_text_get_fit(i, con)) {
+                c=x1+con->pscgElements[i].x2*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll-1 - con->pscgScreens[scrID].cell_space_right;
+                con->textMaxWidth = c - a;
+              } else {
+                con->textMaxWidth = 0;
               }
               con->textMouseY = touch_y - b - 5;
             }

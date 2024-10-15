@@ -54,12 +54,12 @@ void gr2_draw_text(
       }
       if (gr2_text_get_pwd(id, c) == 0) {
         if (c->textBlockStart == c->textBlockEnd) {
+          LCD_set_fitText(gr2_text_get_fit(id, c), x2);
           LCD_Text_Draw_Cursor(x_add + x1, y1 + 5, c->pscgElements[id].str_value, c->pscgElements[id].param, c->text_color);
         }
       } else {
         LCD_Text_Draw_Cursor_Pwd(x_add + x1, y1 + 5, c->pscgElements[id].str_value, c->text_color);
       }
-      
     } else {
       if (c->pscgElements[c->pscgElements[id].screen_id].str_value == 0) {
         LCD_FillRect(x1, y1, x2, y2, c->background_color);
@@ -71,9 +71,6 @@ void gr2_draw_text(
       LCD_DrawText_Pwd(x_add + x1, y1 + PSCG_TEXT_Y_GAP, c->text_color, c->pscgElements[id].str_value);
     } else {
       LCD_DrawText_ext(x_add + x1, y1 + PSCG_TEXT_Y_GAP, c->text_color, c->pscgElements[id].str_value);
-      if (gr2_text_get_fit(id, c)) {
-        c->pscgElements[id].param = LCD_get_fitText_breakpoint();
-      }
     }
     LCD_set_fitText(0, 0);
     LCD_set_text_block(0, 0, 0);
@@ -94,21 +91,16 @@ void gr2_draw_text(
     // grayed out
     if (c->pscgElements[id].value == 1) {
       LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->active_color)); // background
-      if (gr2_text_get_pwd(id, c) == 0) {
-        LCD_Text_Draw_Cursor(x_add + x1, y1 + 5, c->pscgElements[id].str_value, c->pscgElements[id].param, LCD_get_gray16(c->text_color));
-      }
+
     } else {
       LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->background_color));
     }
 
-    LCD_set_fitText(gr2_text_get_fit(id, c), x2);
+    
     if (gr2_text_get_pwd(id, c) == 1) {
       LCD_DrawText_Pwd(x_add + x1, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->text_color), c->pscgElements[id].str_value);
     } else {
       LCD_DrawText_ext(x_add + x1, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->text_color), c->pscgElements[id].str_value);
-      if (gr2_text_get_fit(id, c)) {
-        c->pscgElements[id].param = LCD_get_fitText_breakpoint();
-      }
     }
     LCD_set_fitText(0, 0);
     LCD_set_text_block(0, 0, 0);

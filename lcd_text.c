@@ -35,7 +35,6 @@ SOFTWARE.
 
 uint16_t fitTextMax;
 uint8_t fitText;
-int32_t fitTextBreakpoint;
 const uint8_t * CurrentFont;
 const uint8_t * CurrentFont_cz;
 uint8_t CurrentSize; // current font size
@@ -51,10 +50,6 @@ extern uint16_t background_color;
 void LCD_set_fitText(uint8_t enable, uint16_t max) {
   fitTextMax = max;
   fitText = enable;
-}
-
-int32_t LCD_get_fitText_breakpoint() {
-  return fitTextBreakpoint;
 }
 
 void LCD_Draw_Set_Font(uint8_t *font) {
@@ -196,15 +191,10 @@ uint16_t LCD_get_ext_char_num(uint8_t b1, uint8_t b2) {
 
 void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
   uint32_t i         = 0;
-  uint32_t lw_det    = 0;
-  uint32_t lastspace = 0;
-  uint16_t lastX     = 0;
   uint16_t xLineCnt  = 0;
   uint16_t yLineCnt  = 0;
   uint8_t  outChar   = 0;
   uint16_t yprac;
-
-  fitTextBreakpoint = 0;
 
   while (0 != text[i]) {
 
@@ -225,76 +215,47 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
       }
       i++;
     } else {
-      if (text[i] != '\n') {
-        if (fitText == 1) {
-          if (x + xLineCnt > fitTextMax - CurrentFont[2]) {
-            if (lw_det != lastspace) {
-              LCD_FillRect(
-                           x + lastX,
-                           y + yLineCnt*CurrentFont[3] - LCD_BLOCK_SELECT_SPACER,
-                           fitTextMax,
-                           y + (yLineCnt + 1)*CurrentFont[3],
-                           background_color
-              );
-              i = lastspace;
-              if (fitTextBreakpoint == 0) {
-                fitTextBreakpoint = i;
-              }
-            }
-
-            xLineCnt = 0;
-            lw_det = lastspace;
-            i++; // skip the space
-
-            yLineCnt++;
-            continue;
-          }
-        }
-
-        if (text[i] == ' ') {
-          lastspace = i;
-          lastX = xLineCnt;
-          if (blockStart != blockEnd && i >= blockStart && i < blockEnd) {
-            LCD_FillRect(
-              x + xLineCnt,
-              y + yLineCnt * CurrentFont[3] - LCD_BLOCK_SELECT_SPACER,
-              x + xLineCnt + CurrentFont[2],
-              y + (yLineCnt + 1) * CurrentFont[3],
-              color
-            );
-          }
-
-          xLineCnt += CurrentFont[2];
-        } else if (text[i] == 9) { // tab
-          lastspace = i;
-          lastX = xLineCnt;
-          xLineCnt =  (xLineCnt/(CurrentFont[2] * 4) + 1) * (CurrentFont[2] * 4);
-        } else {
-          outChar = text[i];
-
-          if (blockStart != blockEnd && i >= blockStart && i < blockEnd) {
-            LCD_FillRect(
-              x + xLineCnt,
-              y + yLineCnt * CurrentFont[3] - LCD_BLOCK_SELECT_SPACER,
-              x + xLineCnt + LCD_Char_Get_Width(outChar, CurrentFont),
-              y + (yLineCnt + 1) * CurrentFont[3],
-              color
-            );
-            xLineCnt += LCD_DrawChar(x + xLineCnt, y + yLineCnt * CurrentFont[3], blockColor, outChar, CurrentFont);
-          } else {
-            xLineCnt += LCD_DrawChar(x + xLineCnt, y + yLineCnt * CurrentFont[3], color, outChar, CurrentFont);
-          }
-          
-        }
-
-      } else {
+      if (text[i] == '\n') {
         xLineCnt = 0;
         yLineCnt++;
-
-        if (fitTextBreakpoint == 0 && fitText == 1) {
-          fitTextBreakpoint = i;
+      } else if (text[i] == ' ') {
+        if (blockStart != blockEnd && i >= blockStart && i < blockEnd) {
+          LCD_FillRect(
+            x + xLineCnt,
+            y + yLineCnt * CurrentFont[3] - LCD_BLOCK_SELECT_SPACER,
+            x + xLineCnt + CurrentFont[2],
+            y + (yLineCnt + 1) * CurrentFont[3],
+            color
+          );
         }
-      }
+        xLineCnt += CurrentFont[2];
+        if (fitText == 1) {
+          // next word longer than max
+          if (x + xLineCnt + LCD_Text_Get_Word_Width(&text[i + 1]) + CurrentFont[2] > fitTextMax) {
+            // go to new line
+            xLineCnt = 0;
+            yLineCnt++;
+          }
+        }
+      } else if (text[i] == 9) { // tab
+        xLineCnt =  (xLineCnt/(CurrentFont[2] * 4) + 1) * (CurrentFont[2] * 4);
+      } else {
+        outChar = text[i];
+
+        if (blockStart != blockEnd && i >= blockStart && i < blockEnd) {
+          LCD_FillRect(
+            x + xLineCnt,
+            y + yLineCnt * CurrentFont[3] - LCD_BLOCK_SELECT_SPACER,
+            x + xLineCnt + LCD_Char_Get_Width(outChar, CurrentFont),
+            y + (yLineCnt + 1) * CurrentFont[3],
+            color
+          );
+          xLineCnt += LCD_DrawChar(x + xLineCnt, y + yLineCnt * CurrentFont[3], blockColor, outChar, CurrentFont);
+        } else {
+          xLineCnt += LCD_DrawChar(x + xLineCnt, y + yLineCnt * CurrentFont[3], color, outChar, CurrentFont);
+        }
+        
+      } 
     }
     i++;
   }
@@ -366,6 +327,7 @@ uint16_t LCD_Text_Get_Width(uint8_t *text, uint16_t count) {
   return maxW;
 }
 
+
 uint16_t LCD_Text_Get_Height(uint8_t *text, uint16_t count) {
   uint32_t i = 0;
   uint16_t yLineCnt = 0;
@@ -388,80 +350,128 @@ uint16_t LCD_Text_Get_Height(uint8_t *text, uint16_t count) {
   return yLineCnt*CurrentFont[3];
 }
 
-// předám x a y, ono to vrátí polohu kurzoru
-// text and touch coordinates are passed, cursor position is returned
-uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, uint16_t touch_x, uint16_t touch_y) {
-  uint32_t i        = 0;
-  uint16_t xLineCnt = 0;
-  uint16_t yLineCnt = 0;
-  uint8_t outChar   = 0;
-  uint8_t entFlg    = 0;
-  uint8_t czFlag    = 0;
-  uint16_t xstart   = 0;
-  uint16_t ystart   = 0;
-  uint16_t xstop    = 0;
-  uint16_t ystop    = 0;
+uint16_t LCD_Text_Get_Word_Width(uint8_t *text) {
+  uint16_t width = 0;
+  uint32_t i = 0;
+  while(text[i] != 0) {
+    if (text[i] > 128) {
+      width += LCD_Char_Get_Width(LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
+      i += 2;
+      continue;
 
-  while (0 != text[i]) {
-      czFlag = 0;
-
-      xstart = xLineCnt;
-      ystart = yLineCnt * CurrentFont[3];
-
-      if (text[i] > 128) {
-        czFlag = 1;
-        xLineCnt += LCD_Char_Get_Width(LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
-        i++;
-
-        xstop = xLineCnt;
-        ystop = (yLineCnt + 1) * CurrentFont[3];
-    }else if (text[i] != '\n') {
-      if (text[i] == ' ') {
-        xLineCnt += CurrentFont[2];
-      } else if (text[i] == 9) { // tab
-        xLineCnt =  (xLineCnt/(CurrentFont[2] * 4) + 1) * (CurrentFont[2] * 4);
-      } else {
-        outChar = text[i];
-        xLineCnt += LCD_Char_Get_Width(outChar, CurrentFont);
-      }
-      xstop = xLineCnt;
-      ystop = (yLineCnt + 1)*CurrentFont[3];
+    } else if (text[i] == '\n') {
+      return width;
+    } else if (text[i] == ' ') {
+      return width;
+    } else if (text[i] == 9) {
+      return width;
     } else {
-
-      xstop = 0xffff;
-      ystop = (yLineCnt + 1) * CurrentFont[3];
-      entFlg = 1;
-
-      xLineCnt = 0;
-      yLineCnt++;
-    }
-
-    if(entFlg == 0) {
-      xstop = xLineCnt;
-      ystop = (yLineCnt + 1) * CurrentFont[3];
-    } else {
-      entFlg = 0;
-    }
-
-    //LCD_DrawRectangle(xstart + 7, ystart + 40, xstop + 7, ystop + 40, 0);
-
-    if ((touch_x >= xstart) && (touch_x < xstop) && (touch_y >= ystart) && (touch_y < ystop)) {
-      return i - czFlag;
+      width += LCD_Char_Get_Width(text[i], CurrentFont);
     }
     i++;
   }
 
-  xstop = 0xffff;
-  ystop = 0xffff;
-  if ((touch_x > xstart) && (touch_x < xstop) && (touch_y > ystart) && (touch_y < ystop)) {
+  return width;
+}
+
+// text and touch coordinates are passed, cursor position is returned
+uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, int16_t touch_x, int16_t touch_y, uint16_t max_w) {
+  uint32_t i        = 0;
+  int16_t  xLineCnt = 0;
+  int16_t  yLineCnt = 0;
+  uint8_t  czFlag   = 0;
+  int16_t  xstart   = 0;
+  int16_t  ystart   = 0;
+  int16_t  xstop    = 0;
+  int16_t  ystop    = 0;
+  uint16_t char_w   = 0;
+
+  while (0 != text[i]) {
+    uint8_t eol = 0;
+    czFlag = 0;
+    if (text[i] > 128) {
+      czFlag = 1;
+      char_w = LCD_Char_Get_Width(LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
+      xLineCnt += char_w;
+      i++;
+    } else if (text[i] == '\n') {
+      char_w = xLineCnt;
+      xLineCnt = 0;
+      yLineCnt++;
+      eol = 1;
+    } else if(text[i] == ' ') {
+      xLineCnt += CurrentFont[2];
+      char_w = CurrentFont[2];
+      if (max_w != 0) {
+        // next word longer than max, 10 px is the default text offset
+        if (xLineCnt + LCD_Text_Get_Word_Width(&text[i + 1]) + CurrentFont[2] + 10 > max_w) {
+          // go to new line
+          char_w = xLineCnt - CurrentFont[2];
+          xLineCnt = 0;
+          yLineCnt++;
+          eol = 1;
+        }
+      }
+    } else if (text[i] == 9) { // tab
+      char_w = (xLineCnt/(CurrentFont[2] * 4) + 1) * (CurrentFont[2] * 4) - xLineCnt; 
+      xLineCnt = (xLineCnt/(CurrentFont[2] * 4) + 1) * (CurrentFont[2] * 4);
+    } else {
+      char_w = LCD_Char_Get_Width(text[i], CurrentFont);
+      xLineCnt += char_w;
+    }
+    
+    if(eol) {
+      xstart = char_w;
+      ystart = (yLineCnt - 1) * CurrentFont[3];
+      xstop  = 0x0fff;
+      ystop  = yLineCnt * CurrentFont[3];
+    } else {
+      xstart = xLineCnt - char_w;
+      ystart = yLineCnt * CurrentFont[3];
+      xstop  = xLineCnt;
+      ystop  = (yLineCnt + 1)*CurrentFont[3];
+    }
+
+#ifdef LCD_CURSOR_TEST
+    LCD_FillRect(xstart + 7, ystart + 40, xstop + 7, ystop + 40, LCD_MixColor(255, 255, 255));
+    LCD_DrawRectangle(xstart + 7, ystart + 40, xstop + 7, ystop + 40, 0);
+#endif
+
+    if (((touch_x >= xstart) || (touch_x >= xstart - 7 && touch_x < 0))
+        && (touch_x < xstop) && (touch_y >= ystart) && (touch_y < ystop)
+    ){
+#ifdef LCD_CURSOR_TEST
+      LCD_FillRect(xstart + 7, ystart + 40, xstop + 7, ystop + 40, LCD_MixColor(255, 0, 0));
+#endif
+      return i - czFlag;
+    }
+
+    i++;
+  }
+ 
+  if ((touch_x > 0) && (touch_y > 0)) {
+#ifdef LCD_CURSOR_TEST
+    LCD_FillRect(xstart + 7, ystart + 40, xstop + 7, ystop + 40, LCD_MixColor(0, 255, 0));
+#endif
     return i;
   }
+
+#ifdef LCD_CURSOR_TEST
+  LCD_FillRect(7, 40, 7 + CurrentFont[2], 40 + CurrentFont[3], LCD_MixColor(0, 255, 0));
+#endif
   return 0;
 }
+
+void LCD_Text_Draw_Cursor_Ext(int16_t x, int16_t y, uint8_t *text, uint16_t pos, uint16_t max_w, uint16_t Color);
 
 void LCD_Text_Draw_Cursor(int16_t x, int16_t y, uint8_t *text, uint16_t pos, uint16_t Color) {
   uint16_t xplus = 0;
   uint16_t yplus = 0;
+
+  if (fitText == 1) {
+    LCD_Text_Draw_Cursor_Ext(x, y, text, pos, fitTextMax - x, Color);
+    return;
+  }
 
   if(pos != 0) {
     xplus = LCD_Text_Get_Width(text, pos);
@@ -469,6 +479,69 @@ void LCD_Text_Draw_Cursor(int16_t x, int16_t y, uint8_t *text, uint16_t pos, uin
   }
 
   LCD_DrawLine(x + xplus, y + yplus, x + xplus, y + yplus + CurrentFont[3], Color);
+}
+
+// TODO: merge logic in this and in LCD_Text_Get_Cursor_Pos
+void LCD_Text_Draw_Cursor_Ext(int16_t x, int16_t y, uint8_t *text, uint16_t pos, uint16_t max_w, uint16_t Color) {
+  uint32_t i        = 0;
+  uint16_t xLineCnt = 0;
+  uint16_t yLineCnt = 0;
+  uint8_t  czFlag   = 0;
+  uint16_t xstart   = 0;
+  uint16_t ystart   = 0;
+  uint16_t char_w   = 0; 
+
+  while (0 != text[i]) {
+    uint8_t eol = 0;
+    czFlag = 0;
+    if (text[i] > 128) {
+      czFlag = 1;
+      char_w = LCD_Char_Get_Width(LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
+      xLineCnt += char_w;
+      i++;
+    } else if (text[i] == '\n') {
+      char_w = xLineCnt;
+      xLineCnt = 0;
+      yLineCnt++;
+      eol = 1;
+    } else if(text[i] == ' ') {
+      xLineCnt += CurrentFont[2];
+      char_w = CurrentFont[2];
+      if (max_w != 0) {
+        // next word longer than max
+        if (xLineCnt + LCD_Text_Get_Word_Width(&text[i+1]) + CurrentFont[2] > max_w) {
+          // go to new line
+          char_w = xLineCnt - CurrentFont[2];
+          xLineCnt = 0;
+          yLineCnt++;
+          eol = 1;
+        }
+      }
+    } else if (text[i] == 9) { // tab
+      char_w = (xLineCnt/(CurrentFont[2] * 4) + 1) * (CurrentFont[2] * 4) - xLineCnt; 
+      xLineCnt = (xLineCnt/(CurrentFont[2] * 4) + 1) * (CurrentFont[2] * 4);
+    } else {
+      char_w = LCD_Char_Get_Width(text[i], CurrentFont);
+      xLineCnt += char_w;
+    }
+    
+    if(eol) {
+      xstart = char_w;
+      ystart = (yLineCnt - 1) * CurrentFont[3];
+    } else {
+      xstart = xLineCnt - char_w;
+      ystart = yLineCnt * CurrentFont[3];
+    }
+
+    if(i == pos) {  
+      LCD_DrawLine(x + xstart, y + ystart, x + xstart, y + ystart + CurrentFont[3], Color);
+      return;
+    }
+    i++;
+  }
+
+  xstart += char_w;
+  LCD_DrawLine(x + xstart, y + ystart, x + xstart, y + ystart + CurrentFont[3], Color);
 }
 
 
@@ -497,11 +570,11 @@ uint16_t LCD_DrawChar(int16_t x, int16_t y, uint16_t color, uint16_t znak, const
     cv = font[znak + 6 - font[4]];
     cpos = font[5] + 6; //96+6 - první znak
 
-    for (a = 6; a < (uint32_t)(znak - font[4] + 6); a++) { //napočítáme pozici znaku
+    for (a = 6; a < (uint32_t)(znak - font[4] + 6); a++) { // get char position
       cpos += font[a] * FontSize;
     }
 
-    for (a = 0; a < FontSize; a++) { //je to po deseti bitech na sloupeček
+    for (a = 0; a < FontSize; a++) { // fontSize per column
       for (b = 0; b < cv; b++) {
         for(d = 0; d < 8; d++) {
           if (font[cpos + cposIncr] & (1 << d)) {
@@ -521,6 +594,7 @@ uint16_t LCD_DrawChar(int16_t x, int16_t y, uint16_t color, uint16_t znak, const
     }
     return cv + font[2]/9 + font[2]%9;
   } else {
+    // unknown char...
     if (znak != 0) {
       LCD_DrawRectangle(x + 1, y + 1, x + font[2] - 2 , y + font[3] - 2, color);
       return font[2];
