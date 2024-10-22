@@ -91,7 +91,6 @@ void gr2_draw_text(
     // grayed out
     if (c->pscgElements[id].value == 1) {
       LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->active_color)); // background
-
     } else {
       LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->background_color));
     }

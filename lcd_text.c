@@ -189,6 +189,31 @@ uint16_t LCD_get_ext_char_num(uint8_t b1, uint8_t b2) {
 
 #define LCD_BLOCK_SELECT_SPACER 3*(yLineCnt == 0) // make the first line of the block taller
 
+static inline uint16_t LCD_Text_Get_Word_Width(uint8_t *text) {
+  uint16_t width = 0;
+  uint32_t i = 0;
+  while(text[i] != 0) {
+    if (text[i] > 128) {
+      width += LCD_Char_Get_Width(LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
+      i += 2;
+      continue;
+
+    } else if (text[i] == '\n') {
+      return width;
+    } else if (text[i] == ' ') {
+      return width;
+    } else if (text[i] == 9) {
+      return width;
+    } else {
+      width += LCD_Char_Get_Width(text[i], CurrentFont);
+    }
+    i++;
+  }
+
+  return width;
+}
+
+
 void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
   uint32_t i         = 0;
   uint16_t xLineCnt  = 0;
@@ -305,30 +330,6 @@ uint16_t LCD_Text_Get_Height(uint8_t *text, uint16_t count) {
   return h;
 }
 
-
-uint16_t LCD_Text_Get_Word_Width(uint8_t *text) {
-  uint16_t width = 0;
-  uint32_t i = 0;
-  while(text[i] != 0) {
-    if (text[i] > 128) {
-      width += LCD_Char_Get_Width(LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
-      i += 2;
-      continue;
-
-    } else if (text[i] == '\n') {
-      return width;
-    } else if (text[i] == ' ') {
-      return width;
-    } else if (text[i] == 9) {
-      return width;
-    } else {
-      width += LCD_Char_Get_Width(text[i], CurrentFont);
-    }
-    i++;
-  }
-
-  return width;
-}
 
 // text and touch coordinates are passed, cursor position is returned
 uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, int16_t touch_x, int16_t touch_y, uint16_t max_w) {
