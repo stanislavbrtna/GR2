@@ -432,7 +432,7 @@ uint8_t touch_in_element(
             uint16_t touch_x,
             uint16_t touch_y,
             int16_t x1,
-            uint16_t y1,
+            int16_t y1,
             int16_t x2,
             int16_t y2,
             uint16_t i,
@@ -593,14 +593,11 @@ uint8_t gr2_touch_input(
       if (con->pscgElements[i].type == GR2_TYPE_TEXT) {
         if ( touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
           if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con)) {
+            COUNT_A_B_C_D
 
             if (event == EV_PRESSED) {
               con->pscg_active_element = i;
             }
-
-            a = get_a(touch_x, touch_y, x1, y1, x2, y2, i, screen, con);
-            b = y1 + con->pscgElements[i].y1 * con->pscgScreens[scrID].y_cell - con->pscgScreens[scrID].y_scroll;
-
             
             if (gr2_text_get_editable(i, con)) {
               if (event == EV_RELEASED) {
@@ -617,12 +614,11 @@ uint8_t gr2_touch_input(
               if (gr2_text_get_align(i, con) == GR2_ALIGN_LEFT) {
                 con->textMouseX = touch_x - a - 10;
               } else if (gr2_text_get_align(i, con) == GR2_ALIGN_RIGHT) {
-                con->textMouseX = touch_x - a - (gr2_get_text_align_x(i, x1, x2, 10, con) - 52);
+                con->textMouseX = touch_x - a - (gr2_get_text_align_x(i, a, c, 10, con));
               } else if (gr2_text_get_align(i, con) == GR2_ALIGN_CENTER) {
-                con->textMouseX = touch_x - a - (gr2_get_text_align_x(i, x1, x2, 10, con) - 26);
+                con->textMouseX = touch_x - a - (gr2_get_text_align_x(i, a, c, 10, con));
               }
               if(gr2_text_get_fit(i, con)) {
-                c=x1+con->pscgElements[i].x2*con->pscgScreens[scrID].x_cell-con->pscgScreens[scrID].x_scroll-1 - con->pscgScreens[scrID].cell_space_right;
                 con->textMaxWidth = c - a;
               } else {
                 con->textMaxWidth = 0;

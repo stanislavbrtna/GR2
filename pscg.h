@@ -175,6 +175,9 @@ void gr2_activate_text(uint16_t id, gr2context * c);
 void gr2_text_deactivate(gr2context * c);
 uint8_t gr2_get_text_active(uint16_t id, gr2context * c);
 
+uint16_t gr2_get_text_width(uint16_t id, uint16_t pos, gr2context * c);
+uint16_t gr2_get_text_height(uint16_t id, uint16_t pos, gr2context * c);
+
 // events
 gr2EventType gr2_get_event(uint16_t id, gr2context * c);
 void gr2_set_event(uint16_t id, gr2EventType val, gr2context * c);

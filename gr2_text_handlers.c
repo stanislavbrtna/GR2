@@ -107,3 +107,53 @@ uint8_t gr2_cursor_handler(uint16_t id, uint32_t ms_counter, gr2context * con) {
 
   return 0;
 }
+
+
+uint16_t gr2_get_text_width(uint16_t id, uint16_t pos, gr2context * c) {
+  uint16_t w;
+  uint16_t h;
+  uint16_t max_w = 0;
+
+  uint8_t currFont = LCD_Get_Font_Size();
+  LCD_Set_Sys_Font(c->pscgElements[id].param2);
+
+  if(gr2_text_get_fit(id, c)) {
+
+    uint16_t scrID = c->pscgElements[c->pscgElements[id].screen_id].value;
+    int16_t x1 =c->pscgElements[id].x1*c->pscgScreens[scrID].x_cell-c->pscgScreens[scrID].x_scroll + c->pscgScreens[scrID].cell_space_left;
+    int16_t x2 =c->pscgElements[id].x2*c->pscgScreens[scrID].x_cell-c->pscgScreens[scrID].x_scroll-1 - c->pscgScreens[scrID].cell_space_right;
+    max_w = x2 - x1; 
+  }
+
+  LCD_Text_Get_WH(c->pscgElements[id].str_value, pos, max_w, &w, &h);
+
+  LCD_Set_Sys_Font(currFont);
+
+  return w;
+}
+
+
+uint16_t gr2_get_text_height(uint16_t id, uint16_t pos, gr2context * c) {
+  uint16_t w;
+  uint16_t h;
+  uint16_t max_w = 0;
+
+  uint8_t currFont = LCD_Get_Font_Size();
+  LCD_Set_Sys_Font(c->pscgElements[id].param2);
+
+  if(gr2_text_get_fit(id, c)) {
+
+    uint16_t scrID = c->pscgElements[c->pscgElements[id].screen_id].value;
+    int16_t x1 =c->pscgElements[id].x1*c->pscgScreens[scrID].x_cell + c->pscgScreens[scrID].cell_space_left;
+    int16_t x2 =c->pscgElements[id].x2*c->pscgScreens[scrID].x_cell - c->pscgScreens[scrID].cell_space_right;
+    max_w = x2 - x1;
+  }
+
+  LCD_Text_Get_WH(c->pscgElements[id].str_value, pos, max_w, &w, &h);
+
+  h += LCD_Draw_Get_Font_Height(c->pscgElements[id].param2);
+
+  LCD_Set_Sys_Font(currFont);
+
+  return h;
+}

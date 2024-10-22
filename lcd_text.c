@@ -261,6 +261,7 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
   }
 }
 
+
 void LCD_DrawText_Pwd(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
   uint16_t xLineCnt = 0;
   uint32_t i        = 0;
@@ -270,6 +271,7 @@ void LCD_DrawText_Pwd(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
     i++;
   }
 }
+
 
 void LCD_Text_Draw_Cursor_Pwd(int16_t x, int16_t y, uint8_t *text, uint16_t Color) {
   uint16_t xplus = 0;
@@ -283,72 +285,26 @@ void LCD_Text_Draw_Cursor_Pwd(int16_t x, int16_t y, uint8_t *text, uint16_t Colo
   LCD_DrawLine(x + xplus, y, x + xplus, y + CurrentFont[3], Color);
 }
 
-// returns width of a string, up to the count paramterer,
-// if count == 0, width of whole string is returned (this si used for cursor drawing)
+// returns width of a string, up to the count argument,
 uint16_t LCD_Text_Get_Width(uint8_t *text, uint16_t count) {
-  uint32_t i        = 0;
-  uint16_t xLineCnt = 0;
-  uint16_t yLineCnt = 0;
-  uint8_t outChar   = 0;
-  uint16_t maxW     = 0;
+  uint16_t w;
+  uint16_t h;
 
-  while (0 != text[i]) {
-      if (text[i] > 128){
-        xLineCnt += LCD_Char_Get_Width(LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
-        i++;
-      }else if (text[i] != '\n') {
-        if (text[i] == ' ') {
-          xLineCnt += CurrentFont[2];
-        } else if (text[i] == 9) { // tab
-          if (CurrentFont[2] != 0) {
-            xLineCnt = (xLineCnt/(CurrentFont[2] * 4) + 1) * (CurrentFont[2] * 4);
-          }
-        } else {
-          outChar = text[i];
-          xLineCnt += LCD_Char_Get_Width(outChar, CurrentFont);
-        }
-    } else {
-      if (xLineCnt > maxW) {
-        maxW = xLineCnt;
-      }
-      xLineCnt = 0;
-      yLineCnt++;
-    }
-    i++;
-    if((count != 0) && (i == count)) {
-      return xLineCnt;
-    }
-  }
+  LCD_Text_Get_WH(text, count, fitTextMax, &w, &h);
 
-  if (xLineCnt > maxW) {
-    maxW = xLineCnt;
-  }
-
-  return maxW;
+  return w;
 }
 
 
 uint16_t LCD_Text_Get_Height(uint8_t *text, uint16_t count) {
-  uint32_t i = 0;
-  uint16_t yLineCnt = 0;
+  uint16_t w;
+  uint16_t h;
 
-  while (0 != text[i]) {
-    if (text[i] == '\n') {
-       // abychom nepřičetli, pokud je znakem enter, dělá to pak bordel
-       // we wont count last carriage return
-      if (i != count) {
-        yLineCnt++;
-      }
-    }
+  LCD_Text_Get_WH(text, count, fitTextMax, &w, &h);
 
-    if((count != 0) && (i == count)) {
-      break;
-    }
-    i++;
-  }
-
-  return yLineCnt*CurrentFont[3];
+  return h;
 }
+
 
 uint16_t LCD_Text_Get_Word_Width(uint8_t *text) {
   uint16_t width = 0;
@@ -404,7 +360,7 @@ uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, int16_t touch_x, int16_t touch_y
       char_w = CurrentFont[2];
       if (max_w != 0) {
         // next word longer than max, 10 px is the default text offset
-        if (xLineCnt + LCD_Text_Get_Word_Width(&text[i + 1]) + CurrentFont[2] + 10 > max_w) {
+        if (xLineCnt + LCD_Text_Get_Word_Width(&text[i + 1]) + CurrentFont[2] > max_w) {
           // go to new line
           char_w = xLineCnt - CurrentFont[2];
           xLineCnt = 0;
@@ -465,20 +421,7 @@ uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, int16_t touch_x, int16_t touch_y
 void LCD_Text_Draw_Cursor_Ext(int16_t x, int16_t y, uint8_t *text, uint16_t pos, uint16_t max_w, uint16_t Color);
 
 void LCD_Text_Draw_Cursor(int16_t x, int16_t y, uint8_t *text, uint16_t pos, uint16_t Color) {
-  uint16_t xplus = 0;
-  uint16_t yplus = 0;
-
-  if (fitText == 1) {
-    LCD_Text_Draw_Cursor_Ext(x, y, text, pos, fitTextMax - x, Color);
-    return;
-  }
-
-  if(pos != 0) {
-    xplus = LCD_Text_Get_Width(text, pos);
-    yplus = LCD_Text_Get_Height(text, pos);
-  }
-
-  LCD_DrawLine(x + xplus, y + yplus, x + xplus, y + yplus + CurrentFont[3], Color);
+  LCD_Text_Draw_Cursor_Ext(x, y, text, pos, fitTextMax - x, Color);
 }
 
 // TODO: merge logic in this and in LCD_Text_Get_Cursor_Pos
@@ -489,10 +432,11 @@ void LCD_Text_Draw_Cursor_Ext(int16_t x, int16_t y, uint8_t *text, uint16_t pos,
   uint8_t  czFlag   = 0;
   uint16_t xstart   = 0;
   uint16_t ystart   = 0;
-  uint16_t char_w   = 0; 
+  uint16_t char_w   = 0;
+  uint8_t  eol      = 0;
 
   while (0 != text[i]) {
-    uint8_t eol = 0;
+    eol = 0;
     czFlag = 0;
     if (text[i] > 128) {
       czFlag = 1;
@@ -540,7 +484,13 @@ void LCD_Text_Draw_Cursor_Ext(int16_t x, int16_t y, uint8_t *text, uint16_t pos,
     i++;
   }
 
-  xstart += char_w;
+  if(eol) {
+    xstart = 0;
+    ystart = (yLineCnt) * CurrentFont[3];
+  } else {
+    xstart += char_w;
+  }
+
   LCD_DrawLine(x + xstart, y + ystart, x + xstart, y + ystart + CurrentFont[3], Color);
 }
 
@@ -603,6 +553,7 @@ uint16_t LCD_DrawChar(int16_t x, int16_t y, uint16_t color, uint16_t znak, const
   return 0;
 }
 
+
 uint16_t LCD_Char_Get_Width(uint16_t znak, const uint8_t *font) {
   uint16_t cv;
 
@@ -611,4 +562,86 @@ uint16_t LCD_Char_Get_Width(uint16_t znak, const uint8_t *font) {
     return cv + font[2]/9 + font[2]%9;
   }
   return 0;
+}
+
+
+void LCD_Text_Get_WH(uint8_t *text, uint16_t pos, uint16_t max_w, uint16_t *width, uint16_t *height) {
+  uint32_t i         = 0;
+  uint16_t xLineCnt  = 0;
+  uint16_t yLineCnt  = 0;
+  uint8_t  czFlag    = 0;
+  uint16_t xstart    = 0;
+  uint16_t ystart    = 0;
+  uint16_t char_w    = 0;
+  uint8_t  eol       = 0;
+  uint16_t max_width = 0;
+
+  *width  = 0;
+  *height = 0;
+
+  while (0 != text[i]) {
+    eol = 0;
+    czFlag = 0;
+    if (text[i] > 128) {
+      czFlag = 1;
+      char_w = LCD_Char_Get_Width(LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
+      xLineCnt += char_w;
+      i++;
+    } else if (text[i] == '\n') {
+      char_w = xLineCnt;
+      xLineCnt = 0;
+      yLineCnt++;
+      eol = 1;
+    } else if(text[i] == ' ') {
+      xLineCnt += CurrentFont[2];
+      char_w = CurrentFont[2];
+      if (max_w != 0) {
+        // next word longer than max
+        if (xLineCnt + LCD_Text_Get_Word_Width(&text[i+1]) + CurrentFont[2] > max_w) {
+          // go to new line
+          char_w = xLineCnt - CurrentFont[2];
+          xLineCnt = 0;
+          yLineCnt++;
+          eol = 1;
+        }
+      }
+    } else if (text[i] == 9) { // tab
+      char_w = (xLineCnt/(CurrentFont[2] * 4) + 1) * (CurrentFont[2] * 4) - xLineCnt; 
+      xLineCnt = (xLineCnt/(CurrentFont[2] * 4) + 1) * (CurrentFont[2] * 4);
+    } else {
+      char_w = LCD_Char_Get_Width(text[i], CurrentFont);
+      xLineCnt += char_w;
+    }
+
+    if(xLineCnt > max_width) {
+      max_width = xLineCnt;
+    }
+    
+    if(eol) {
+      xstart = char_w;
+      ystart = (yLineCnt - 1) * CurrentFont[3];
+    } else {
+      xstart = xLineCnt - char_w;
+      ystart = yLineCnt * CurrentFont[3];
+    }
+
+    if(i == pos && pos != 0) {
+      *width  = max_width;
+      *height = yLineCnt * CurrentFont[3];
+      return;
+    }
+    i++;
+  }
+
+  if(eol) {
+    xstart = 0;
+    ystart = (yLineCnt) * CurrentFont[3];
+  } else {
+    xstart += char_w;
+  }
+
+  *width  = max_width;
+  *height = yLineCnt * CurrentFont[3];
+
+  //printf("orig: w:%u h:%u max:%u\n", *width, *height, max_w);
 }
