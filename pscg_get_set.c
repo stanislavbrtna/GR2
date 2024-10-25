@@ -609,6 +609,10 @@ void gr2_set_yscroll_initial(uint16_t id, int16_t val, gr2context * c) {
 
 void gr2_set_cell_spacing(uint16_t id, uint16_t left, uint16_t right, uint16_t top, uint16_t bottom, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if(!c->pscgElements[id].valid || !c->pscgScreens[c->pscgElements[id].value].valid) {
+		printf("%s: Warn: Element not valid!\n", __FUNCTION__);
+		return;
+	}
 	gr2_set_cell_space_left(id, left, c);
 	gr2_set_cell_space_right(id, right, c);
 	gr2_set_cell_space_top(id, top, c);
@@ -649,6 +653,10 @@ void gr2_set_cell_space_bottom(uint16_t id, uint16_t val, gr2context * c) {
 
 void gr2_set_x_cell(uint16_t id, uint16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if(!c->pscgElements[id].valid  || !c->pscgScreens[c->pscgElements[id].value].valid) {
+		printf("%s: Warn: Element not valid!\n", __FUNCTION__);
+		return;
+	}
 	if (val != c->pscgScreens[c->pscgElements[id].value].x_cell) {
 		c->pscgElements[id].modified = 1;
 	}
@@ -657,6 +665,10 @@ void gr2_set_x_cell(uint16_t id, uint16_t val, gr2context * c) {
 
 void gr2_set_y_cell(uint16_t id, uint16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if(!c->pscgElements[id].valid  || !c->pscgScreens[c->pscgElements[id].value].valid) {
+		printf("%s: Warn: Element not valid!\n", __FUNCTION__);
+		return;
+	}
 	if (val != c->pscgScreens[c->pscgElements[id].value].y_cell) {
 		c->pscgElements[id].modified = 1;
 	}
