@@ -33,12 +33,17 @@ SOFTWARE.
 #include "fonts/roboto12.h"
 #include "fonts/roboto12_cz.h"
 
-uint16_t fitTextMax;
-uint8_t fitText;
+#include "fonts/font12mono.h"
+#include "fonts/font12mono_cz.h"
+
+
 const uint8_t * CurrentFont;
 const uint8_t * CurrentFont_cz;
-uint8_t CurrentSize; // current font size
-int32_t fontCorector_cz;
+
+uint16_t fitTextMax;
+uint8_t  fitText;
+uint8_t  CurrentSize; // current font size
+int32_t  fontCorector_cz;
 uint32_t blockStart;
 uint32_t blockEnd;
 uint16_t blockColor;
@@ -50,23 +55,6 @@ extern uint16_t background_color;
 void LCD_set_fitText(uint8_t enable, uint16_t max) {
   fitTextMax = max;
   fitText = enable;
-}
-
-void LCD_Draw_Set_Font(uint8_t *font) {
-
-  if (font == font18) {
-    fontCorector_cz = -3;
-    CurrentFont_cz  = font18_cz;
-    CurrentSize     = 18;
-  }
-
-  if (font == font32) {
-    fontCorector_cz = -5;
-    CurrentFont_cz  = font32_cz;
-    CurrentSize     = 32;
-  }
-
-  CurrentFont = font;
 }
 
 uint16_t LCD_Draw_Get_Font_Height() {
@@ -89,6 +77,13 @@ void LCD_Set_Sys_Font(uint8_t size) {
     fontCorector_cz = -2;
     CurrentFont     = roboto12;
     CurrentFont_cz  = roboto12_cz;
+  }
+
+  if (size == 13) {
+    CurrentSize     = 13;
+    fontCorector_cz = -2;
+    CurrentFont     = font12mono;
+    CurrentFont_cz  = font12mono_cz;
   }
 
   if (size == 18) {
