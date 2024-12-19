@@ -417,7 +417,7 @@ uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, int16_t touch_x, int16_t touch_y
 void LCD_Text_Draw_Cursor_Ext(int16_t x, int16_t y, uint8_t *text, uint16_t pos, uint16_t max_w, uint16_t Color);
 
 void LCD_Text_Draw_Cursor(int16_t x, int16_t y, uint8_t *text, uint16_t pos, uint16_t Color) {
-  LCD_Text_Draw_Cursor_Ext(x, y, text, pos, fitTextMax - x, Color);
+  LCD_Text_Draw_Cursor_Ext(x, y, text, pos, (fitTextMax - x) * (int16_t)fitText, Color);
 }
 
 // TODO: merge logic in this and in LCD_Text_Get_Cursor_Pos
