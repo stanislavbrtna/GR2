@@ -81,7 +81,7 @@ void LCD_Set_Sys_Font(uint8_t size) {
 
   if (size == 13) {
     CurrentSize     = 13;
-    fontCorector_cz = -2;
+    fontCorector_cz = -3;
     CurrentFont     = font12mono;
     CurrentFont_cz  = font12mono_cz;
   }
