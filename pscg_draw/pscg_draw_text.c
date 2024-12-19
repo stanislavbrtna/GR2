@@ -46,9 +46,17 @@ void gr2_draw_text(
 
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     if (c->pscgElements[id].value == 1) { // active
-      LCD_FillRect(x1, y1, x2, y2, c->active_color);
+      uint16_t text_bg = c->active_color;
+      uint16_t text_select = c->fill_color;
+
+      if(gr2_text_get_invert_select(id, c)) {
+        text_bg = c->fill_color;
+        text_select = c->active_color;
+      }
+
+      LCD_FillRect(x1, y1, x2, y2, text_bg);
       if (c->textBlockStart != 0 || c->textBlockEnd != 0) {
-        LCD_set_text_block(c->textBlockStart - 1, c->textBlockEnd, c->fill_color);
+        LCD_set_text_block(c->textBlockStart - 1, c->textBlockEnd, text_select);
       } else {
         LCD_set_text_block(0, 0, 0);
       }

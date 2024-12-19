@@ -44,7 +44,6 @@ void LCD_set_fitText(uint8_t enable, uint16_t max);
 
 uint16_t LCD_DrawChar(int16_t x, int16_t y, uint16_t color, uint16_t znak, const uint8_t *font);
 uint16_t LCD_Char_Get_Width(uint16_t znak, const uint8_t *font);
-//uint16_t LCD_Text_Get_Word_Width(uint8_t *text);
 
 void LCD_Text_Get_WH(uint8_t *text, uint16_t pos, uint16_t max_w, uint16_t *width, uint16_t *height);
 

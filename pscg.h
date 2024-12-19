@@ -171,6 +171,9 @@ uint8_t gr2_text_get_fit(uint16_t id, gr2context * c);
 void gr2_text_set_pwd(uint16_t id, uint16_t val, gr2context * c);
 uint8_t gr2_text_get_pwd(uint16_t id, gr2context * c);
 
+void gr2_text_set_invert_select(uint16_t id, uint16_t val, gr2context * c);
+uint8_t gr2_text_get_invert_select(uint16_t id, gr2context * c);
+
 void gr2_activate_text(uint16_t id, gr2context * c);
 void gr2_text_deactivate(gr2context * c);
 uint8_t gr2_get_text_active(uint16_t id, gr2context * c);

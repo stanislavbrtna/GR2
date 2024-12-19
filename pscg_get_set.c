@@ -215,6 +215,25 @@ uint8_t gr2_text_get_editable(uint16_t id, gr2context * c) {
 	}
 }
 
+void gr2_text_set_invert_select(uint16_t id, uint16_t val, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if (val == 1) {
+		c->pscgElements[id].status_reg |= GR2_SELECT_INV;
+	} else {
+		c->pscgElements[id].status_reg &= ~GR2_SELECT_INV;
+	}
+	c->pscgElements[id].modified = 1;
+}
+
+uint8_t gr2_text_get_invert_select(uint16_t id, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
+	if (c->pscgElements[id].status_reg & GR2_SELECT_INV) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
 void gr2_text_set_fit(uint16_t id, uint16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
 	if (c->pscgElements[id].type == GR2_TYPE_TEXT) {

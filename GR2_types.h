@@ -25,6 +25,7 @@ SOFTWARE.
 
 #define GR2_TEXT_EDITABLE_B 1
 #define GR2_TEXT_FIT_B      2
+#define GR2_SELECT_INV      4
 #define GR2_BLOCK_TEXT_B  256
 #define GR2_GHOST_B       512
 #define GR2_SELECT_B     1024
@@ -60,13 +61,13 @@ typedef struct {
   volatile int32_t  prev_val; // previous value, used for redraw
   volatile int32_t  param;
   volatile uint16_t param2;   //param 2, mostly for storing font sizes
-  volatile uint16_t modified; // modified flag, modified elements are redrawn
+  volatile uint8_t  modified; // modified flag, modified elements are redrawn
   
   volatile uint16_t status_reg;
   // text:
   // bit0 - editable 1
   // bit1 - fit 2
-  // bit2 4
+  // bit2 - text select invert 4
   // bit3 8
   // bit4 16
   // bit5 32

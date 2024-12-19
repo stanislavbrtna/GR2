@@ -513,7 +513,6 @@ uint8_t gr2_touch_input(
   for (i = 1; i <= con->maxElementsId; i++) {
     if ((con->pscgElements[i].screen_id == screen) && (i != screen) && (con->pscgElements[i].valid == 1) && (con->pscgElements[i].visible == 1)) {
       if (con->pscgElements[i].type == GR2_TYPE_SCREEN) {
-        //a musí zvostat pošahaný, aby screen zjistil, že a je pošahaný
         COUNT_A_B_C_D
         if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
           if (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con)) {
