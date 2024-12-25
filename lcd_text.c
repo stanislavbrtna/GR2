@@ -473,10 +473,11 @@ void LCD_Text_Draw_Cursor_Ext(int16_t x, int16_t y, uint8_t *text, uint16_t pos,
       ystart = yLineCnt * CurrentFont[3];
     }
 
-    if(i == pos) {  
+    if(i >= pos) {  
       LCD_DrawLine(x + xstart, y + ystart, x + xstart, y + ystart + CurrentFont[3], Color);
       return;
     }
+
     i++;
   }
 
