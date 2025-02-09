@@ -46,7 +46,7 @@ uint8_t gr2_cursor_handler(uint16_t id, uint32_t ms_counter, gr2context * con) {
 
     if ((con->textBlockStart != 0 || con->textBlockEnd != 0)
         && temp > con->textBlockStart - 1
-        && temp < con->textBlockEnd
+        && temp < con->textBlockEnd - 1
     ) {
       blockEventTimer = 0;
       gr2_set_event(id, EV_NONE, con);
