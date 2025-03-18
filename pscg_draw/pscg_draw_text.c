@@ -35,6 +35,9 @@ void gr2_draw_text(
   LCD_setSubDrawArea(x1, y1, x2, y2);
   background_color = c->background_color;
   uint8_t curr_font;
+  uint16_t text_bg = c->background_color;
+
+  uint8_t showCursor = 0;
 
   // printf("DBG font size: %u\n", font_size);
   curr_font = LCD_Get_Font_Size();
@@ -46,15 +49,23 @@ void gr2_draw_text(
 
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     if (c->pscgElements[id].value == 1) { // active
-      uint16_t text_bg = c->active_color;
+      
       uint16_t text_select = c->fill_color;
 
       if(gr2_text_get_invert_select(id, c)) {
         text_bg = c->fill_color;
         text_select = c->active_color;
+      } else {
+        text_bg = c->active_color;
       }
 
-      LCD_FillRect(x1, y1, x2, y2, text_bg);
+      if (gr2_text_get_pwd(id, c) == 1) {
+        LCD_FillRect(x1, y1, x2, y2, text_bg);
+      }
+
+      LCD_FillRect(x1, y1, x1 + x_add, y2, text_bg);
+      LCD_FillRect(x1, y1, x2, y1 + PSCG_TEXT_Y_GAP, text_bg);
+
       if (c->textBlockStart != 0 || c->textBlockEnd != 0) {
         LCD_set_text_block(c->textBlockStart - 1, c->textBlockEnd, text_select);
       } else {
@@ -63,7 +74,7 @@ void gr2_draw_text(
       if (gr2_text_get_pwd(id, c) == 0) {
         if (c->textBlockStart == c->textBlockEnd) {
           LCD_set_fitText(gr2_text_get_fit(id, c), x2);
-          LCD_Text_Draw_Cursor(x_add + x1, y1 + 5, c->pscgElements[id].str_value, c->pscgElements[id].param, c->text_color);
+          showCursor = 1;
         }
       } else {
         LCD_Text_Draw_Cursor_Pwd(x_add + x1, y1 + 5, c->pscgElements[id].str_value, c->text_color);
@@ -78,7 +89,14 @@ void gr2_draw_text(
     if (gr2_text_get_pwd(id, c) == 1) {
       LCD_DrawText_Pwd(x_add + x1, y1 + PSCG_TEXT_Y_GAP, c->text_color, c->pscgElements[id].str_value);
     } else {
+      if(c->pscgElements[id].value == 1)
+        LCD_set_text_bg(1, text_bg, x2 - x1, y2 - y1);
       LCD_DrawText_ext(x_add + x1, y1 + PSCG_TEXT_Y_GAP, c->text_color, c->pscgElements[id].str_value);
+      
+      if(c->pscgElements[id].value == 1)
+        LCD_set_text_bg(0, 0, 0, 0);
+      if(showCursor)
+        LCD_Text_Draw_Cursor(x_add + x1, y1 + 5, c->pscgElements[id].str_value, c->pscgElements[id].param, c->text_color);
     }
     LCD_set_fitText(0, 0);
     LCD_set_text_block(0, 0, 0);
@@ -103,7 +121,6 @@ void gr2_draw_text(
       LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->background_color));
     }
 
-    
     if (gr2_text_get_pwd(id, c) == 1) {
       LCD_DrawText_Pwd(x_add + x1, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->text_color), c->pscgElements[id].str_value);
     } else {

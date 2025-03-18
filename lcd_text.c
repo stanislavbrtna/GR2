@@ -48,9 +48,18 @@ uint32_t blockStart;
 uint32_t blockEnd;
 uint16_t blockColor;
 
+uint8_t  textBgFill;
+int16_t  textBgWidth;
+int16_t  textBgHeight;
+uint16_t textBgColor;
 
-// background color of the text field, ugly hack for fitting text
-extern uint16_t background_color;
+void LCD_set_text_bg(uint8_t enable, uint16_t color, int16_t width, int16_t height) {
+  textBgFill = enable;
+  textBgColor = color;
+  textBgWidth = width;
+  textBgHeight = height;
+}
+
 
 void LCD_set_fitText(uint8_t enable, uint16_t max) {
   fitTextMax = max;
@@ -228,14 +237,28 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
           x + xLineCnt + LCD_Char_Get_Width(LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz),
           y + (yLineCnt + 1) * CurrentFont[3],
           color
-        ); 
+        );
+        uint16_t col = textBgColor;
+        textBgColor = color;
         xLineCnt += LCD_DrawChar(x + xLineCnt, yprac, blockColor,  LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
+        textBgColor = col;
       } else {
         xLineCnt += LCD_DrawChar(x + xLineCnt, yprac, color,  LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
       }
       i++;
     } else {
       if (text[i] == '\n') {
+        
+        if(textBgFill == 1) {
+          LCD_FillRect(
+            x + xLineCnt,
+            y + yLineCnt * CurrentFont[3],
+            x + textBgWidth,
+            y + (yLineCnt + 1) * CurrentFont[3],
+            textBgColor
+          );
+        }
+
         xLineCnt = 0;
         yLineCnt++;
       } else if (text[i] == ' ') {
@@ -246,6 +269,14 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
             x + xLineCnt + CurrentFont[2],
             y + (yLineCnt + 1) * CurrentFont[3],
             color
+          );
+        } else if(textBgFill == 1) {
+          LCD_FillRect(
+            x + xLineCnt,
+            y + yLineCnt * CurrentFont[3],
+            x + xLineCnt + CurrentFont[2],
+            y + (yLineCnt + 1) * CurrentFont[3],
+            textBgColor
           );
         }
         xLineCnt += CurrentFont[2];
@@ -270,7 +301,10 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
             y + (yLineCnt + 1) * CurrentFont[3],
             color
           );
+          uint16_t col = textBgColor;
+          textBgColor = color;
           xLineCnt += LCD_DrawChar(x + xLineCnt, y + yLineCnt * CurrentFont[3], blockColor, outChar, CurrentFont);
+          textBgColor = col;
         } else {
           xLineCnt += LCD_DrawChar(x + xLineCnt, y + yLineCnt * CurrentFont[3], color, outChar, CurrentFont);
         }
@@ -278,6 +312,24 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
       } 
     }
     i++;
+  }
+
+  if(textBgFill == 1) {
+    LCD_FillRect(
+      x + xLineCnt,
+      y + yLineCnt * CurrentFont[3],
+      x + textBgWidth,
+      y + (yLineCnt + 1) * CurrentFont[3],
+      textBgColor
+    );
+  
+    LCD_FillRect(
+      x,
+      y + (yLineCnt + 1) * CurrentFont[3],
+      x + textBgWidth,
+      y + textBgHeight,
+      textBgColor
+    );
   }
 }
 
@@ -495,15 +547,12 @@ void LCD_Text_Draw_Cursor_Ext(int16_t x, int16_t y, uint8_t *text, uint16_t pos,
 // returns char width
 uint16_t LCD_DrawChar(int16_t x, int16_t y, uint16_t color, uint16_t znak, const uint8_t *font) {
   uint32_t a, b, d;
-  uint16_t xLineCnt = 0;
   uint16_t yLineCnt = 0;
-  uint16_t cv;
+  uint16_t char_width;
   uint32_t cpos;
   uint32_t cposIncr = 0;
   uint16_t FontSize;
   uint8_t liche = 0;
-
-  xLineCnt = x;
 
   if (((font[3] / 8) * 8) == font[3]) {
     FontSize = font[3]/8;
@@ -514,32 +563,64 @@ uint16_t LCD_DrawChar(int16_t x, int16_t y, uint16_t color, uint16_t znak, const
 
   if ((znak >= 32 && znak <= 128) || (znak >= 193 && znak <= 383)) {
     cposIncr = 0;
-    cv = font[znak + 6 - font[4]];
+    char_width = font[znak + 6 - font[4]];
     cpos = font[5] + 6; //96+6 - první znak
 
     for (a = 6; a < (uint32_t)(znak - font[4] + 6); a++) { // get char position
       cpos += font[a] * FontSize;
     }
 
-    for (a = 0; a < FontSize; a++) { // fontSize per column
-      for (b = 0; b < cv; b++) {
-        for(d = 0; d < 8; d++) {
-          if (font[cpos + cposIncr] & (1 << d)) {
-            if (liche == 0) {
-              LCD_DrawPoint(xLineCnt + b, y + yLineCnt * font[3] + a*8 + d, color);
-            } else {
-              if (a < (uint32_t)(FontSize - 1)) {
-                LCD_DrawPoint(xLineCnt + b, y + yLineCnt*font[3] + a*8 + d, color);
+    if(textBgFill == 0) {
+      for (a = 0; a < FontSize; a++) { // fontSize per column
+        for (b = 0; b < char_width; b++) {
+          for(d = 0; d < 8; d++) {
+            if (font[cpos + cposIncr] & (1 << d)) {
+              if (liche == 0) {
+                LCD_DrawPoint(x + b, y + yLineCnt * font[3] + a*8 + d, color);
               } else {
-                LCD_DrawPoint(xLineCnt + b, y + yLineCnt*font[3] + (a - 1)*8 + liche + d, color);
+                if (a < (uint32_t)(FontSize - 1)) {
+                  LCD_DrawPoint(x + b, y + yLineCnt*font[3] + a*8 + d, color);
+                } else {
+                  LCD_DrawPoint(x + b, y + yLineCnt*font[3] + (a - 1)*8 + liche + d, color);
+                }
               }
             }
           }
+          cposIncr++;
         }
-        cposIncr++;
       }
+    } else {
+      //textBgColor = LCD_MixColor(255,0,0);
+      for (a = 0; a < FontSize; a++) {
+        for (b = 0; b < char_width; b++) {
+          if (a < (uint32_t)(FontSize - 1)) {
+            LCD_canvas_set(x + b, y + a*8, x + b + 1, y + (a+1)*8 );
+            for(d = 0; d < 8; d++) {
+              if (font[cpos + cposIncr] & (1 << d)) {
+                LCD_canvas_putcol(color);
+              } else {
+                LCD_canvas_putcol(textBgColor);
+              }
+            }
+            cposIncr++;
+          } else {
+            LCD_canvas_set(x + b, y + a*8, x + b + 1, y + (a)*8 + liche);
+            for(d = 2; d < 8; d++) {
+              if (font[cpos + cposIncr] & (1 << d)) {
+                LCD_canvas_putcol(color);
+              } else {
+                LCD_canvas_putcol(textBgColor);
+              }
+            }
+            cposIncr++;
+          }
+        }
+      }
+      
+      LCD_FillRect(x+char_width, y, x + char_width + font[2]/9 + font[2]%9, y + font[3], textBgColor);
     }
-    return cv + font[2]/9 + font[2]%9;
+    
+    return char_width + font[2]/9 + font[2]%9;
   } else {
     // unknown char...
     if (znak != 0) {

@@ -47,4 +47,6 @@ uint16_t LCD_Char_Get_Width(uint16_t znak, const uint8_t *font);
 
 void LCD_Text_Get_WH(uint8_t *text, uint16_t pos, uint16_t max_w, uint16_t *width, uint16_t *height);
 
+void LCD_set_text_bg(uint8_t enable, uint16_t color, int16_t width, int16_t height);
+
 #endif
