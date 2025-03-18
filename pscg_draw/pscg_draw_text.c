@@ -63,8 +63,8 @@ void gr2_draw_text(
         LCD_FillRect(x1, y1, x2, y2, text_bg);
       }
 
-      LCD_FillRect(x1, y1, x1 + x_add, y2, text_bg);
-      LCD_FillRect(x1, y1, x2, y1 + PSCG_TEXT_Y_GAP, text_bg);
+      LCD_FillRect(x1 + 1, y1 + 1, x1 + x_add, y2 - 1, text_bg);
+      LCD_FillRect(x1 + 1, y1 + 1, x2 - 1, y1 + PSCG_TEXT_Y_GAP, text_bg);
 
       if (c->textBlockStart != 0 || c->textBlockEnd != 0) {
         LCD_set_text_block(c->textBlockStart - 1, c->textBlockEnd, text_select);

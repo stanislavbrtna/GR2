@@ -284,6 +284,15 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
           // next word longer than max
           if (x + xLineCnt + LCD_Text_Get_Word_Width(&text[i + 1]) + CurrentFont[2] > fitTextMax) {
             // go to new line
+            if(textBgFill == 1) {
+              LCD_FillRect(
+                x + xLineCnt,
+                y + yLineCnt * CurrentFont[3],
+                x + textBgWidth,
+                y + (yLineCnt + 1) * CurrentFont[3],
+                textBgColor
+              );
+            }
             xLineCnt = 0;
             yLineCnt++;
           }
