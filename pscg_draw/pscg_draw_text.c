@@ -163,13 +163,21 @@ void gr2_draw_text(
     // fill background only if screen has no bg image
     if (c->pscgElements[c->pscgElements[id].screen_id].str_value == 0) {
       LCD_FillRect(x1, y1, x2, y2, c->background_color);
+      // draw top frame
+      LCD_FillRect(x1 + 1, y1 + 1, x1 + x_add - 1, y2 - 1, c->background_color);
+      LCD_FillRect(x1 + 1, y1 + 1, x2 - 1, y1 + PSCG_TEXT_Y_GAP, c->background_color);
+
+      LCD_set_text_bg(1, c->background_color, x2 - x1, y2 - y1);
+      LCD_DrawText_ext(x_add + x1, y1 + PSCG_TEXT_Y_GAP, c->text_color, c->pscgElements[id].str_value);
+      LCD_set_text_bg(0, 0, 0, 0);
+
+    } else {
+      LCD_DrawText_ext(x_add + x1, y1 + PSCG_TEXT_Y_GAP, c->text_color, c->pscgElements[id].str_value);
     }
 
     if (gr2_get_select(id, c) == 1) {
       LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
     }
-
-    LCD_DrawText_ext(x_add + x1, y1 + PSCG_TEXT_Y_GAP, c->text_color, c->pscgElements[id].str_value);
   } else {
     // grayed out
     LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->background_color));
