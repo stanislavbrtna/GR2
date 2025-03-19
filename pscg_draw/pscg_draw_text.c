@@ -162,7 +162,6 @@ void gr2_draw_text(
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     // fill background only if screen has no bg image
     if (c->pscgElements[c->pscgElements[id].screen_id].str_value == 0) {
-      LCD_FillRect(x1, y1, x2, y2, c->background_color);
       // draw top frame
       LCD_FillRect(x1 + 1, y1 + 1, x1 + x_add - 1, y2 - 1, c->background_color);
       LCD_FillRect(x1 + 1, y1 + 1, x2 - 1, y1 + PSCG_TEXT_Y_GAP, c->background_color);
