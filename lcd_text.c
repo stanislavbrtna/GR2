@@ -557,6 +557,42 @@ extern volatile int16_t draw_area_x2;
 extern volatile int16_t draw_area_y1;
 extern volatile int16_t draw_area_y2;
 
+uint16_t charLine[8];
+
+static void draw_char_line(int16_t x, int16_t y, uint8_t len) {
+  int16_t yTopOffset = 0;
+  // set XY with draw area in mind
+  if (x > draw_area_x2 || x < draw_area_x1 || y + len < draw_area_y1 || y > draw_area_y2) {
+    return;
+  }
+
+  if (y < draw_area_y1) {
+    yTopOffset = draw_area_y1 - y;
+    y = draw_area_y1;
+  }
+
+  if (y + len > draw_area_y2) {
+    len = draw_area_y2 - y;
+  }
+
+  lcdOrientationType or = LCD_get_orientation();
+
+  if (or == OR_NORMAL || or == OR_ROT_LEFT) {
+    LCD_set_XY(x, y, x, y + len);
+    for(int16_t i = yTopOffset; i < len; i++) {
+      lcd_hw_Draw_Point(charLine[i]);
+    }
+  }
+  
+  if (or == OR_ROT_RIGHT || or == OR_UPSIDE_DOWN ) {
+    LCD_set_XY(x, y, x, y + len);
+    for(int16_t i = len; i >= yTopOffset; i--) {
+      lcd_hw_Draw_Point(charLine[i]);
+    }
+  }
+
+}
+
 // returns char width
 uint16_t LCD_DrawChar(int16_t x, int16_t y, uint16_t color, uint16_t charIndex, const uint8_t *font) {
   uint32_t a, b, d;
@@ -618,24 +654,27 @@ uint16_t LCD_DrawChar(int16_t x, int16_t y, uint16_t color, uint16_t charIndex, 
     for (a = 0; a < FontSize; a++) {
       for (b = 0; b < char_width; b++) {
         if (a < (uint32_t)(FontSize - 1) || (liche == 0)) {
-          LCD_canvas_set(x + b, y + a*8, x + b + 1, y + (a+1)*8 );
           for(d = 0; d < 8; d++) {
             if (font[cpos + cposIncr] & (1 << d)) {
-              LCD_canvas_putcol(color);
+              charLine[d] = color;
             } else {
-              LCD_canvas_putcol(textBgColor);
+              charLine[d] = textBgColor;
             }
           }
+          draw_char_line(x + b, y + a*8, 8);
           cposIncr++;
         } else {
-          LCD_canvas_set(x + b, y + a*8, x + b + 1, y + (a)*8 + liche);
+          uint8_t i = 0;
           for(d = 8 - liche; d < 8; d++) {
             if (font[cpos + cposIncr] & (1 << d)) {
-              LCD_canvas_putcol(color);
+              charLine[i] = color;
             } else {
-              LCD_canvas_putcol(textBgColor);
+              charLine[i] = textBgColor;
             }
+            i++;
           }
+
+          draw_char_line(x + b, y + a*8, liche);
           cposIncr++;
         }
       }
