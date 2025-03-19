@@ -32,7 +32,6 @@ gr2context * c
   LCD_setSubDrawArea(x1, y1, x2, y2);
   uint8_t  curr_font;
   uint16_t text_bg = c->background_color;
-  uint8_t  showCursor = 0;
   uint16_t text_select = c->fill_color;
 
   curr_font = LCD_Get_Font_Size();
@@ -90,7 +89,7 @@ gr2context * c
   } else { // standard text input
     if (c->pscgElements[id].value == 1) { // active
       // draw top frame
-      LCD_FillRect(x1 + 1, y1 + 1, x1 + x_add, y2 - 1, text_bg);
+      LCD_FillRect(x1 + 1, y1 + 1, x1 + x_add - 1, y2 - 1, text_bg);
       LCD_FillRect(x1 + 1, y1 + 1, x2 - 1, y1 + PSCG_TEXT_Y_GAP, text_bg);
 
       if (c->textBlockStart != 0 || c->textBlockEnd != 0) {

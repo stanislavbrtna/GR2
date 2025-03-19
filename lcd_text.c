@@ -552,6 +552,10 @@ void LCD_Text_Draw_Cursor_Ext(int16_t x, int16_t y, uint8_t *text, uint16_t pos,
   LCD_DrawLine(x + xstart, y + ystart, x + xstart, y + ystart + CurrentFont[3], Color);
 }
 
+extern volatile int16_t draw_area_x1;
+extern volatile int16_t draw_area_x2;
+extern volatile int16_t draw_area_y1;
+extern volatile int16_t draw_area_y2;
 
 // returns char width
 uint16_t LCD_DrawChar(int16_t x, int16_t y, uint16_t color, uint16_t charIndex, const uint8_t *font) {
@@ -561,6 +565,8 @@ uint16_t LCD_DrawChar(int16_t x, int16_t y, uint16_t color, uint16_t charIndex, 
   uint32_t cposIncr = 0;
   uint16_t FontSize;
   uint8_t liche = 0;
+
+  char_width = font[charIndex + 6 - font[4]];
 
   if (((font[3] / 8) * 8) == font[3]) {
     FontSize = font[3]/8;
@@ -578,8 +584,11 @@ uint16_t LCD_DrawChar(int16_t x, int16_t y, uint16_t color, uint16_t charIndex, 
     return font[2];
   }
 
+  if(x + char_width < draw_area_x1 || x > draw_area_x2 || y + font[3] < draw_area_y1 || y > draw_area_y2) {
+    return char_width + font[2]/9 + font[2]%9;
+  }
+
   cposIncr = 0;
-  char_width = font[charIndex + 6 - font[4]];
   cpos = font[5] + 6; //96+6 - první znak
 
   for (a = 6; a < (uint32_t)(charIndex - font[4] + 6); a++) { // get char position
