@@ -84,7 +84,7 @@ gr2context * c
       LCD_FillRect(x1, y1, x2, y2, c->fill_color);
     }
 
-    LCD_DrawText_Pwd(x_add + x1, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->text_color), c->pscgElements[id].str_value);
+    LCD_DrawText_Pwd(x_add + x1, y1 + PSCG_TEXT_Y_GAP, c->text_color, c->pscgElements[id].str_value);
 
   } else { // standard text input
     if (c->pscgElements[id].value == 1) { // active
