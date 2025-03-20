@@ -585,8 +585,8 @@ static void draw_char_line(int16_t x, int16_t y, uint8_t len) {
   }
   
   if (or == OR_ROT_RIGHT || or == OR_UPSIDE_DOWN ) {
-    LCD_set_XY(x, y, x, y + len);
-    for(int16_t i = len; i >= yTopOffset; i--) {
+    LCD_set_XY(x, y - 1, x, y + len - 1);
+    for(int16_t i = len - 1; i >= yTopOffset; i--) {
       lcd_hw_Draw_Point(charLine[i]);
     }
   }
