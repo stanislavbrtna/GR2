@@ -39,7 +39,7 @@
 #ifndef FONT_12_MONO_CZ_H
 #define FONT_12_MONO_CZ_H
 
-uint8_t font12mono_cz[] = {
+const uint8_t font12mono_cz[] = {
     0x3F, 0x24, // size
     0x0A, // width
     0x10, // height

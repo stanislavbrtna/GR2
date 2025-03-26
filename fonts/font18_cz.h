@@ -42,7 +42,7 @@
 #define FONT18_CZ_WIDTH 10
 #define FONT18_CZ_HEIGHT 22
 
-uint8_t font18_cz[] = {
+const uint8_t font18_cz[] = {
     0x94, 0x3C, // size
     0x0A, // width
     0x16, // height

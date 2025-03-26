@@ -42,7 +42,7 @@
 #define ROBOTO83_CZ_WIDTH 10
 #define ROBOTO83_CZ_HEIGHT 98
 
-uint8_t roboto87_cz[] = {
+const uint8_t roboto87_cz[] = {
     0x69, 0xE8, // size
     0x0E, // width
     0x62, // height

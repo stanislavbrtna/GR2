@@ -42,7 +42,7 @@
 #define ROBOTO83_WIDTH 10
 #define ROBOTO83_HEIGHT 87
 
-uint8_t roboto87[] = {
+const uint8_t roboto87[] = {
     0x26, 0x69, // size
     0x0E, // width
     0x57, // height

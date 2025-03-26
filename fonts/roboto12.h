@@ -42,7 +42,7 @@
 #define ROBOTO12_WIDTH 10
 #define ROBOTO12_HEIGHT 14
 
-uint8_t roboto12[] = {
+const uint8_t roboto12[] = {
     0x1C, 0xD6, // size
     0x0A, // width
     0x0E, // height

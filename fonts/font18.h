@@ -41,7 +41,7 @@
 #define FONT18_WIDTH 10
 #define FONT18_HEIGHT 18
 
-uint8_t font18[]= {
+const uint8_t font18[]= {
     0x38, 0x82, // size
     0x0A, // width
     0x12, // height

@@ -41,7 +41,7 @@
 #define MONO70_WIDTH 10
 #define MONO70_HEIGHT 65
 
-uint8_t mono70[] = {
+const uint8_t mono70[] = {
     0x6F, 0x3B, // size
     0x0A, // width
     0x41, // height

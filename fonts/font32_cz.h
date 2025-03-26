@@ -42,7 +42,7 @@
 #define FONT32_CZ_WIDTH 10
 #define FONT32_CZ_HEIGHT 39
 
-uint8_t font32_cz[] = {
+const uint8_t font32_cz[] = {
     0xCE, 0xD3, // size
     0x0A, // width
     0x27, // height

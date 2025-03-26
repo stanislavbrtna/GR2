@@ -39,7 +39,7 @@
  #ifndef FONT_12_MONO_H
  #define FONT_12_MONO_H
 
-uint8_t font12mono[] = {
+const uint8_t font12mono[] = {
     0x17, 0xC2, // size
     0x0A, // width
     0x0D, // height
