@@ -42,7 +42,7 @@
 #define ROBOTO12_CZ_WIDTH 10
 #define ROBOTO12_CZ_HEIGHT 16
 
-const uint8_t roboto12_cz[] = {
+uint8_t roboto12_cz[] = {
     0x49, 0x54, // size
     0x0A, // width
     0x10, // height

@@ -42,7 +42,9 @@ typedef enum {EV_NONE,EV_PRESSED, EV_HOLD,EV_LONGHOLD, EV_RELEASED, EV_DRAGOUT} 
 
 #include "lcd_io.h"
 #include "lcd_basics.h"
-#include "lcd_text.h"
+#include "lcd_text/text_draw.h"
+#include "lcd_text/char_utils.h"
+#include "lcd_text/text_fonts.h"
 #include "lcd_canvas.h"
 
 #ifdef PPM_SUPPORT_ENABLED //TODO: rename this to something like ENABLE_SDA_OS_APIS

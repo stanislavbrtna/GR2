@@ -146,12 +146,7 @@ void gr2_draw_text(
   }
 
   LCD_setSubDrawArea(x1, y1, x2, y2);
-  uint8_t curr_font;
-  uint16_t text_bg = c->background_color;
-
-  uint8_t showCursor = 0;
-
-  curr_font = LCD_Get_Font_Size();
+  uint8_t curr_font = LCD_Get_Font_Size();
   LCD_Set_Sys_Font(c->pscgElements[id].param2);
 
   // get additional alignment

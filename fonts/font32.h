@@ -42,7 +42,7 @@
 #define FONT32_WIDTH 10
 #define FONT32_HEIGHT 34
 
-const uint8_t font32[] = {
+uint8_t font32[] = {
     0xBB, 0x22, // size
     0x0A, // width
     0x22, // height

@@ -36,11 +36,10 @@
  *                  // bit field of all characters
  */
 
+#ifndef FONT_12_MONO_CZ_H
+#define FONT_12_MONO_CZ_H
 
-#define NEW_FONT_WIDTH 10
-#define NEW_FONT_HEIGHT 16
-
-const uint8_t font12mono_cz[] = {
+uint8_t font12mono_cz[] = {
     0x3F, 0x24, // size
     0x0A, // width
     0x10, // height
@@ -262,3 +261,5 @@ const uint8_t font12mono_cz[] = {
     0x80, 0x90, 0xA0, 0x90, 0x80, 0x10, 0x18, 0x14, 0x13, 0x10 // 382
     
 };
+
+#endif
