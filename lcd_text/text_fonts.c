@@ -23,8 +23,8 @@ SOFTWARE.
 #include "text_fonts.h"
 #include "../fonts/fonts.h"
 
-uint8_t * CurrentFont;
-uint8_t * CurrentFont_cz;
+const uint8_t * CurrentFont;
+const uint8_t * CurrentFont_cz;
 
 uint8_t  CurrentSize;
 int32_t  fontCorector_cz;
