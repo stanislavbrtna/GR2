@@ -106,6 +106,7 @@ gr2context * c
       }
   
     } else {
+      LCD_set_text_block(0, 0, 0);
       LCD_FillRect(x1 + 1, y1 + 1, x1 + x_add, y2 - 1, c->background_color);
       LCD_FillRect(x1 + 1, y1 + 1, x2 - 1, y1 + PSCG_TEXT_Y_GAP, c->background_color);
       LCD_set_text_bg(1, c->background_color, x2 - x1, y2 - y1);
