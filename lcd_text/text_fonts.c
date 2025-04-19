@@ -29,7 +29,6 @@ const uint8_t * CurrentFont_cz;
 uint8_t  CurrentSize;
 int32_t  fontCorector_cz;
 
-
 uint16_t LCD_Draw_Get_Font_Height() {
   return (uint16_t)CurrentFont[3];
 }

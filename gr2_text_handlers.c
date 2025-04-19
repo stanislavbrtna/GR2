@@ -151,7 +151,7 @@ uint16_t gr2_get_text_height(uint16_t id, uint16_t pos, gr2context * c) {
 
   LCD_Text_Get_WH(c->pscgElements[id].str_value, pos, max_w, &w, &h);
 
-  h += LCD_Draw_Get_Font_Height(c->pscgElements[id].param2);
+  h += LCD_Draw_Get_Font_Height();
 
   LCD_Set_Sys_Font(currFont);
 
