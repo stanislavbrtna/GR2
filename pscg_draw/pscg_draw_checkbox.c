@@ -58,7 +58,7 @@ void gr2_draw_checkbox(
     tc = LCD_get_gray16(c->text_color);
   }
 
-  if((active == 1)) {
+  if(active == 1) {
     // bigger rectangle
     if (gr2_get_select(id, c) == 1) {
       LCD_FillRect(

@@ -176,7 +176,7 @@ void gr2_reset_all(gr2context * c) {
 
 uint8_t gr2_clicked(uint16_t id, gr2context * c) {
   PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
-  if ((c->pscgElements[id].event == EV_RELEASED)) {
+  if (c->pscgElements[id].event == EV_RELEASED) {
     gr2_set_event(id, EV_NONE, c);
     return 1;
   } else {
