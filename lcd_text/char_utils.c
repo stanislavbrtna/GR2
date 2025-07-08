@@ -90,7 +90,7 @@ uint16_t LCD_DrawChar(int16_t x, int16_t y, uint16_t color, uint16_t charIndex, 
     liche = font[3]%8;
   }
 
-  if (!((charIndex >= 32 && charIndex <= 128) || (charIndex >= 193 && charIndex <= 383))) {
+  if (!(charIndex >= font[4] && charIndex <= font[4] + font[5])) {
     // unknown char...
     if(textBgFill) {
       LCD_FillRect(x, y, x + font[2], y + font[3], textBgColor);
@@ -244,6 +244,18 @@ uint16_t LCD_get_ext_char_num(uint8_t b1, uint8_t b2) {
   }else if((b1 == 0xC5) && (b2 == 0xbe)){ //í
     return 382;
   }
+  return 0;
+}
+
+uint16_t LCD_get_emoji_num(uint8_t b1, uint8_t b2, uint8_t b3, uint8_t b4) {
+  if(b1 == 0xF0 && b2 == 0x9F){
+    if(b3 == 0x98 && b4 >= 0x80) return b4 - 0x80 + 1;
+    
+    if(b3 == 0x99 && b4 >= 0x80) {
+      return b4 - 0x80 + 0x3F + 2;
+    }
+  }
+
   return 0;
 }
 

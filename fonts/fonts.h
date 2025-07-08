@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include "font18.h"
 #include "font18_cz.h"
+#include "font18_emoji.h"
 
 #include "font32.h"
 #include "font32_cz.h"

@@ -29,6 +29,7 @@ uint16_t LCD_Char_Get_Width(uint16_t znak, const uint8_t *font);
 
 uint8_t  LCD_Get_Font_Size();
 uint16_t LCD_get_ext_char_num(uint8_t b1, uint8_t b2);
+uint16_t LCD_get_emoji_num(uint8_t b1, uint8_t b2, uint8_t b3, uint8_t b4);
 
 void LCD_DrawText_Pwd(int16_t x, int16_t y, uint16_t color, uint8_t *text);
 void LCD_Text_Draw_Cursor_Pwd(int16_t x, int16_t y, uint8_t *text, uint16_t Color);

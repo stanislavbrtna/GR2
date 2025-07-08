@@ -26,6 +26,7 @@ SOFTWARE.
 extern uint8_t * font12mono_cz;
 extern uint8_t * font12mono;
 extern uint8_t * font18_cz;
+extern uint8_t * font18_emoji;
 extern uint8_t * font18;
 extern uint8_t * font32_cz;
 extern uint8_t * font32;
