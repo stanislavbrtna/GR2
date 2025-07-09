@@ -30,6 +30,8 @@ extern uint8_t * CurrentFont_cz;
 extern uint8_t  CurrentSize;
 extern int32_t  fontCorector_cz;
 
+extern uint8_t font18_emoji[];
+
 uint16_t fitTextMax;
 uint8_t  fitText;
 
@@ -102,7 +104,7 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
   while (0 != text[i]) {
 
     //bitbang utf8
-    if (text[i] > 128) {
+    if (text[i] > 128 && text[i] < 240) {
       yprac = y + yLineCnt * CurrentFont[3] + fontCorector_cz;
       if (blockStart != blockEnd && i >= blockStart && i < blockEnd) {
         LCD_FillRect(
@@ -120,6 +122,24 @@ void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text) {
         xLineCnt += LCD_DrawChar(x + xLineCnt, yprac, color,  LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
       }
       i++;
+    } else if (text[i] >= 240) {
+      yprac = y + yLineCnt * (CurrentFont[3]);
+      if (blockStart != blockEnd && i >= blockStart && i < blockEnd) {
+        LCD_FillRect(
+          x + xLineCnt,
+          y + yLineCnt * font18_emoji[3] - LCD_BLOCK_SELECT_SPACER,
+          x + xLineCnt + LCD_Char_Get_Width(LCD_get_emoji_num(text[i], text[i+1], text[i+2], text[i+3]), font18_emoji) - 1,
+          y + (yLineCnt + 1) * font18_emoji[3],
+          color
+        );
+        uint16_t col = textBgColor;
+        textBgColor = color;
+        xLineCnt += LCD_DrawChar(x + xLineCnt, yprac - 6, blockColor, LCD_get_emoji_num(text[i], text[i+1], text[i+2], text[i+3]), font18_emoji);
+        textBgColor = col;
+      } else {
+        xLineCnt += LCD_DrawChar(x + xLineCnt, yprac - 6, color, LCD_get_emoji_num(text[i], text[i+1], text[i+2], text[i+3]), font18_emoji);
+      }
+      i += 3;
     } else {
       if (text[i] == '\n') {
         
@@ -252,11 +272,16 @@ uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, int16_t touch_x, int16_t touch_y
   while (0 != text[i]) {
     uint8_t eol = 0;
     czFlag = 0;
-    if (text[i] > 128) {
+    if (text[i] > 128 && text[i] < 240) {
       czFlag = 1;
       char_w = LCD_Char_Get_Width(LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
       xLineCnt += char_w;
       i++;
+    } else if (text[i] >= 240) {
+      czFlag = 3;
+      char_w = LCD_Char_Get_Width(LCD_get_emoji_num(text[i], text[i+1], text[i+2], text[i+3]), font18_emoji);
+      xLineCnt += char_w;
+      i += 3;
     } else if (text[i] == '\n') {
       char_w = xLineCnt;
       xLineCnt = 0;
@@ -343,11 +368,16 @@ void LCD_Text_Draw_Cursor_Ext(int16_t x, int16_t y, uint8_t *text, uint16_t pos,
   while (0 != text[i]) {
     eol = 0;
     czFlag = 0;
-    if (text[i] > 128) {
+    if (text[i] > 128 && text[i] < 240) {
       czFlag = 1;
       char_w = LCD_Char_Get_Width(LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
       xLineCnt += char_w;
       i++;
+    } else if (text[i] >= 240) {
+      czFlag = 3;
+      char_w = LCD_Char_Get_Width(LCD_get_emoji_num(text[i], text[i+1], text[i+2], text[i+3]), font18_emoji);
+      xLineCnt += char_w;
+      i += 3;
     } else if (text[i] == '\n') {
       char_w = xLineCnt;
       xLineCnt = 0;
@@ -418,11 +448,16 @@ void LCD_Text_Get_WH(uint8_t *text, uint16_t pos, uint16_t max_w, uint16_t *widt
   while (0 != text[i]) {
     eol = 0;
     czFlag = 0;
-    if (text[i] > 128) {
+    if (text[i] > 128 && text[i] < 240) {
       czFlag = 1;
       char_w = LCD_Char_Get_Width(LCD_get_ext_char_num(text[i], text[i+1]), CurrentFont_cz);
       xLineCnt += char_w;
       i++;
+    } else if (text[i] >= 240) {
+      czFlag = 3;
+      char_w = LCD_Char_Get_Width(LCD_get_emoji_num(text[i], text[i+1], text[i+2], text[i+3]), font18_emoji);
+      xLineCnt += char_w;
+      i += 3;
     } else if (text[i] == '\n') {
       char_w = xLineCnt;
       xLineCnt = 0;
