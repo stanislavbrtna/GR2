@@ -41,23 +41,23 @@ void gr2_reset_context(gr2context * c) {
 
   c->textActive                = 0;
   c->textActiveId              = 0;
-  c->invisible_flag            = 0;
-  c->reset_active_element_flag = 0;
+  c->invisibleFlag             = 0;
+  c->resetActiveElementFlag    = 0;
   c->textMouseX                = 0;
   c->textMouseY                = 0;
   c->textMaxWidth              = 0;
-  c->default_grid_size         = 32;
-  c->default_grid_spacing      = 0;
-  c->pscg_active_element       = 0;
-  c->relative_init             = 0;
-  c->rounded_init              = GR2_ROUNDED_DEFAULT;
-  c->default_slider_size       = 32;
+  c->defaultGridSize         = 32;
+  c->defaultGridSpacing      = 0;
+  c->activeElement       = 0;
+  c->relativeInit             = 0;
+  c->roundedInit              = GR2_ROUNDED_DEFAULT;
+  c->defaultSliderSize       = 32;
 
-  c->border_color     = 0x0000; // black
-  c->text_color       = 0x0000; // black
-  c->background_color = 0xF800; // red
-  c->fill_color       = 0x07E0; // green
-  c->active_color     = 0xFFFF; // white
+  c->borderColor     = 0x0000; // black
+  c->textColor       = 0x0000; // black
+  c->backgroundColor = 0xF800; // red
+  c->fillColor       = 0x07E0; // green
+  c->activeColor     = 0xFFFF; // white
 }
 
 

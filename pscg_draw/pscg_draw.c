@@ -50,14 +50,14 @@ int16_t gr2_get_text_align_x(uint16_t id, int16_t x1, int16_t x2, int16_t offset
 }
 
 void gr2_draw_end(gr2context * c) {
-  c->invisible_flag = 0;
+  c->invisibleFlag = 0;
 
-  if (c->reset_active_element_flag) {
-    c->pscgElements[c->pscg_active_element].pre_active = 0;
-    c->pscgElements[c->pscg_active_element].modified = 1;
+  if (c->resetActiveElementFlag) {
+    c->pscgElements[c->activeElement].pre_active = 0;
+    c->pscgElements[c->activeElement].modified = 1;
 
-    c->pscg_active_element = 0;
-    c->reset_active_element_flag = 0;
+    c->activeElement = 0;
+    c->resetActiveElementFlag = 0;
   }
 
   gr2_set_global_grayout_flag(0);

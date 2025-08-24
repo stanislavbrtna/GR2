@@ -243,7 +243,7 @@ uint8_t gr2_keypad_input(gr2ButtonType button, gr2EventType ev, uint16_t screen,
       } else {
         con->pscgElements[current_element].value = 1;
       }
-      con->pscg_active_element = 0;
+      con->activeElement = 0;
     }
   
     if (con->pscgElements[current_element].type == GR2_TYPE_TEXT && gr2_text_get_editable(current_element, con)) {

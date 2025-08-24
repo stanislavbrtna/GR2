@@ -121,7 +121,7 @@ static void pscg_add_fill_xy(uint16_t i, uint16_t x1, uint16_t y1, uint16_t x2, 
 	c->pscgElements[i].x1 = x1;
 	c->pscgElements[i].y1 = y1;
 
-	if (c->relative_init) {
+	if (c->relativeInit) {
 		c->pscgElements[i].x2 = x1 + x2;
 		c->pscgElements[i].y2 = y1 + y2;
 	} else {
@@ -147,7 +147,7 @@ static void pscg_fill_zero_defaults(uint16_t i, uint16_t screen_id, gr2context *
 
 	c->pscgElements[screen_id].modified = 1;
 
-	gr2_set_rounded(i, c->rounded_init, c);
+	gr2_set_rounded(i, c->roundedInit, c);
 }
 
 static uint16_t pscg_get_new_id(gr2context * c) {
@@ -263,7 +263,7 @@ uint16_t gr2_add_slider_v(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, in
 	pscg_fill_zero_defaults(i, screen, c);
 	c->pscgElements[i].type = GR2_TYPE_SLIDER_V;
 	pscg_add_fill_xy(i, x1, y1, x2, y2, c);
-	c->pscgElements[i].param2 = c->default_slider_size*2;
+	c->pscgElements[i].param2 = c->defaultSliderSize*2;
 	c->pscgElements[i].param = param; //pozici slideru ovlivňuje value/param
 	c->pscgElements[i].value = value;
 	c->pscgElements[i].prev_val = value;
@@ -279,7 +279,7 @@ uint16_t gr2_add_slider_h(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, in
 	pscg_fill_zero_defaults(i, screen, c);
 	c->pscgElements[i].type = GR2_TYPE_SLIDER_H;
 	pscg_add_fill_xy(i, x1, y1, x2, y2, c);
-	c->pscgElements[i].param2 = c->default_slider_size;
+	c->pscgElements[i].param2 = c->defaultSliderSize;
 	c->pscgElements[i].param = param; //pozici slideru ovlivňuje value/param
 	c->pscgElements[i].value = value;
 	c->pscgElements[i].prev_val = value;
@@ -344,12 +344,12 @@ uint16_t gr2_add_screen(gr2context * c) {
 	c->pscgScreens[scrI].y_scroll = 0;
 	c->pscgScreens[scrI].x_scroll_old = 0;
 	c->pscgScreens[scrI].y_scroll_old = 0;
-	c->pscgScreens[scrI].x_cell = c->default_grid_size;
-	c->pscgScreens[scrI].y_cell = c->default_grid_size;
-	c->pscgScreens[scrI].cell_space_left = c->default_grid_spacing;
-	c->pscgScreens[scrI].cell_space_right = c->default_grid_spacing;
-	c->pscgScreens[scrI].cell_space_bottom = c->default_grid_spacing;
-	c->pscgScreens[scrI].cell_space_top = c->default_grid_spacing;
+	c->pscgScreens[scrI].x_cell = c->defaultGridSize;
+	c->pscgScreens[scrI].y_cell = c->defaultGridSize;
+	c->pscgScreens[scrI].cell_space_left = c->defaultGridSpacing;
+	c->pscgScreens[scrI].cell_space_right = c->defaultGridSpacing;
+	c->pscgScreens[scrI].cell_space_bottom = c->defaultGridSpacing;
+	c->pscgScreens[scrI].cell_space_top = c->defaultGridSpacing;
 	c->pscgScreens[scrI].default_font = LCD_Get_Font_Size();
 	c->pscgScreens[scrI].kbd_selected = 0;
 

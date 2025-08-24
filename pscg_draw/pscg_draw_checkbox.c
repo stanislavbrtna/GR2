@@ -41,21 +41,21 @@ void gr2_draw_checkbox(
   // So the background is matching rest of the screen
   // If the screen is grey, background will be gray
   if (global_grayout_flag == 0) {
-    LCD_FillRect(x1, y1, x2, y2, c->background_color);
+    LCD_FillRect(x1, y1, x2, y2, c->backgroundColor);
   } else {
-    LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->background_color));
+    LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->backgroundColor));
   }
 
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
-    bc = c->border_color;
-    fc = c->fill_color;
-    ac = c->active_color;
-    tc = c->text_color;
+    bc = c->borderColor;
+    fc = c->fillColor;
+    ac = c->activeColor;
+    tc = c->textColor;
   } else {
-    bc = LCD_get_gray16(c->border_color);
-    fc = LCD_get_gray16(c->fill_color);
-    ac = LCD_get_gray16(c->active_color);
-    tc = LCD_get_gray16(c->text_color);
+    bc = LCD_get_gray16(c->borderColor);
+    fc = LCD_get_gray16(c->fillColor);
+    ac = LCD_get_gray16(c->activeColor);
+    tc = LCD_get_gray16(c->textColor);
   }
 
   if(active == 1) {
@@ -93,7 +93,7 @@ void gr2_draw_checkbox(
       y2 - PSCG_CHECKBOX_VSPACE_DN - PSCG_CHECKBOX_IN_VSPACE,
       tc
     );
-  } else if (c->pscg_active_element == id) {
+  } else if (c->activeElement == id) {
     if (gr2_get_select(id, c) == 1) {
       LCD_FillRect(
         x1 + PSCG_CHECKBOX_HSPACE_UP,

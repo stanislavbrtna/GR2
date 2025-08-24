@@ -134,28 +134,28 @@ typedef struct {
   uint8_t  textActive;
   uint16_t textActiveId;
 
-  uint8_t  invisible_flag;
-  uint8_t  reset_active_element_flag;
+  uint8_t  invisibleFlag;
+  uint8_t  resetActiveElementFlag;
 
   int16_t  textMouseX;
   int16_t  textMouseY;
   uint16_t textMaxWidth;
 
-  uint16_t default_grid_size;
-  uint16_t default_grid_spacing;
+  uint16_t defaultGridSize;
+  uint16_t defaultGridSpacing;
 
-  uint16_t default_slider_size;
+  uint16_t defaultSliderSize;
 
-  uint8_t  pscg_active_element;
+  uint8_t  activeElement;
 
-  uint8_t  relative_init;
-  uint8_t  rounded_init;
+  uint8_t  relativeInit;
+  uint8_t  roundedInit;
 
-  uint16_t border_color;
-  uint16_t text_color;
-  uint16_t background_color;
-  uint16_t fill_color;
-  uint16_t active_color;
+  uint16_t borderColor;
+  uint16_t textColor;
+  uint16_t backgroundColor;
+  uint16_t fillColor;
+  uint16_t activeColor;
 } gr2context;
 
 #endif

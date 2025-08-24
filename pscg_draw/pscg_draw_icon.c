@@ -35,17 +35,17 @@ static void draw_text_box(int32_t x1, int32_t y1, int32_t x2, uint8_t state, uin
   curr_font = LCD_Get_Font_Size();
 
   if (state == 2) { //grayout
-    bc = LCD_get_gray16(c->border_color);
-    fc = LCD_get_gray16(c->fill_color);
-    ac = LCD_get_gray16(c->active_color);
-    tc = LCD_get_gray16(c->text_color);
-    ba = LCD_get_gray16(c->background_color);
+    bc = LCD_get_gray16(c->borderColor);
+    fc = LCD_get_gray16(c->fillColor);
+    ac = LCD_get_gray16(c->activeColor);
+    tc = LCD_get_gray16(c->textColor);
+    ba = LCD_get_gray16(c->backgroundColor);
   } else {
-    bc = c->border_color;
-    fc = c->fill_color;
-    ac = c->active_color;
-    tc = c->text_color;
-    ba = c->background_color;
+    bc = c->borderColor;
+    fc = c->fillColor;
+    ac = c->activeColor;
+    tc = c->textColor;
+    ba = c->backgroundColor;
   }
 
   LCD_Set_Sys_Font(c->pscgElements[id].param2);
@@ -119,17 +119,17 @@ void gr2_draw_icon(
   int32_t img_x1 = x1;
 
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
-    bc  = c->border_color;
-    fc  = c->fill_color;
-    ac  = c->active_color;
-    tc  = c->text_color;
-    bac = c->background_color; 
+    bc  = c->borderColor;
+    fc  = c->fillColor;
+    ac  = c->activeColor;
+    tc  = c->textColor;
+    bac = c->backgroundColor; 
   } else {
-    bc  = LCD_get_gray16(c->border_color);
-    fc  = LCD_get_gray16(c->fill_color);
-    ac  = LCD_get_gray16(c->active_color);
-    tc  = LCD_get_gray16(c->text_color);
-    bac = LCD_get_gray16(c->background_color); 
+    bc  = LCD_get_gray16(c->borderColor);
+    fc  = LCD_get_gray16(c->fillColor);
+    ac  = LCD_get_gray16(c->activeColor);
+    tc  = LCD_get_gray16(c->textColor);
+    bac = LCD_get_gray16(c->backgroundColor); 
   }
 
   // get the image info

@@ -81,13 +81,13 @@ void gr2_draw_screen_bg(int16_t x1,
   if (svp_fexists(c->pscgElements[id].str_value)) {
     sda_draw_p16_scaled(imgX1, imgY1, c->pscgElements[id].param, c->pscgElements[id].param, c->pscgElements[id].str_value);
   }  else {
-    LCD_FillRect(x1, y1, x2, y2, c->fill_color);
-    LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
-    LCD_DrawLine(x1, y1, x2, y2, c->border_color);
-    LCD_DrawLine(x1, y2, x2, y1, c->border_color);
+    LCD_FillRect(x1, y1, x2, y2, c->fillColor);
+    LCD_DrawRectangle(x1, y1, x2, y2, c->borderColor);
+    LCD_DrawLine(x1, y1, x2, y2, c->borderColor);
+    LCD_DrawLine(x1, y2, x2, y1, c->borderColor);
   }
 #else
-  LCD_FillRect(x1, y1, x2, y2, c->background_color);
+  LCD_FillRect(x1, y1, x2, y2, c->backgroundColor);
 #endif
   LCD_setDrawAreaS(&area); //draw_ppm changes subdraw area, so it must be restored
 }
@@ -107,7 +107,7 @@ void gr2_draw_screen(
   uint8_t all;
   uint8_t draw_frame_flag = 0;
   uint16_t global_grayout_flag;
-  uint16_t background_color;
+  uint16_t backgroundColor;
 
   if (screen > con->elementsMax) {
     gr2_error((uint8_t *)"id out of bounds.", con);
@@ -128,9 +128,9 @@ void gr2_draw_screen(
   }
 
   if (gr2_get_global_grayout_flag() || (con->pscgElements[screen].grayout == 1)) {
-    background_color = LCD_get_gray16(con->background_color);
+    backgroundColor = LCD_get_gray16(con->backgroundColor);
   } else {
-    background_color = con->background_color;
+    backgroundColor = con->backgroundColor;
   }
 
   global_grayout_flag = gr2_get_global_grayout_flag();
@@ -146,7 +146,7 @@ void gr2_draw_screen(
     if (con->pscgElements[screen].str_value != 0 && gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t*) "") != 1) {
       gr2_draw_screen_bg(x1, y1, x2, y2, x1, y1, screen, con);
     } else {
-      LCD_FillRect(x1, y1, x2, y2, background_color);
+      LCD_FillRect(x1, y1, x2, y2, backgroundColor);
     }
   } else if (all == 2) {
     for (i = 1; i <= con->maxElementsId; i++) {
@@ -165,7 +165,7 @@ void gr2_draw_screen(
           if (con->pscgElements[screen].str_value != 0 && gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t*) "") != 1) {
             gr2_draw_screen_bg(a, b, c + 1, d, x1, y1, screen, con);
           } else {
-            LCD_FillRect(a, b, c + 1, d, background_color);
+            LCD_FillRect(a, b, c + 1, d, backgroundColor);
           }
         }
       }
@@ -179,7 +179,7 @@ void gr2_draw_screen(
   //zneviditelnění invisible prvků
   //set visible nastaví flag
   //flag je shozen voláním gr2_draw_end(), které by se mělo zavolat jakmile je vše potřebné vykresleno
-  if (con->invisible_flag == 1) {
+  if (con->invisibleFlag == 1) {
     for (i = 1; i <= con->maxElementsId; i++){
       if ((con->pscgElements[i].screen_id == screen)
           && (i != screen)
@@ -191,7 +191,7 @@ void gr2_draw_screen(
         if (con->pscgElements[screen].str_value != 0 && gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t*) "") != 1) {
           gr2_draw_screen_bg(a, b, c, d, x1, y1, screen, con);
         } else {
-          LCD_FillRect(a, b, c, d, background_color);
+          LCD_FillRect(a, b, c, d, backgroundColor);
         }
         con->pscgElements[i].modified = 0;
       }
@@ -236,7 +236,7 @@ void gr2_draw_screen(
       if (con->pscgElements[i].type == GR2_TYPE_BUTTON) {
         COUNT_A_B_C_D
         if ((all == 1) || (con->pscgElements[i].modified == 1)) {
-          if ((i == con->pscg_active_element)||(con->pscgElements[i].value == 1)) {
+          if ((i == con->activeElement)||(con->pscgElements[i].value == 1)) {
             gr2_draw_button(a, b, c, d, con->pscgElements[i].str_value, 1, i, con);
           } else {
             gr2_draw_button(a, b, c, d, con->pscgElements[i].str_value, 0, i, con);
@@ -280,7 +280,7 @@ void gr2_draw_screen(
       if (con->pscgElements[i].type == GR2_TYPE_ICON) {
         COUNT_A_B_C_D
         if ((all == 1) || (con->pscgElements[i].modified == 1)) {
-          if ((i == con->pscg_active_element) || (con->pscgElements[i].value == 1)) {
+          if ((i == con->activeElement) || (con->pscgElements[i].value == 1)) {
             gr2_draw_icon(a, b, c, d, 1, i, con);
           }else{
             gr2_draw_icon(a, b, c, d, 0, i, con);
@@ -355,7 +355,7 @@ void gr2_draw_screen(
   }
 
   if(draw_frame_flag == 1) {
-    LCD_DrawRectangle(x1, y1, x2, y2, con->border_color);
+    LCD_DrawRectangle(x1, y1, x2, y2, con->borderColor);
   }
 
   gr2_set_global_grayout_flag(global_grayout_flag);
@@ -461,7 +461,7 @@ uint8_t touch_in_element(
     if ((con->pscgElements[i].type == GR2_TYPE_SCREEN) || (con->pscgElements[i].type == GR2_TYPE_FRAME)) {
       return 1;
     } else {
-      if ((con->pscg_active_element == 0 && event == EV_PRESSED) || (con->pscg_active_element == i && event != EV_PRESSED)) {
+      if ((con->activeElement == 0 && event == EV_PRESSED) || (con->activeElement == i && event != EV_PRESSED)) {
         return 1;
       } else {
         return 0;
@@ -493,14 +493,14 @@ uint8_t gr2_touch_input(
   }
 
   if (event == EV_NONE) {
-    con->pscgElements[con->pscg_active_element].modified = 1;
-    con->pscg_active_element = 0;
+    con->pscgElements[con->activeElement].modified = 1;
+    con->activeElement = 0;
     return 0;
   } else if (event == EV_RELEASED) {
-    con->pscgElements[con->pscg_active_element].modified = 1;
-    con->reset_active_element_flag = 1;
-  } else if ((event == EV_HOLD) && (con->pscg_active_element != 0)) {
-    i = con->pscg_active_element;
+    con->pscgElements[con->activeElement].modified = 1;
+    con->resetActiveElementFlag = 1;
+  } else if ((event == EV_HOLD) && (con->activeElement != 0)) {
+    i = con->activeElement;
     if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) { // touch in screen
       if (1 != (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con))) { // but out of element
         con->pscgElements[i].event = EV_DRAGOUT; // event dragout is not really used here
@@ -527,11 +527,11 @@ uint8_t gr2_touch_input(
             con->pscgElements[i].event    = event;
             con->pscgElements[i].modified = 1;
             if (event == EV_PRESSED){
-              con->pscg_active_element = i;
+              con->activeElement = i;
             }
 
             if (event == EV_RELEASED) {
-              con->pscg_active_element = 0;
+              con->activeElement = 0;
             }
             retval = 1;
           }
@@ -546,7 +546,7 @@ uint8_t gr2_touch_input(
             con->pscgElements[i].modified = 1;
 
             if (event == EV_PRESSED) {
-              con->pscg_active_element = i;
+              con->activeElement = i;
             }
 
             if (event == EV_RELEASED) {
@@ -555,7 +555,7 @@ uint8_t gr2_touch_input(
               } else {
                 con->pscgElements[i].value = 1;
               }
-              con->pscg_active_element = 0;
+              con->activeElement = 0;
             }
             retval = 1;
           }
@@ -565,7 +565,7 @@ uint8_t gr2_touch_input(
       if (con->pscgElements[i].type == GR2_TYPE_SLIDER_V) {
         COUNT_A_B_C_D
         if ( touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)){
-          if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con) && (con->pscg_active_element == 0)) || (con->pscg_active_element == i)) {
+          if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con) && (con->activeElement == 0)) || (con->activeElement == i)) {
             con->pscgElements[i].event = event;
             con->pscgElements[i].prev_val = con->pscgElements[i].value;
             d -= con->pscgElements[i].param2/2;
@@ -579,10 +579,10 @@ uint8_t gr2_touch_input(
               gr2_set_value(i, con->pscgElements[i].param, con);
             }
             if (event == EV_PRESSED) {
-              con->pscg_active_element = i;
+              con->activeElement = i;
             }
             if (event == EV_RELEASED) {
-              con->pscg_active_element = 0;
+              con->activeElement = 0;
             }
             retval = 1;
           }
@@ -595,7 +595,7 @@ uint8_t gr2_touch_input(
             COUNT_A_B_C_D
 
             if (event == EV_PRESSED) {
-              con->pscg_active_element = i;
+              con->activeElement = i;
             }
             
             if (gr2_text_get_editable(i, con)) {
@@ -604,7 +604,7 @@ uint8_t gr2_touch_input(
                   retval = 2; //magic return value for opening the sw keyboard
                 }
                 gr2_activate_text(i, con);
-                con->pscg_active_element = 0;
+                con->activeElement = 0;
               }
             }
           
@@ -637,10 +637,10 @@ uint8_t gr2_touch_input(
             con->pscgElements[i].modified = 1;
             retval = 1;
             if (event == EV_PRESSED) {
-              con->pscg_active_element = i;
+              con->activeElement = i;
             }
             if (event == EV_RELEASED) {
-              con->pscg_active_element = 0;
+              con->activeElement = 0;
             }
           }
         }
@@ -649,7 +649,7 @@ uint8_t gr2_touch_input(
       if (con->pscgElements[i].type == GR2_TYPE_SLIDER_H) {
         COUNT_A_B_C_D
         if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
-          if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con) && (con->pscg_active_element == 0)) || (con->pscg_active_element == i)) {
+          if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con) && (con->activeElement == 0)) || (con->activeElement == i)) {
             con->pscgElements[i].event    = event;
             con->pscgElements[i].prev_val = con->pscgElements[i].value;
             a += con->pscgElements[i].param2/2;
@@ -664,10 +664,10 @@ uint8_t gr2_touch_input(
 
             retval = 1;
             if (event == EV_PRESSED) {
-              con->pscg_active_element = i;
+              con->activeElement = i;
             }
             if (event == EV_RELEASED) {
-              con->pscg_active_element = 0;
+              con->activeElement = 0;
             }
           }
         }
@@ -690,10 +690,10 @@ uint8_t gr2_touch_input(
             con->pscgElements[i].modified = 1;
             retval = 1;
             if (event == EV_PRESSED) {
-              con->pscg_active_element = i;
+              con->activeElement = i;
             }
             if (event == EV_RELEASED) {
-              con->pscg_active_element = 0;
+              con->activeElement = 0;
             }
           }
         }

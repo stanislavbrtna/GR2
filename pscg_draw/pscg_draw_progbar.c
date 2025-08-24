@@ -43,22 +43,22 @@ void gr2_draw_progbar_v(
 
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     // background
-    LCD_FillRect(x1, y1, x2, y2 - slider_pos, c->fill_color);
+    LCD_FillRect(x1, y1, x2, y2 - slider_pos, c->fillColor);
 
     // slider
-    LCD_FillRect(x1, y2 - slider_pos, x2, y2, c->active_color);
+    LCD_FillRect(x1, y2 - slider_pos, x2, y2, c->activeColor);
   } else {
     // grayed out variants
-    LCD_FillRect(x1, y1, x2, y2 - slider_pos, LCD_get_gray16(c->fill_color));
-    LCD_FillRect(x1, y2 - slider_pos, x2, y2, LCD_get_gray16(c->active_color));
+    LCD_FillRect(x1, y1, x2, y2 - slider_pos, LCD_get_gray16(c->fillColor));
+    LCD_FillRect(x1, y2 - slider_pos, x2, y2, LCD_get_gray16(c->activeColor));
   }
 
   // rest of the slider
-  LCD_DrawLine(x1, y2 - slider_pos, x2, y2 - slider_pos, c->border_color);
+  LCD_DrawLine(x1, y2 - slider_pos, x2, y2 - slider_pos, c->borderColor);
 
   // frame
-  LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
-  LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, c->border_color);
+  LCD_DrawRectangle(x1, y1, x2, y2, c->borderColor);
+  LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, c->borderColor);
 }
 
 
@@ -83,17 +83,17 @@ void gr2_draw_progbar_h(
 
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     // background
-    LCD_FillRect(x1 + slider_pos, y1, x2, y2, c->fill_color);
+    LCD_FillRect(x1 + slider_pos, y1, x2, y2, c->fillColor);
     // slider
-    LCD_FillRect(x1, y1, x1 + slider_pos, y2, c->active_color);
+    LCD_FillRect(x1, y1, x1 + slider_pos, y2, c->activeColor);
   } else {
-    LCD_FillRect(x1 + slider_pos, y1 , x2, y2, LCD_get_gray16(c->fill_color));
-    LCD_FillRect(x1, y1, x1 + slider_pos, y2, LCD_get_gray16(c->active_color));
+    LCD_FillRect(x1 + slider_pos, y1 , x2, y2, LCD_get_gray16(c->fillColor));
+    LCD_FillRect(x1, y1, x1 + slider_pos, y2, LCD_get_gray16(c->activeColor));
   }
 
-  LCD_DrawLine(x1 + slider_pos, y1, x1 + slider_pos, y2, c->border_color);
+  LCD_DrawLine(x1 + slider_pos, y1, x1 + slider_pos, y2, c->borderColor);
 
   // frame
-  LCD_DrawRectangle(x1, y1, x2, y2, c->border_color);
-  LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, c->border_color);
+  LCD_DrawRectangle(x1, y1, x2, y2, c->borderColor);
+  LCD_DrawRectangle(x1 + 1, y1 + 1, x2 - 1, y2 - 1, c->borderColor);
 }
