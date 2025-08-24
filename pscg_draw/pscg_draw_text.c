@@ -23,11 +23,11 @@ SOFTWARE.
 #include "pscg_draw.h"
 
 static void draw_editable(int16_t x1,
-int16_t y1,
-int16_t x2,
-int16_t y2,
-uint16_t id,
-gr2context * c
+  int16_t y1,
+  int16_t x2,
+  int16_t y2,
+  uint16_t id,
+  gr2context * c
 ) {
   LCD_setSubDrawArea(x1, y1, x2, y2);
   uint8_t  curr_font;
@@ -98,11 +98,11 @@ gr2context * c
         LCD_set_text_block(0, 0, 0);
       }
 
-      LCD_set_text_bg(1, text_bg, x2 - x1, y2 - y1);
-      LCD_DrawText_ext(x_add + x1, y1 + PSCG_TEXT_Y_GAP, c->textColor, c->pscgElements[id].str_value);
+      LCD_set_text_bg(1, text_bg, (x2 - x1) - c->textXScroll + x_add, y2 - y1);
+      LCD_DrawText_ext(x_add + x1 + c->textXScroll, y1 + PSCG_TEXT_Y_GAP + c->textYScroll, c->textColor, c->pscgElements[id].str_value);
       
       if (c->textBlockStart == c->textBlockEnd) {
-        LCD_Text_Draw_Cursor(x_add + x1, y1 + 5, c->pscgElements[id].str_value, c->pscgElements[id].param, c->textColor);
+        LCD_Text_Draw_Cursor(x_add + x1 + c->textXScroll, y1 + 5 + c->textYScroll, c->pscgElements[id].str_value, c->pscgElements[id].param, c->textColor);
       }
   
     } else {

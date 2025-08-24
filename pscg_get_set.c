@@ -206,6 +206,25 @@ void gr2_text_set_editable(uint16_t id, uint16_t val, gr2context * c) {
 	}
 }
 
+void gr2_text_set_x_scroll(int16_t val, gr2context * c) {
+	c->textXScroll = val;
+	if(c->textActive) {
+		gr2_set_modified(c->textActiveId, c);
+	}
+}
+
+void gr2_text_set_y_scroll(int16_t val, gr2context * c) {
+	c->textYScroll = val;
+	if(c->textActive) {
+		gr2_set_modified(c->textActiveId, c);
+	}
+}
+
+void gr2_set_text_scr_auto_scroll(uint16_t id, uint16_t val, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	c->pscgScreens[c->pscgElements[id].value].textAutoScroll = val;
+}
+
 uint8_t gr2_text_get_editable(uint16_t id, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
 	if (c->pscgElements[id].status_reg & GR2_TEXT_EDITABLE_B) {
@@ -740,6 +759,8 @@ void gr2_activate_text(uint16_t id, gr2context * c) {
 	c->textActiveId   = id;
 	c->textBlockStart = 0;
     c->textBlockEnd   = 0;
+	c->textXScroll    = 0;
+	c->textYScroll    = 0;
 }
 
 void gr2_text_deactivate(gr2context * c) {

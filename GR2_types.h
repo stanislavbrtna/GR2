@@ -108,6 +108,7 @@ typedef struct {
   uint16_t cell_space_bottom;
 
   uint8_t  default_font;
+  uint8_t  textAutoScroll;
 
   uint16_t kbd_selected;
 
@@ -147,6 +148,9 @@ typedef struct {
   uint16_t defaultSliderSize;
 
   uint8_t  activeElement;
+
+  int16_t  textXScroll;
+  int16_t  textYScroll;
 
   uint8_t  relativeInit;
   uint8_t  roundedInit;

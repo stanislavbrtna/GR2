@@ -24,8 +24,8 @@ SOFTWARE.
 #define GR2_H
 
 
-// GR2 version 2.4
-#define GR2_VERSION 240
+// GR2 version 3.0
+#define GR2_VERSION 300
 
 #ifdef PC
 #include <stdio.h>

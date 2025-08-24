@@ -181,6 +181,9 @@ uint8_t gr2_get_text_active(uint16_t id, gr2context * c);
 uint16_t gr2_get_text_width(uint16_t id, uint16_t pos, gr2context * c);
 uint16_t gr2_get_text_height(uint16_t id, uint16_t pos, gr2context * c);
 
+void gr2_text_set_x_scroll(int16_t val, gr2context * c);
+void gr2_text_set_y_scroll(int16_t val, gr2context * c);
+
 // events
 gr2EventType gr2_get_event(uint16_t id, gr2context * c);
 void gr2_set_event(uint16_t id, gr2EventType val, gr2context * c);
@@ -206,6 +209,7 @@ void gr2_set_y_cell(uint16_t id, uint16_t val, gr2context * c);
 uint16_t gr2_get_x_cell(uint16_t id, gr2context * c);
 uint16_t gr2_get_y_cell(uint16_t id, gr2context * c);
 void gr2_set_default_font(uint16_t id, uint8_t val, gr2context * c);
+void gr2_set_text_scr_auto_scroll(uint16_t id, uint16_t val, gr2context * c);
 void gr2_set_cell_space_left(uint16_t id, uint16_t val, gr2context * c);
 void gr2_set_cell_space_right(uint16_t id, uint16_t val, gr2context * c);
 void gr2_set_cell_space_top(uint16_t id, uint16_t val, gr2context * c);

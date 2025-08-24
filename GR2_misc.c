@@ -46,12 +46,15 @@ void gr2_reset_context(gr2context * c) {
   c->textMouseX                = 0;
   c->textMouseY                = 0;
   c->textMaxWidth              = 0;
-  c->defaultGridSize         = 32;
-  c->defaultGridSpacing      = 0;
-  c->activeElement       = 0;
-  c->relativeInit             = 0;
-  c->roundedInit              = GR2_ROUNDED_DEFAULT;
-  c->defaultSliderSize       = 32;
+  c->defaultGridSize           = 32;
+  c->defaultGridSpacing        = 0;
+  c->activeElement             = 0;
+  c->relativeInit              = 0;
+  c->roundedInit               = GR2_ROUNDED_DEFAULT;
+  c->defaultSliderSize         = 32;
+
+  c->textXScroll               = 0;
+  c->textYScroll               = 0;
 
   c->borderColor     = 0x0000; // black
   c->textColor       = 0x0000; // black
