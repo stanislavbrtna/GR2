@@ -98,7 +98,7 @@ static void draw_editable(int16_t x1,
         LCD_set_text_block(0, 0, 0);
       }
 
-      LCD_set_text_bg(1, text_bg, (x2 - x1) - c->textXScroll + x_add, y2 - y1);
+      LCD_set_text_bg(1, text_bg, (x2 - x1) - c->textXScroll + x_add, y2 - y1 - c->textYScroll);
       LCD_DrawText_ext(x_add + x1 + c->textXScroll, y1 + PSCG_TEXT_Y_GAP + c->textYScroll, c->textColor, c->pscgElements[id].str_value);
       
       if (c->textBlockStart == c->textBlockEnd) {

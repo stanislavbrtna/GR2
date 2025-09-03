@@ -207,17 +207,17 @@ void gr2_text_set_editable(uint16_t id, uint16_t val, gr2context * c) {
 }
 
 void gr2_text_set_x_scroll(int16_t val, gr2context * c) {
-	c->textXScroll = val;
-	if(c->textActive) {
+	if(c->textActive && c->textXScroll != val) {
 		gr2_set_modified(c->textActiveId, c);
 	}
+	c->textXScroll = val;
 }
 
 void gr2_text_set_y_scroll(int16_t val, gr2context * c) {
-	c->textYScroll = val;
-	if(c->textActive) {
+	if(c->textActive && c->textYScroll != val) {
 		gr2_set_modified(c->textActiveId, c);
 	}
+	c->textYScroll = val;
 }
 
 void gr2_set_text_scr_auto_scroll(uint16_t id, uint16_t val, gr2context * c) {
