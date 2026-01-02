@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2022 Stanislav Brtna
+Copyright (c) 2025 Stanislav Brtna
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,33 +20,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "pscg_draw.h"
+#ifndef GR2_FONTS_H
+#define GR2_FONTS_H
 
-void gr2_draw_image(
-    int16_t x1,
-    int16_t y1,
-    int16_t x2,
-    int16_t y2,
-    uint16_t id,
-    gr2context * c
-) {
-  LCD_drawArea area;
-  LCD_setSubDrawArea(x1, y1, x2, y2);
-  LCD_getDrawArea(&area);
+#include "font18.h"
+#include "font18_cz.h"
+#include "font18_emoji.h"
 
-#ifdef PPM_SUPPORT_ENABLED
-  if (svp_fexists(c->pscgElements[id].str_value)) {
-    if (c->pscgElements[id].param != 0) {
-      sda_p16_set_alpha(1, c->pscgElements[id].param - 1, c->backgroundColor);
-    }
-    sda_img_draw(x1, y1, c->pscgElements[id].value, c->pscgElements[id].value, c->pscgElements[id].str_value);
-    sda_p16_set_alpha(0, 0, c->backgroundColor);
-  }  else {
-    LCD_FillRect(x1, y1, x2, y2, c->activeColor);
-    LCD_DrawRectangle(x1, y1, x2, y2, c->borderColor);
-    LCD_DrawLine(x1, y1, x2, y2, c->borderColor);
-    LCD_DrawLine(x1, y2, x2, y1, c->borderColor);
-  }
+#include "font32.h"
+#include "font32_cz.h"
+
+#include "mono70.h"
+
+#include "roboto87.h"
+#include "roboto87_cz.h"
+
+#include "roboto12.h"
+#include "roboto12_cz.h"
+
+#include "font12mono.h"
+#include "font12mono_cz.h"
+
 #endif
-  LCD_setDrawAreaS(&area); //draw_ppm changes subdraw area, so it must be restored
-}

@@ -29,12 +29,12 @@ static void draw_slider(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t 
   uint16_t ac, bc, bac;
   
   if (grayout == 0) {
-    ac = c->active_color;
-    bc = c->border_color;
-    bac = c->background_color;
+    ac = c->activeColor;
+    bc = c->borderColor;
+    bac = c->backgroundColor;
   } else {
-    ac = LCD_get_gray16(c->active_color);
-    bc = LCD_get_gray16(c->border_color);
+    ac = LCD_get_gray16(c->activeColor);
+    bc = LCD_get_gray16(c->borderColor);
   }
 
   LCD_FillRect(x1, y1, x2, y2, ac);
@@ -51,12 +51,17 @@ static void draw_slider(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t 
   uint16_t ac, bc, bac;
   
   if (grayout == 0) {
-    ac = c->active_color;
-    bc = c->border_color;
-    bac = c->background_color;
+    ac = c->activeColor;
+    bc = c->borderColor;
   } else {
-    ac = LCD_get_gray16(c->active_color);
-    bc = LCD_get_gray16(c->border_color);
+    ac = LCD_get_gray16(c->activeColor);
+    bc = LCD_get_gray16(c->borderColor);
+  }
+
+  if (global_grayout_flag) {
+    bac = LCD_get_gray16(c->backgroundColor);
+  } else {
+    bac = c->backgroundColor;
   }
 
   LCD_FillRect(x1, y1 + GR2_SLIDER_RADIUS, x2, y2 - GR2_SLIDER_RADIUS, ac);
@@ -111,10 +116,16 @@ static void draw_slider(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t 
       }
     }
   }
-
-  
 }
 #endif
+
+static void slider_clear_bg(int16_t x1, int16_t y1, int16_t x2, int16_t y2, gr2context * c) {
+  if (global_grayout_flag) {
+    LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->backgroundColor));
+  } else {
+    LCD_FillRect(x1, y1, x2, y2, c->backgroundColor);
+  }
+}
 
 void gr2_draw_slider_v(
     int16_t x1,
@@ -131,8 +142,9 @@ void gr2_draw_slider_v(
   uint16_t width = x2 - x1;
 
   LCD_setSubDrawArea(x1, y1, x2, y2);
-
-  LCD_FillRect(x1, y1, x2, y2, c->background_color); // clear
+  
+  // clear
+  slider_clear_bg(x1, y1, x2, y2, c);
 
   slider_pos = (int32_t)(((float)value / (float)param) * ((float)(y2 - y1 - slider_size)));
 
@@ -143,17 +155,17 @@ void gr2_draw_slider_v(
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     LCD_FillRect(
       x1 + width/4, y1, x2 - width/4, y2,
-      c->fill_color
+      c->fillColor
     );
 
     LCD_FillRect(
       x1 + width/4, y1 + slider_pos, x2 - width/4, y2,
-      c->active_color
+      c->activeColor
     );
 
     LCD_DrawRectangle(
       x1 + width/4, y1, x2 - width/4, y2,
-      c->border_color
+      c->borderColor
     );
 
     // slider
@@ -162,17 +174,17 @@ void gr2_draw_slider_v(
   } else {
     LCD_FillRect(
       x1 + width/4, y1, x2 - width/4, y2,
-      LCD_get_gray16(c->fill_color)
+      LCD_get_gray16(c->fillColor)
     );
 
     LCD_FillRect(
       x1 + width/4, y1 + slider_pos, x2 - width/4, y2,
-      LCD_get_gray16(c->active_color)
+      LCD_get_gray16(c->activeColor)
     );
 
     LCD_DrawRectangle(
       x1 + width/4, y1, x2 - width/4, y2,
-      LCD_get_gray16(c->border_color)
+      LCD_get_gray16(c->borderColor)
     );
 
     // slider
@@ -215,10 +227,7 @@ void gr2_draw_slider_v_f(
   }
 
   // clear old slider from screen
-  LCD_FillRect(
-    x1, y1 + slider_pos_o, x2, y1 + slider_pos_o + slider_size + 1,
-    c->background_color
-  );
+  slider_clear_bg(x1, y1 + slider_pos_o, x2, y1 + slider_pos_o + slider_size + 1, c);
 
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     if (slider_pos >= slider_pos_o) {
@@ -227,7 +236,7 @@ void gr2_draw_slider_v_f(
         y1 + slider_pos_o,
         x2 - width/4,
         y1 + slider_pos,
-        c->fill_color
+        c->fillColor
       );
     } else {
       LCD_FillRect(
@@ -235,7 +244,7 @@ void gr2_draw_slider_v_f(
         y1 + slider_pos,
         x2 - width/4,
         y1 + slider_pos_o + slider_size + 1,
-        c->active_color
+        c->activeColor
       );
     }
     LCD_DrawRectangle(
@@ -243,7 +252,7 @@ void gr2_draw_slider_v_f(
       y1,
       x2 - width/4,
       y2,
-      c->border_color
+      c->borderColor
     );
 
     // slider
@@ -255,17 +264,17 @@ void gr2_draw_slider_v_f(
         y1 + slider_pos_o,
         x2 - width/4,
         y1 + slider_pos,
-        LCD_get_gray16(c->fill_color)
+        LCD_get_gray16(c->fillColor)
       );
     } else {
       LCD_FillRect(
         x1 + width/4, y1 + slider_pos, x2 - width/4, y1 + slider_pos_o + slider_size + 1,
-        LCD_get_gray16(c->active_color)
+        LCD_get_gray16(c->activeColor)
       );
     }
     LCD_DrawRectangle(
       x1 + width/4, y1, x2 - width/4, y2,
-      LCD_get_gray16(c->border_color)
+      LCD_get_gray16(c->borderColor)
     );
 
     // slider
@@ -291,7 +300,7 @@ void gr2_draw_slider_h(
   uint16_t height = 0;
   height = y2 - y1;
 
-  LCD_FillRect(x1, y1, x2, y2 + 1, c->background_color);
+  slider_clear_bg(x1, y1, x2, y1 + 1, c);
 
   slider_pos = (int32_t)(((float)value/(float)param)*((float)(x2 - x1 - slider_size)));
 
@@ -302,15 +311,15 @@ void gr2_draw_slider_h(
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     LCD_FillRect(
       x1, y1 + height/4, x2, y2 - height/4,
-      c->active_color
+      c->activeColor
     ); // upper background
     LCD_FillRect(
       x1 + slider_pos, y1 + height/4, x2, y2 - height/4,
-      c->fill_color
+      c->fillColor
     ); // lower background
     LCD_DrawRectangle(
       x1, y1 + height/4, x2, y2 - height/4,
-      c->border_color
+      c->borderColor
     ); // frame
 
     // slider
@@ -319,15 +328,15 @@ void gr2_draw_slider_h(
   } else {
     LCD_FillRect(
       x1, y1 + height/4, x2, y2 - height/4,
-      LCD_get_gray16(c->active_color)
+      LCD_get_gray16(c->activeColor)
     );
     LCD_FillRect(
       x1 + slider_pos, y1 + height/4, x2, y2 - height/4,
-      LCD_get_gray16(c->fill_color)
+      LCD_get_gray16(c->fillColor)
     );
     LCD_DrawRectangle(
       x1, y1 + height/4, x2, y2 - height/4,
-      LCD_get_gray16(c->border_color)
+      LCD_get_gray16(c->borderColor)
     );
     //slider
     draw_slider(x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2, gr2_get_select(id, c), 1, c);
@@ -367,26 +376,23 @@ void gr2_draw_slider_h_f(
   }
 
   // remove old slider
-  LCD_FillRect(
-    x1 + slider_pos_o, y1, x1 + slider_pos_o + slider_size, y2,
-    c->background_color
-  );
+  slider_clear_bg(x1 + slider_pos_o, y1, x1 + slider_pos_o + slider_size, y2, c);
 
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
     if (slider_pos >= slider_pos_o) {
       LCD_FillRect(
         x1 + slider_pos_o, y1 + height/4, x1 + slider_pos, y2 - height/4,
-        c->active_color
+        c->activeColor
       );
     } else {
       LCD_FillRect(
         x1 + slider_pos, y1 + height/4, x1 + slider_pos_o + slider_size, y2 - height/4,
-        c->fill_color
+        c->fillColor
         );
     }
     LCD_DrawRectangle(
       x1, y1 + height/4, x2, y2 - height/4,
-      c->border_color
+      c->borderColor
     );
     //slider
     draw_slider(x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2, gr2_get_select(id, c), 0, c);
@@ -394,17 +400,17 @@ void gr2_draw_slider_h_f(
     if (slider_pos >= slider_pos_o) {
       LCD_FillRect(
         x1 + slider_pos_o, y1 + height/4, x1 + slider_pos, y2 - height/4,
-        LCD_get_gray16(c->active_color)
+        LCD_get_gray16(c->activeColor)
       );
     } else {
       LCD_FillRect(
         x1 + slider_pos, y1 + height/4, x1 + slider_pos_o + slider_size, y2 - height/4,
-        LCD_get_gray16(c->fill_color)
+        LCD_get_gray16(c->fillColor)
       );
     }
     LCD_DrawRectangle(
       x1, y1 + height/4, x2, y2 - height/4,
-      LCD_get_gray16(c->border_color)
+      LCD_get_gray16(c->borderColor)
     );
     draw_slider(x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2, gr2_get_select(id, c), 1, c);
   }

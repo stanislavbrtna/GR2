@@ -38,35 +38,63 @@ void gr2_draw_button(
   curr_font = LCD_Get_Font_Size();
   LCD_Set_Sys_Font(c->pscgElements[id].param2);
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
-    if((active == 1) && (c->pscgElements[id].pre_active == 0)) {
-      gr2_button_draw_bg(x1, y1, x2, y2, c->active_color, c->pscgElements[id].status_reg);
-    }else if (active == 0) {
+    uint16_t bg_color;
+
+    if(active == 1) {
+      bg_color = c->activeColor;
+    } else {
       if ((c->pscgElements[id].status_reg & GR2_GHOST_B) == 0) {
-        gr2_button_draw_bg(x1, y1, x2, y2, c->fill_color, c->pscgElements[id].status_reg);
+        bg_color = c->fillColor;
       } else {
-        gr2_button_draw_bg(x1, y1, x2, y2, c->background_color, c->pscgElements[id].status_reg);
+        bg_color = c->backgroundColor;
       }
     }
+
+    if(active == 1 && c->pscgElements[id].pre_active == 0) {
+      gr2_button_draw_bg(x1, y1, x2, y2, bg_color, c->pscgElements[id].status_reg);
+    }else if (active == 0) {
+      gr2_button_draw_bg(x1, y1, x2, y2, bg_color, c->pscgElements[id].status_reg);
+    }
+
+    int32_t sic_width = 0;
+
+    if(c->pscgElements[id].str_value2 != 0 && !gr2_strcmp(c->pscgElements[id].str_value2, "")) {
+#ifdef PPM_SUPPORT_ENABLED
+      sda_draw_sic_file(x1 + 2 + c->pscgElements[id].param/2, y1 + 1, c->textColor, bg_color, c->pscgElements[id].str_value2);
+      sic_width = sda_sic_get_last_width();
+#endif
+    }
+
     LCD_DrawText_ext(
-      x1 + gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].param, c),
+      x1 + gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].param + sic_width, c),
       y1 + PSCG_TEXT_Y_GAP,
-      c->text_color,
+      c->textColor,
       str
     );
     if (c->pscgElements[id].status_reg & GR2_SELECT_B) {
-      gr2_button_draw_frame(x1 + 5, y1 + 4, x2 - 5, y2 - 4, c->active_color, c->pscgElements[id].status_reg);
+      gr2_button_draw_frame(x1 + 5, y1 + 4, x2 - 5, y2 - 4, c->activeColor, c->pscgElements[id].status_reg);
     }
-    gr2_button_draw_frame(x1,y1,x2,y2,c->border_color, c->pscgElements[id].status_reg);
+    gr2_button_draw_frame(x1,y1,x2,y2,c->borderColor, c->pscgElements[id].status_reg);
     
   }  else {
-    gr2_button_draw_bg(x1, y1, x2, y2, LCD_get_gray16(c->fill_color), c->pscgElements[id].status_reg);
+    gr2_button_draw_bg(x1, y1, x2, y2, LCD_get_gray16(c->fillColor), c->pscgElements[id].status_reg);
+
+    int32_t sic_width = 0;
+
+    if(c->pscgElements[id].str_value2 != 0 && !gr2_strcmp(c->pscgElements[id].str_value2, "")) {
+#ifdef PPM_SUPPORT_ENABLED
+      sda_draw_sic_file(x1 + 2 + c->pscgElements[id].param/2, y1 + 1, c->textColor, LCD_get_gray16(c->fillColor), c->pscgElements[id].str_value2);
+      sic_width = sda_sic_get_last_width();
+#endif
+    }
+
     LCD_DrawText_ext(
-      x1 + gr2_get_text_align_x(id, x1, x2,c->pscgElements[id].param, c),
+      x1 + gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].param + sic_width, c),
       y1 + PSCG_TEXT_Y_GAP,
-      LCD_get_gray16(c->text_color),
+      LCD_get_gray16(c->textColor),
       str
     );
-    gr2_button_draw_frame(x1,y1,x2,y2,LCD_get_gray16(c->border_color), c->pscgElements[id].status_reg);
+    gr2_button_draw_frame(x1,y1,x2,y2,LCD_get_gray16(c->borderColor), c->pscgElements[id].status_reg);
   }
   LCD_Set_Sys_Font(curr_font);
   c->pscgElements[id].pre_active = active;

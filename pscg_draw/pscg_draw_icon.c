@@ -35,17 +35,17 @@ static void draw_text_box(int32_t x1, int32_t y1, int32_t x2, uint8_t state, uin
   curr_font = LCD_Get_Font_Size();
 
   if (state == 2) { //grayout
-    bc = LCD_get_gray16(c->border_color);
-    fc = LCD_get_gray16(c->fill_color);
-    ac = LCD_get_gray16(c->active_color);
-    tc = LCD_get_gray16(c->text_color);
-    ba = LCD_get_gray16(c->background_color);
+    bc = LCD_get_gray16(c->borderColor);
+    fc = LCD_get_gray16(c->fillColor);
+    ac = LCD_get_gray16(c->activeColor);
+    tc = LCD_get_gray16(c->textColor);
+    ba = LCD_get_gray16(c->backgroundColor);
   } else {
-    bc = c->border_color;
-    fc = c->fill_color;
-    ac = c->active_color;
-    tc = c->text_color;
-    ba = c->background_color;
+    bc = c->borderColor;
+    fc = c->fillColor;
+    ac = c->activeColor;
+    tc = c->textColor;
+    ba = c->backgroundColor;
   }
 
   LCD_Set_Sys_Font(c->pscgElements[id].param2);
@@ -111,24 +111,25 @@ void gr2_draw_icon(
 ) {
   LCD_drawArea area;
   uint16_t size = 0;
-  uint16_t bc, fc, ac, tc;
+  uint16_t bc, fc, ac, tc, bac;
   
-  int32_t box_x2;
-  int32_t box_ystart;
+  int32_t box_ystart = y1;
   int32_t box_xstart = x1;
 
   int32_t img_x1 = x1;
 
   if ((c->pscgElements[id].grayout == 0) && (global_grayout_flag == 0)) {
-    bc = c->border_color;
-    fc = c->fill_color;
-    ac = c->active_color;
-    tc = c->text_color;
+    bc  = c->borderColor;
+    fc  = c->fillColor;
+    ac  = c->activeColor;
+    tc  = c->textColor;
+    bac = c->backgroundColor; 
   } else {
-    bc = LCD_get_gray16(c->border_color);
-    fc = LCD_get_gray16(c->fill_color);
-    ac = LCD_get_gray16(c->active_color);
-    tc = LCD_get_gray16(c->text_color);
+    bc  = LCD_get_gray16(c->borderColor);
+    fc  = LCD_get_gray16(c->fillColor);
+    ac  = LCD_get_gray16(c->activeColor);
+    tc  = LCD_get_gray16(c->textColor);
+    bac = LCD_get_gray16(c->backgroundColor); 
   }
 
   // get the image info
@@ -146,9 +147,7 @@ void gr2_draw_icon(
     size = (y2 - y1  + 1) / img_h;
   }
   
-
   LCD_setSubDrawArea(x1, y1, x2 + 1, y2); // set sub-draw area
-
   LCD_getDrawArea(&area); // store the area
 
   //printf("size: %d, txt: %s\n", size, c->pscgElements[id].str_value);
@@ -176,12 +175,12 @@ void gr2_draw_icon(
     if (svp_fexists(c->pscgElements[id].str_value2)) {
       svp_ppm_set_pmc(1, ac);
       if (c->pscgElements[id].param != 0) {
-        sda_p16_set_alpha(1, c->pscgElements[id].param - 1, c->background_color);
+        sda_p16_set_alpha(1, c->pscgElements[id].param - 1, bac);
       }
       sda_img_set_mix_color(1, ac);
       sda_img_draw(img_x1, y1, size, size, c->pscgElements[id].str_value2);
 
-      sda_p16_set_alpha(0, 0, c->background_color);
+      sda_p16_set_alpha(0, 0, bac);
       sda_img_set_mix_color(0, ac);
     } else {
       // if there is no icon, will draw empty rectangle
@@ -206,18 +205,20 @@ void gr2_draw_icon(
 #ifdef PPM_SUPPORT_ENABLED
     if (svp_fexists(c->pscgElements[id].str_value2)) {
       if (c->pscgElements[id].param != 0) {
-        sda_p16_set_alpha(1, c->pscgElements[id].param - 1, c->background_color);
+        sda_p16_set_alpha(1, c->pscgElements[id].param - 1, bac);
       }
-      if (c->pscgElements[id].grayout == 1) {
-        sda_img_set_mix_color(1, ac);
-      } else if (c->pscgElements[id].status_reg & GR2_SELECT_B) {
+
+      if(c->pscgElements[id].grayout == 1
+         || global_grayout_flag
+         || c->pscgElements[id].status_reg & GR2_SELECT_B
+      ) {
         sda_img_set_mix_color(1, ac);
       }
       
       sda_img_draw(img_x1, y1, size, size, c->pscgElements[id].str_value2);
 
       sda_img_set_mix_color(0, ac);
-      sda_p16_set_alpha(0, 0, c->background_color);
+      sda_p16_set_alpha(0, 0, bac);
     } else {
       if (c->pscgElements[id].status_reg & GR2_SELECT_B) {
         LCD_FillRect(x1, y1, x1 + 64 * size, y1 + 64 * size, ac);
@@ -240,7 +241,7 @@ void gr2_draw_icon(
 
     LCD_setDrawAreaS(&area); // restore sub draw area
     
-    if (c->pscgElements[id].grayout == 1) {
+    if (c->pscgElements[id].grayout == 1 || global_grayout_flag) {
       draw_text_box(box_xstart, box_ystart, x2, 2, id, 0, c);
     } else if (c->pscgElements[id].status_reg & GR2_SELECT_B) {
       draw_text_box(box_xstart, box_ystart, x2, 1, id, 0, c);

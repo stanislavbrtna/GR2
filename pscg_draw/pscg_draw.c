@@ -38,28 +38,26 @@ int16_t gr2_get_text_align_x(uint16_t id, int16_t x1, int16_t x2, int16_t offset
   uint8_t alignment;
   int16_t x_add = 0;
   alignment = gr2_text_get_align(id, c);
-  if (alignment != GR2_ALIGN_LEFT) {
-    if (alignment == GR2_ALIGN_RIGHT) {
-      x_add = x2 - x1 - LCD_Text_Get_Width(c->pscgElements[id].str_value, 0) - offset;
-    } else if (alignment == GR2_ALIGN_CENTER) {
-      x_add = (x2 - x1)/2 - LCD_Text_Get_Width(c->pscgElements[id].str_value, 0)/2 + 1;
-    }
-  } else {
+  if (alignment == GR2_ALIGN_LEFT) {
     x_add += offset;
+  } else if (alignment == GR2_ALIGN_RIGHT) {
+    x_add = x2 - x1 - LCD_Text_Get_Width(c->pscgElements[id].str_value, 0) - offset;
+  } else if (alignment == GR2_ALIGN_CENTER) {
+    x_add = (x2 - x1)/2 - LCD_Text_Get_Width(c->pscgElements[id].str_value, 0)/2 + 1;
   }
 
   return x_add;
 }
 
 void gr2_draw_end(gr2context * c) {
-  c->invisible_flag = 0;
+  c->invisibleFlag = 0;
 
-  if (c->reset_active_element_flag) {
-    c->pscgElements[c->pscg_active_element].pre_active = 0;
-    c->pscgElements[c->pscg_active_element].modified = 1;
+  if (c->resetActiveElementFlag) {
+    c->pscgElements[c->activeElement].pre_active = 0;
+    c->pscgElements[c->activeElement].modified = 1;
 
-    c->pscg_active_element = 0;
-    c->reset_active_element_flag = 0;
+    c->activeElement = 0;
+    c->resetActiveElementFlag = 0;
   }
 
   gr2_set_global_grayout_flag(0);

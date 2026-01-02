@@ -20,30 +20,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef LCD_TEXT_H
-#define LCD_TEXT_H
-#include "GR2.h"
+#ifndef LCD_TEXT_DRAW_H
+#define LCD_TEXT_DRAW_H
+#include "../GR2.h"
 
-//draw text and text misc. functions
 void LCD_DrawText_ext(int16_t x, int16_t y, uint16_t color, uint8_t *text);
-void LCD_DrawText_Pwd(int16_t x, int16_t y, uint16_t color, uint8_t *text);
-void LCD_Text_Draw_Cursor_Pwd(int16_t x, int16_t y, uint8_t *text, uint16_t Color);
+
 void LCD_set_text_block(uint32_t start, uint32_t end, uint16_t color);
+void LCD_set_fitText(uint8_t enable, uint16_t max);
+void LCD_set_text_bg(uint8_t enable, uint16_t color, int16_t width, int16_t height);
+
 uint16_t LCD_Text_Get_Width(uint8_t *text, uint16_t count); //if count == 0 maximum line width is returned
 uint16_t LCD_Text_Get_Height(uint8_t *text, uint16_t count); //if count == 0 maximum line height is returned
-uint16_t LCD_Draw_Get_Font_Height();
-uint16_t LCD_Draw_Get_Font_Width();
-uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, uint16_t touch_x, uint16_t touch_y);
+uint16_t LCD_Text_Get_Cursor_Pos(uint8_t *text, int16_t touch_x, int16_t touch_y, uint16_t max_w);
 
 void LCD_Text_Draw_Cursor(int16_t x, int16_t y, uint8_t *text, uint16_t pos, uint16_t Color);
 
-void LCD_Set_Sys_Font(uint8_t size);
-uint8_t LCD_Get_Font_Size();
-
-void LCD_set_fitText(uint8_t enable, uint16_t max);
-int32_t LCD_get_fitText_breakpoint(); // returns position of first automatic breakpoint
-
-uint16_t LCD_DrawChar(int16_t x, int16_t y, uint16_t color, uint16_t znak, const uint8_t *font);
-uint16_t LCD_Char_Get_Width(uint16_t znak, const uint8_t *font);
+void LCD_Text_Get_WH(uint8_t *text, uint16_t pos, uint16_t max_w, uint16_t *width, uint16_t *height);
 
 #endif

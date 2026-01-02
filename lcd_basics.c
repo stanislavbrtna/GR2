@@ -268,7 +268,6 @@ void LCD_FillRect(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t Color
       LCD_draw_point_wrp(Color);
     }
   }
-  LCD_set_XY(0, 0, lcd_x_size, lcd_y_size);
 #endif
 
 #ifdef STM_BSP_FILL
@@ -557,8 +556,8 @@ void LCD_DrawLine(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t color
     LCD_FillRect(x1, y1, x1, y2, color);
     return;
   } else {
-    incx =- 1;
-    delta_x =- delta_x;
+    incx = -1;
+    delta_x = -delta_x;
   }
 
   if(delta_y > 0) {
@@ -567,8 +566,8 @@ void LCD_DrawLine(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t color
     LCD_FillRect(x1, y1, x2, y1, color);
     return;
   } else {
-    incy =- 1;
-    delta_y =- delta_y;
+    incy = -1;
+    delta_y = -delta_y;
   }
 
   if(delta_x > delta_y)

@@ -21,7 +21,7 @@ SOFTWARE.
 */
 
 #include "GR2.h"
-gr2context * svs_pscg_c;
+gr2context *svs_pscg_c;
 
 void set_gr2_workaround_context(gr2context * c) {
   svs_pscg_c = c;
@@ -33,23 +33,25 @@ void gr2_garbage_workaround(uint8_t *strId, uint32_t str_len, uint8_t *max) {
   uint16_t x = 0;
 
   for(x = 1; x <= svs_pscg_c->maxElementsId; x++) {
-      if (((svs_pscg_c->pscgElements[x].str_value) > strId)
-            && (svs_pscg_c->pscgElements[x].str_value <= max)
-            && (svs_pscg_c->pscgElements[x].valid == 1))
-      {
-        //printf("GR2-GC-DBG changing: %s \n", svs_pscg_c->pscgElements[x].str_value - (uint8_t *)str_len);
-        svs_pscg_c->pscgElements[x].str_value
-          = (void*) ((uint32_t)svs_pscg_c->pscgElements[x].str_value - str_len);
-      }
+    if (
+      (svs_pscg_c->pscgElements[x].str_value > strId) &&
+      (svs_pscg_c->pscgElements[x].str_value <= max) &&
+      (svs_pscg_c->pscgElements[x].valid == 1)
+    ){
+      //printf("GR2-GC-DBG changing: %s \n", svs_pscg_c->pscgElements[x].str_value - (uint8_t *)str_len);
+      svs_pscg_c->pscgElements[x].str_value
+        = (uint8_t*) ((uint32_t)svs_pscg_c->pscgElements[x].str_value - str_len);
+    }
 
-      if (((svs_pscg_c->pscgElements[x].str_value2) > strId)
-            && (svs_pscg_c->pscgElements[x].str_value2 <= max)
-            && (svs_pscg_c->pscgElements[x].valid == 1))
-      {
-        //printf("GR2-GC-DBG changing: %s to %s\n", pscgElements[x].str_value,pscgElements[x].str_value - (uint8_t *)str_len);
-        svs_pscg_c->pscgElements[x].str_value2
-          = (void*) ((uint32_t)svs_pscg_c->pscgElements[x].str_value2 - str_len);
-      }
+    if (
+      (svs_pscg_c->pscgElements[x].str_value2 > strId) &&
+      (svs_pscg_c->pscgElements[x].str_value2 <= max) &&
+      (svs_pscg_c->pscgElements[x].valid == 1)
+    ){
+      //printf("GR2-GC-DBG changing: %s to %s\n", pscgElements[x].str_value,pscgElements[x].str_value - (uint8_t *)str_len);
+      svs_pscg_c->pscgElements[x].str_value2
+        = (uint8_t*) ((uint32_t)svs_pscg_c->pscgElements[x].str_value2 - str_len);
+    }
   }
 }
 
@@ -58,10 +60,17 @@ uint8_t gr2_garbage_workaround2(uint8_t *strId) {
   uint16_t x = 0;
 
   for(x = 1; x <= svs_pscg_c->maxElementsId; x++) {
-      if ((svs_pscg_c->pscgElements[x].str_value == strId || svs_pscg_c->pscgElements[x].str_value2 == strId) && (svs_pscg_c->pscgElements[x].valid == 1)) {
-        //printf("GR2-GC-DBG: valid string:%s", pscgElements[x].str_value);
-        return 1;
-      }
+    if(
+      (
+        svs_pscg_c->pscgElements[x].str_value == strId ||
+        svs_pscg_c->pscgElements[x].str_value2 == strId
+      ) && (
+        svs_pscg_c->pscgElements[x].valid == 1
+      )
+    ){
+      //printf("GR2-GC-DBG: valid string:%s", pscgElements[x].str_value);
+      return 1;
+    }
   }
   return 0;
 }

@@ -25,7 +25,7 @@ SOFTWARE.
 uint32_t sda_strlen(uint8_t * str);
 
 void gr2_set_grid_size(uint16_t size, gr2context * c) {
-	c->default_grid_size = size;
+	c->defaultGridSize = size;
 }
 
 uint8_t gr2_get_valid(uint16_t id, gr2context * c) {
@@ -35,43 +35,43 @@ uint8_t gr2_get_valid(uint16_t id, gr2context * c) {
 
 // color getters and setters
 void gr2_set_border_color(uint16_t col, gr2context * c) {
-	c->border_color = col;
+	c->borderColor = col;
 }
 
 uint16_t gr2_get_border_color(gr2context * c) {
-	return c->border_color;
+	return c->borderColor;
 }
 
 void gr2_set_text_color(uint16_t col, gr2context * c) {
-	c->text_color = col;
+	c->textColor = col;
 }
 
 uint16_t gr2_get_text_color(gr2context * c) {
-	return c->text_color;
+	return c->textColor;
 }
 
 void gr2_set_background_color(uint16_t col, gr2context * c) {
-	c->background_color = col;
+	c->backgroundColor = col;
 }
 
 uint16_t gr2_get_background_color(gr2context * c) {
-	return c->background_color;
+	return c->backgroundColor;
 }
 
 void gr2_set_fill_color(uint16_t col, gr2context * c) {
-	c->fill_color = col;
+	c->fillColor = col;
 }
 
 uint16_t gr2_get_fill_color(gr2context * c) {
-	return c->fill_color;
+	return c->fillColor;
 }
 
 void gr2_set_active_color(uint16_t col, gr2context * c) {
-	c->active_color = col;
+	c->activeColor = col;
 }
 
 uint16_t gr2_get_active_color(gr2context * c) {
-	return c->active_color;
+	return c->activeColor;
 }
 
 int32_t gr2_get_value(uint16_t id, gr2context * c) {
@@ -112,18 +112,18 @@ void gr2_set_visible(uint16_t id, uint16_t vis, gr2context * c) {
 	}
 
 	if ((vis == 0) && (c->pscgElements[id].visible == 1)) {
-	  c->invisible_flag = 1;
+	  c->invisibleFlag = 1;
 	}
 
 	c->pscgElements[id].visible = vis;
 }
 
 void gr2_set_relative_init(uint8_t val, gr2context * c) {
-  c->relative_init = val;
+  c->relativeInit = val;
 }
 
 uint8_t gr2_get_relative_init(gr2context * c) {
-  return c->relative_init;
+  return c->relativeInit;
 }
 
 void gr2_set_grayout(uint16_t id, uint8_t val, gr2context * c) {
@@ -155,6 +155,14 @@ void gr2_set_param(uint16_t id, int32_t val, gr2context * c) {
 		c->pscgElements[id].modified = 1;
 	}
 	c->pscgElements[id].param = val;
+}
+
+void gr2_set_param2(uint16_t id, int32_t val, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if (val != c->pscgElements[id].param2) {
+		c->pscgElements[id].modified = 1;
+	}
+	c->pscgElements[id].param2 = val;
 }
 
 void gr2_set_modified(uint16_t id, gr2context * c) {
@@ -198,9 +206,47 @@ void gr2_text_set_editable(uint16_t id, uint16_t val, gr2context * c) {
 	}
 }
 
+void gr2_text_set_x_scroll(int16_t val, gr2context * c) {
+	if(c->textActive && c->textXScroll != val) {
+		gr2_set_modified(c->textActiveId, c);
+	}
+	c->textXScroll = val;
+}
+
+void gr2_text_set_y_scroll(int16_t val, gr2context * c) {
+	if(c->textActive && c->textYScroll != val) {
+		gr2_set_modified(c->textActiveId, c);
+	}
+	c->textYScroll = val;
+}
+
+void gr2_set_text_scr_auto_scroll(uint16_t id, uint16_t val, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	c->pscgScreens[c->pscgElements[id].value].textAutoScroll = val;
+}
+
 uint8_t gr2_text_get_editable(uint16_t id, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
 	if (c->pscgElements[id].status_reg & GR2_TEXT_EDITABLE_B) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+void gr2_text_set_invert_select(uint16_t id, uint16_t val, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if (val == 1) {
+		c->pscgElements[id].status_reg |= GR2_SELECT_INV;
+	} else {
+		c->pscgElements[id].status_reg &= ~GR2_SELECT_INV;
+	}
+	c->pscgElements[id].modified = 1;
+}
+
+uint8_t gr2_text_get_invert_select(uint16_t id, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
+	if (c->pscgElements[id].status_reg & GR2_SELECT_INV) {
 		return 1;
 	} else {
 		return 0;
@@ -410,7 +456,7 @@ uint16_t gr2_get_x1(uint16_t id, gr2context * c) {
 
 uint16_t gr2_get_x2(uint16_t id, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
-	if (c->relative_init) {
+	if (c->relativeInit) {
 		return c->pscgElements[id].x2 - c->pscgElements[id].x1;
 	} else {
 		return c->pscgElements[id].x2;
@@ -424,7 +470,7 @@ uint16_t gr2_get_y1(uint16_t id, gr2context * c) {
 
 uint16_t gr2_get_y2(uint16_t id, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
-	if (c->relative_init) {
+	if (c->relativeInit) {
 		return c->pscgElements[id].y2 - c->pscgElements[id].y1;
 	} else {
 		return c->pscgElements[id].y2;
@@ -437,7 +483,7 @@ void gr2_set_x1(uint16_t id, uint16_t val, gr2context * c) {
 		c->pscgElements[id].modified = 1;
 		c->pscgElements[c->pscgElements[id].screen_id].modified = 1;
 	}
-	if (c->relative_init) {
+	if (c->relativeInit) {
 		c->pscgElements[id].x2 = c->pscgElements[id].x2 - c->pscgElements[id].x1 + val;
 	}
 
@@ -446,7 +492,7 @@ void gr2_set_x1(uint16_t id, uint16_t val, gr2context * c) {
 
 void gr2_set_x2(uint16_t id, uint16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
-	if (c->relative_init) {
+	if (c->relativeInit) {
 		if (val + c->pscgElements[id].x1 != c->pscgElements[id].x2) {
 			c->pscgElements[id].modified = 1;
 			c->pscgElements[c->pscgElements[id].screen_id].modified = 1;
@@ -467,7 +513,7 @@ void gr2_set_y1(uint16_t id, uint16_t val, gr2context * c) {
 		c->pscgElements[id].modified = 1;
 		c->pscgElements[c->pscgElements[id].screen_id].modified = 1;
 	}
-	if (c->relative_init) {
+	if (c->relativeInit) {
 		c->pscgElements[id].y2 = c->pscgElements[id].y2 - c->pscgElements[id].y1 + val;
 	}
 
@@ -476,7 +522,7 @@ void gr2_set_y1(uint16_t id, uint16_t val, gr2context * c) {
 
 void gr2_set_y2(uint16_t id, uint16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
-	if (c->relative_init) {
+	if (c->relativeInit) {
 		if (c->pscgElements[id].y1 + val != c->pscgElements[id].y2) {
 			c->pscgElements[id].modified = 1;
 			c->pscgElements[c->pscgElements[id].screen_id].modified = 1;
@@ -505,7 +551,7 @@ void gr2_set_x1y1x2y2(
 	c->pscgElements[id].x1 = x1;
 	c->pscgElements[id].y1 = y1;
 
-	if (c->relative_init) {
+	if (c->relativeInit) {
 		c->pscgElements[id].x2 = x2 + x1;
 		c->pscgElements[id].y2 = y2 + y1;
 	} else {
@@ -576,6 +622,10 @@ void gr2_set_xscroll_initial(uint16_t id, int16_t val, gr2context * c) {
 
 void gr2_set_default_font(uint16_t id, uint8_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if(c->pscgElements[id].type != GR2_TYPE_SCREEN) {
+		printf("%s: Warn: Element type is not GR2_TYPE_SCREEN!\n", __FUNCTION__);
+		return;
+	}
 	c->pscgScreens[c->pscgElements[id].value].default_font = val;
 	//printf("setting def font: %u\n", pscgScreens[pscgElements[id].value].default_font);
 }
@@ -601,6 +651,16 @@ void gr2_set_yscroll_initial(uint16_t id, int16_t val, gr2context * c) {
 
 void gr2_set_cell_spacing(uint16_t id, uint16_t left, uint16_t right, uint16_t top, uint16_t bottom, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if(!c->pscgElements[id].valid || !c->pscgScreens[c->pscgElements[id].value].valid) {
+		printf("%s: Warn: Element not valid!\n", __FUNCTION__);
+		return;
+	}
+
+	if(c->pscgElements[id].type != GR2_TYPE_SCREEN) {
+		printf("%s: Warn: Element type is not GR2_TYPE_SCREEN!\n", __FUNCTION__);
+		return;
+	}
+
 	gr2_set_cell_space_left(id, left, c);
 	gr2_set_cell_space_right(id, right, c);
 	gr2_set_cell_space_top(id, top, c);
@@ -609,6 +669,10 @@ void gr2_set_cell_spacing(uint16_t id, uint16_t left, uint16_t right, uint16_t t
 
 void gr2_set_cell_space_left(uint16_t id, uint16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if(c->pscgElements[id].type != GR2_TYPE_SCREEN) {
+		printf("%s: Warn: Element type is not GR2_TYPE_SCREEN!\n", __FUNCTION__);
+		return;
+	}
 	if (val != c->pscgScreens[c->pscgElements[id].value].cell_space_left) {
 		c->pscgElements[id].modified = 1;
 	}
@@ -617,6 +681,10 @@ void gr2_set_cell_space_left(uint16_t id, uint16_t val, gr2context * c) {
 
 void gr2_set_cell_space_right(uint16_t id, uint16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if(c->pscgElements[id].type != GR2_TYPE_SCREEN) {
+		printf("%s: Warn: Element type is not GR2_TYPE_SCREEN!\n", __FUNCTION__);
+		return;
+	}
 	if (val != c->pscgScreens[c->pscgElements[id].value].cell_space_right) {
 		c->pscgElements[id].modified = 1;
 	}
@@ -625,6 +693,10 @@ void gr2_set_cell_space_right(uint16_t id, uint16_t val, gr2context * c) {
 
 void gr2_set_cell_space_top(uint16_t id, uint16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if(c->pscgElements[id].type != GR2_TYPE_SCREEN) {
+		printf("%s: Warn: Element type is not GR2_TYPE_SCREEN!\n", __FUNCTION__);
+		return;
+	}
 	if (val != c->pscgScreens[c->pscgElements[id].value].cell_space_top) {
 		c->pscgElements[id].modified = 1;
 	}
@@ -633,6 +705,10 @@ void gr2_set_cell_space_top(uint16_t id, uint16_t val, gr2context * c) {
 
 void gr2_set_cell_space_bottom(uint16_t id, uint16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if(c->pscgElements[id].type != GR2_TYPE_SCREEN) {
+		printf("%s: Warn: Element type is not GR2_TYPE_SCREEN!\n", __FUNCTION__);
+		return;
+	}
 	if (val != c->pscgScreens[c->pscgElements[id].value].cell_space_bottom) {
 		c->pscgElements[id].modified = 1;
 	}
@@ -641,6 +717,16 @@ void gr2_set_cell_space_bottom(uint16_t id, uint16_t val, gr2context * c) {
 
 void gr2_set_x_cell(uint16_t id, uint16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if(!c->pscgElements[id].valid  || !c->pscgScreens[c->pscgElements[id].value].valid) {
+		printf("%s: Warn: Element not valid!\n", __FUNCTION__);
+		return;
+	}
+
+	if(c->pscgElements[id].type != GR2_TYPE_SCREEN) {
+		printf("%s: Warn: Element type is not GR2_TYPE_SCREEN!\n", __FUNCTION__);
+		return;
+	}
+	
 	if (val != c->pscgScreens[c->pscgElements[id].value].x_cell) {
 		c->pscgElements[id].modified = 1;
 	}
@@ -649,6 +735,16 @@ void gr2_set_x_cell(uint16_t id, uint16_t val, gr2context * c) {
 
 void gr2_set_y_cell(uint16_t id, uint16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if(!c->pscgElements[id].valid  || !c->pscgScreens[c->pscgElements[id].value].valid) {
+		printf("%s: Warn: Element not valid!\n", __FUNCTION__);
+		return;
+	}
+
+	if(c->pscgElements[id].type != GR2_TYPE_SCREEN) {
+		printf("%s: Warn: Element type is not GR2_TYPE_SCREEN!\n", __FUNCTION__);
+		return;
+	}
+
 	if (val != c->pscgScreens[c->pscgElements[id].value].y_cell) {
 		c->pscgElements[id].modified = 1;
 	}
@@ -701,6 +797,8 @@ void gr2_activate_text(uint16_t id, gr2context * c) {
 	c->textActiveId   = id;
 	c->textBlockStart = 0;
     c->textBlockEnd   = 0;
+	c->textXScroll    = 0;
+	c->textYScroll    = 0;
 }
 
 void gr2_text_deactivate(gr2context * c) {

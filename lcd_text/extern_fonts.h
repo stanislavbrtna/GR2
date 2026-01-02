@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2022 Stanislav Brtna
+Copyright (c) 2025 Stanislav Brtna
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,33 +20,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "pscg_draw.h"
+#ifndef LCD_TEXT_FONTS_H
+#define LCD_TEXT_FONTS_H
 
-void gr2_draw_image(
-    int16_t x1,
-    int16_t y1,
-    int16_t x2,
-    int16_t y2,
-    uint16_t id,
-    gr2context * c
-) {
-  LCD_drawArea area;
-  LCD_setSubDrawArea(x1, y1, x2, y2);
-  LCD_getDrawArea(&area);
+extern uint8_t * font12mono_cz;
+extern uint8_t * font12mono;
+extern uint8_t * font18_cz;
+extern uint8_t * font18_emoji;
+extern uint8_t * font18;
+extern uint8_t * font32_cz;
+extern uint8_t * font32;
+extern uint8_t * roboto12;
+extern uint8_t * roboto12_cz;
+extern uint8_t * mono70;
+extern uint8_t * roboto87;
+extern uint8_t * roboto87_cz;
 
-#ifdef PPM_SUPPORT_ENABLED
-  if (svp_fexists(c->pscgElements[id].str_value)) {
-    if (c->pscgElements[id].param != 0) {
-      sda_p16_set_alpha(1, c->pscgElements[id].param - 1, c->backgroundColor);
-    }
-    sda_img_draw(x1, y1, c->pscgElements[id].value, c->pscgElements[id].value, c->pscgElements[id].str_value);
-    sda_p16_set_alpha(0, 0, c->backgroundColor);
-  }  else {
-    LCD_FillRect(x1, y1, x2, y2, c->activeColor);
-    LCD_DrawRectangle(x1, y1, x2, y2, c->borderColor);
-    LCD_DrawLine(x1, y1, x2, y2, c->borderColor);
-    LCD_DrawLine(x1, y2, x2, y1, c->borderColor);
-  }
+
 #endif
-  LCD_setDrawAreaS(&area); //draw_ppm changes subdraw area, so it must be restored
-}
