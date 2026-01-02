@@ -38,6 +38,11 @@ SOFTWARE.
 #include "stm32f4xx_hal_cortex.h"
 #endif
 
+#if defined(STM32H743xx)
+#include "stm32h7xx_hal.h"
+#include "stm32h7xx.h"
+#endif
+
 typedef enum {EV_NONE,EV_PRESSED, EV_HOLD,EV_LONGHOLD, EV_RELEASED, EV_DRAGOUT} gr2EventType;
 
 #include "lcd_io.h"

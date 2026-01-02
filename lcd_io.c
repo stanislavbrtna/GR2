@@ -22,6 +22,8 @@ SOFTWARE.
 
 #include "lcd_io.h"
 
+#ifdef PC
+
 void ExtDrawPoint(int x, int y, uint16_t color);
 void ExtFillRect(int x,  int y, int w, int h, uint16_t color);
 
@@ -68,3 +70,5 @@ void lcd_hw_Draw_Point(uint16_t color) {
   }
   return;
 }
+
+#endif
