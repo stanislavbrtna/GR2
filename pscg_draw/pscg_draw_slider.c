@@ -47,7 +47,7 @@ static void draw_slider(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t 
   }
 }
 #else
-static void draw_slider(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t select, uint8_t grayout, gr2context *c) {
+static void draw_slider(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t select, uint8_t grayout, uint8_t* str2, gr2context *c) {
   uint16_t ac, bc, bac;
   
   if (grayout == 0) {
@@ -86,33 +86,35 @@ static void draw_slider(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t 
   LCD_FillCirclePart(x2 - GR2_SLIDER_RADIUS, y2 - GR2_SLIDER_RADIUS, GR2_SLIDER_RADIUS, 3, bc);
   LCD_FillCirclePart(x2 - GR2_SLIDER_RADIUS, y2 - GR2_SLIDER_RADIUS, GR2_SLIDER_RADIUS - 2, 3, ac);
 
+  if (select) {
+    bc = bac;
+  }
 
-  if(x2 - x1 < y2 - y1) {
-    if (y2 - y1 > 48) {
-      if (select) {
-        bc = bac;
-      }
-      LCD_FillRect(x1 + 6, y1 + (y2 - y1)/2, x2 - 6, y1 + (y2 - y1)/2 + 1, bc);
-      LCD_FillRect(x1 + 6, y1 + (y2 - y1)/2 - 16, x2 - 6, y1 + (y2 - y1)/2 - 16 + 1, bc);
-      LCD_FillRect(x1 + 6, y1 + (y2 - y1)/2 + 16, x2 - 6, y1 + (y2 - y1)/2 + 16 + 1, bc);
-    } else {
-      if (select) {
-        LCD_DrawRectangle(x1 + GR2_SLIDER_RADIUS, y1 + GR2_SLIDER_RADIUS, x2 - GR2_SLIDER_RADIUS, y2 - GR2_SLIDER_RADIUS, bac);
-        LCD_DrawRectangle(x1 + GR2_SLIDER_RADIUS + 1, y1 + GR2_SLIDER_RADIUS + 1, x2 - GR2_SLIDER_RADIUS - 1, y2 - GR2_SLIDER_RADIUS - 1, bac);
-      }
-    }
+  // stripes/rectangle inside slider
+  if(str2 != 0) {
+    sda_draw_sic_file(x1 + GR2_SLIDER_RADIUS/2, y1 + GR2_SLIDER_RADIUS/2, bc, ac, str2);
   } else {
-    if (x2 - x1 > 48) {
-      if (select) {
-        bc = bac;
+    if(x2 - x1 < y2 - y1) {
+      if (y2 - y1 > 48) {
+        LCD_FillRect(x1 + 6, y1 + (y2 - y1)/2, x2 - 6, y1 + (y2 - y1)/2 + 1, bc);
+        LCD_FillRect(x1 + 6, y1 + (y2 - y1)/2 - 16, x2 - 6, y1 + (y2 - y1)/2 - 16 + 1, bc);
+        LCD_FillRect(x1 + 6, y1 + (y2 - y1)/2 + 16, x2 - 6, y1 + (y2 - y1)/2 + 16 + 1, bc);
+      } else {
+        if (select) {
+          LCD_DrawRectangle(x1 + GR2_SLIDER_RADIUS, y1 + GR2_SLIDER_RADIUS, x2 - GR2_SLIDER_RADIUS, y2 - GR2_SLIDER_RADIUS, bac);
+          LCD_DrawRectangle(x1 + GR2_SLIDER_RADIUS + 1, y1 + GR2_SLIDER_RADIUS + 1, x2 - GR2_SLIDER_RADIUS - 1, y2 - GR2_SLIDER_RADIUS - 1, bac);
+        }
       }
-      LCD_FillRect(x1 + (x2 - x1)/2, y1 + 6, x1 + (x2 - x1)/2 + 1, y2 - 6, bc);
-      LCD_FillRect(x1 + (x2 - x1)/2 - 16, y1 + 6, x1 + (x2 - x1)/2 + 1 - 16, y2 - 6, bc);
-      LCD_FillRect(x1 + (x2 - x1)/2 + 16, y1 + 6, x1 + (x2 - x1)/2 + 1 + 16, y2 - 6, bc);
     } else {
-      if (select) {
-        LCD_DrawRectangle(x1 + GR2_SLIDER_RADIUS, y1 + GR2_SLIDER_RADIUS, x2 - GR2_SLIDER_RADIUS, y2 - GR2_SLIDER_RADIUS, bac);
-        LCD_DrawRectangle(x1 + GR2_SLIDER_RADIUS + 1, y1 + GR2_SLIDER_RADIUS + 1, x2 - GR2_SLIDER_RADIUS - 1, y2 - GR2_SLIDER_RADIUS - 1, bac);
+      if (x2 - x1 > 48) {
+        LCD_FillRect(x1 + (x2 - x1)/2, y1 + 6, x1 + (x2 - x1)/2 + 1, y2 - 6, bc);
+        LCD_FillRect(x1 + (x2 - x1)/2 - 16, y1 + 6, x1 + (x2 - x1)/2 + 1 - 16, y2 - 6, bc);
+        LCD_FillRect(x1 + (x2 - x1)/2 + 16, y1 + 6, x1 + (x2 - x1)/2 + 1 + 16, y2 - 6, bc);
+      } else {
+        if (select) {
+          LCD_DrawRectangle(x1 + GR2_SLIDER_RADIUS, y1 + GR2_SLIDER_RADIUS, x2 - GR2_SLIDER_RADIUS, y2 - GR2_SLIDER_RADIUS, bac);
+          LCD_DrawRectangle(x1 + GR2_SLIDER_RADIUS + 1, y1 + GR2_SLIDER_RADIUS + 1, x2 - GR2_SLIDER_RADIUS - 1, y2 - GR2_SLIDER_RADIUS - 1, bac);
+        }
       }
     }
   }
@@ -169,7 +171,7 @@ void gr2_draw_slider_v(
     );
 
     // slider
-    draw_slider(x1, y1 + slider_pos, x2, y1 + slider_pos + slider_size, gr2_get_select(id, c), 0, c);
+    draw_slider(x1, y1 + slider_pos, x2, y1 + slider_pos + slider_size, gr2_get_select(id, c), 0, c->pscgElements[id].str_value2, c);
 
   } else {
     LCD_FillRect(
@@ -188,7 +190,7 @@ void gr2_draw_slider_v(
     );
 
     // slider
-    draw_slider(x1, y1 + slider_pos, x2, y1 + slider_pos + slider_size, gr2_get_select(id, c), 1, c);
+    draw_slider(x1, y1 + slider_pos, x2, y1 + slider_pos + slider_size, gr2_get_select(id, c), 1, c->pscgElements[id].str_value2, c);
   }
 }
 
@@ -256,7 +258,7 @@ void gr2_draw_slider_v_f(
     );
 
     // slider
-    draw_slider(x1, y1 + slider_pos, x2, y1 + slider_pos + slider_size, gr2_get_select(id, c), 0, c);
+    draw_slider(x1, y1 + slider_pos, x2, y1 + slider_pos + slider_size, gr2_get_select(id, c), 0, c->pscgElements[id].str_value2, c);
   } else {
     if (slider_pos >= slider_pos_o) {
       LCD_FillRect(
@@ -278,7 +280,7 @@ void gr2_draw_slider_v_f(
     );
 
     // slider
-    draw_slider(x1, y1 + slider_pos, x2, y1 + slider_pos + slider_size, gr2_get_select(id, c), 1, c);
+    draw_slider(x1, y1 + slider_pos, x2, y1 + slider_pos + slider_size, gr2_get_select(id, c), 1, c->pscgElements[id].str_value2, c);
   }
 }
 
@@ -323,7 +325,7 @@ void gr2_draw_slider_h(
     ); // frame
 
     // slider
-    draw_slider(x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2, gr2_get_select(id, c), 0, c);
+    draw_slider(x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2, gr2_get_select(id, c), 0, c->pscgElements[id].str_value2, c);
     
   } else {
     LCD_FillRect(
@@ -339,7 +341,7 @@ void gr2_draw_slider_h(
       LCD_get_gray16(c->borderColor)
     );
     //slider
-    draw_slider(x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2, gr2_get_select(id, c), 1, c);
+    draw_slider(x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2, gr2_get_select(id, c), 1, c->pscgElements[id].str_value2, c);
   }
 }
 
@@ -395,7 +397,7 @@ void gr2_draw_slider_h_f(
       c->borderColor
     );
     //slider
-    draw_slider(x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2, gr2_get_select(id, c), 0, c);
+    draw_slider(x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2, gr2_get_select(id, c), 0, c->pscgElements[id].str_value2, c);
   } else {
     if (slider_pos >= slider_pos_o) {
       LCD_FillRect(
@@ -412,6 +414,6 @@ void gr2_draw_slider_h_f(
       x1, y1 + height/4, x2, y2 - height/4,
       LCD_get_gray16(c->borderColor)
     );
-    draw_slider(x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2, gr2_get_select(id, c), 1, c);
+    draw_slider(x1 + slider_pos, y1, x1 + slider_pos + slider_size, y2, gr2_get_select(id, c), 1, c->pscgElements[id].str_value2, c);
   }
 }
