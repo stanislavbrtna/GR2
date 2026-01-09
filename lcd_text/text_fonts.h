@@ -24,6 +24,15 @@ SOFTWARE.
 #define LCD_TEXT_FONTS_H
 #include "../GR2.h"
 
+typedef enum {
+  FONT_12 = 12,
+  FONT_12_MONO = 13,
+  FONT_18 = 18,
+  FONT_32 = 32,
+  FONT_70 = 70,
+  FONT_87 = 87
+} GR2_FONTS;
+
 uint16_t LCD_Draw_Get_Font_Height();
 uint16_t LCD_Draw_Get_Font_Width();
 void LCD_Set_Sys_Font(uint8_t size);
