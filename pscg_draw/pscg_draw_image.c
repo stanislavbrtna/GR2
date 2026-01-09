@@ -35,7 +35,7 @@ void gr2_draw_image(
   LCD_getDrawArea(&area);
 
 #ifdef PPM_SUPPORT_ENABLED
-  if (svp_fexists(c->pscgElements[id].str_value)) {
+  if (svp_fexists(c->pscgElements[id].str_value) || sda_get_if_sic(c->pscgElements[id].str_value)) {
     if (c->pscgElements[id].param != 0) {
       sda_p16_set_alpha(1, c->pscgElements[id].param - 1, c->backgroundColor);
     }
