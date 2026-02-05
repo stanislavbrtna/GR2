@@ -302,7 +302,7 @@ void gr2_draw_slider_h(
   uint16_t height = 0;
   height = y2 - y1;
 
-  slider_clear_bg(x1, y1, x2, y1 + 1, c);
+  slider_clear_bg(x1, y1, x2, y2 + 1, c);
 
   slider_pos = (int32_t)(((float)value/(float)param)*((float)(x2 - x1 - slider_size)));
 
