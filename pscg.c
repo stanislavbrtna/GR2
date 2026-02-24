@@ -611,18 +611,18 @@ uint8_t gr2_touch_input(
             // store current absolute touch coordinates for cursor detection
             if (con->pscgElements[i].value == 1) {
               if (gr2_text_get_align(i, con) == GR2_ALIGN_LEFT) {
-                con->textMouseX = touch_x - a - 10;
+                con->textMouseX = touch_x - a - con->pscgElements[i].x_offset;
               } else if (gr2_text_get_align(i, con) == GR2_ALIGN_RIGHT) {
-                con->textMouseX = touch_x - a - (gr2_get_text_align_x(i, a, c, 10, con));
+                con->textMouseX = touch_x - a - (gr2_get_text_align_x(i, a, c, con->pscgElements[i].x_offset, con));
               } else if (gr2_text_get_align(i, con) == GR2_ALIGN_CENTER) {
-                con->textMouseX = touch_x - a - (gr2_get_text_align_x(i, a, c, 10, con));
+                con->textMouseX = touch_x - a - (gr2_get_text_align_x(i, a, c, con->pscgElements[i].x_offset, con));
               }
               if(gr2_text_get_fit(i, con)) {
                 con->textMaxWidth = c - a;
               } else {
                 con->textMaxWidth = 0;
               }
-              con->textMouseY = touch_y - b - 5;
+              con->textMouseY = touch_y - b - 5 - con->pscgElements[i].y_offset;
             }
             con->pscgElements[i].event = event;
           }
