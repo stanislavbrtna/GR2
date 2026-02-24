@@ -52,9 +52,9 @@ static void draw_editable(int16_t x1,
     LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->backgroundColor));
     
     if (gr2_text_get_pwd(id, c) == 1) {
-      LCD_DrawText_Pwd(x_add + x1, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->textColor), c->pscgElements[id].str_value);
+      LCD_DrawText_Pwd(x_add + x1 + c->pscgElements[id].x_offset, y1 + PSCG_TEXT_Y_GAP + c->pscgElements[id].y_offset, LCD_get_gray16(c->textColor), c->pscgElements[id].str_value);
     } else {
-      LCD_DrawText_ext(x_add + x1, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->textColor), c->pscgElements[id].str_value);
+      LCD_DrawText_ext(x_add + x1 + c->pscgElements[id].x_offset, y1 + PSCG_TEXT_Y_GAP + c->pscgElements[id].y_offset, LCD_get_gray16(c->textColor), c->pscgElements[id].str_value);
     }
   
     LCD_DrawRectangle(x1, y1, x2, y2, LCD_get_gray16(c->borderColor));
@@ -99,7 +99,7 @@ static void draw_editable(int16_t x1,
       }
 
       LCD_set_text_bg(1, text_bg, (x2 - x1) - c->textXScroll + x_add, y2 - y1 - c->textYScroll);
-      LCD_DrawText_ext(x_add + x1 + c->textXScroll, y1 + PSCG_TEXT_Y_GAP + c->textYScroll, c->textColor, c->pscgElements[id].str_value);
+      LCD_DrawText_ext(x_add + x1 + c->textXScroll + c->pscgElements[id].x_offset, y1 + PSCG_TEXT_Y_GAP + c->textYScroll + c->pscgElements[id].y_offset, c->textColor, c->pscgElements[id].str_value);
       
       if (c->textBlockStart == c->textBlockEnd) {
         LCD_Text_Draw_Cursor(x_add + x1 + c->textXScroll, y1 + 5 + c->textYScroll, c->pscgElements[id].str_value, c->pscgElements[id].param, c->textColor);
@@ -110,7 +110,7 @@ static void draw_editable(int16_t x1,
       LCD_FillRect(x1 + 1, y1 + 1, x1 + x_add, y2 - 1, c->backgroundColor);
       LCD_FillRect(x1 + 1, y1 + 1, x2 - 1, y1 + PSCG_TEXT_Y_GAP, c->backgroundColor);
       LCD_set_text_bg(1, c->backgroundColor, x2 - x1, y2 - y1);
-      LCD_DrawText_ext(x_add + x1, y1 + PSCG_TEXT_Y_GAP, c->textColor, c->pscgElements[id].str_value);
+      LCD_DrawText_ext(x_add + x1 + c->pscgElements[id].x_offset, y1 + PSCG_TEXT_Y_GAP + c->pscgElements[id].y_offset, c->textColor, c->pscgElements[id].str_value);
 
     }
     LCD_set_text_bg(0, 0, 0, 0);
@@ -163,11 +163,11 @@ void gr2_draw_text(
       LCD_FillRect(x1 + 1, y1 + 1, x2 - 1, y1 + PSCG_TEXT_Y_GAP, c->backgroundColor);
 
       LCD_set_text_bg(1, c->backgroundColor, x2 - x1, y2 - y1);
-      LCD_DrawText_ext(x_add + x1, y1 + PSCG_TEXT_Y_GAP, c->textColor, c->pscgElements[id].str_value);
+      LCD_DrawText_ext(x_add + x1 + c->pscgElements[id].x_offset, y1 + PSCG_TEXT_Y_GAP + c->pscgElements[id].y_offset, c->textColor, c->pscgElements[id].str_value);
       LCD_set_text_bg(0, 0, 0, 0);
 
     } else {
-      LCD_DrawText_ext(x_add + x1, y1 + PSCG_TEXT_Y_GAP, c->textColor, c->pscgElements[id].str_value);
+      LCD_DrawText_ext(x_add + x1 + c->pscgElements[id].x_offset, y1 + PSCG_TEXT_Y_GAP + c->pscgElements[id].y_offset, c->textColor, c->pscgElements[id].str_value);
     }
 
     if (gr2_get_select(id, c) == 1) {
@@ -176,7 +176,7 @@ void gr2_draw_text(
   } else {
     // grayed out
     LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->backgroundColor));
-    LCD_DrawText_ext(x_add + x1, y1 + PSCG_TEXT_Y_GAP, LCD_get_gray16(c->textColor), c->pscgElements[id].str_value);
+    LCD_DrawText_ext(x_add + x1 + c->pscgElements[id].x_offset, y1 + PSCG_TEXT_Y_GAP + c->pscgElements[id].y_offset, LCD_get_gray16(c->textColor), c->pscgElements[id].str_value);
 
     if (gr2_get_select(id, c) == 1) {
       LCD_DrawRectangle(x1, y1, x2, y2, LCD_get_gray16(c->borderColor));

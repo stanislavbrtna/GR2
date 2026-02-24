@@ -60,7 +60,9 @@ typedef struct {
   volatile int32_t  value;
   volatile int32_t  prev_val; // previous value, used for redraw
   volatile int32_t  param;
-  volatile uint16_t param2;   //param 2, mostly for storing font sizes
+  volatile int16_t  x_offset; // y offset of the content (mainly button, image)
+  volatile int16_t  y_offset; // y offset of the content (mainly button, image)
+  volatile uint16_t param2;   // param 2, mostly for storing font sizes
   volatile uint8_t  modified; // modified flag, modified elements are redrawn
   
   volatile uint16_t status_reg;

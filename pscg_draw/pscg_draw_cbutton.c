@@ -40,7 +40,7 @@ void gr2_draw_cbutton(
       gr2_button_draw_bg(x1, y1, x2, y2, c->pscgElements[id].value, c->pscgElements[id].status_reg);
     }
     LCD_DrawText_ext(
-      x1 + gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].param, c),
+      x1 + gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].x_offset, c),
       y1 + PSCG_TEXT_Y_GAP,
       ~c->pscgElements[id].value,
       str
@@ -52,7 +52,7 @@ void gr2_draw_cbutton(
   }  else {
     LCD_FillRect(x1, y1, x2, y2, LCD_get_gray16(c->pscgElements[id].value));
     LCD_DrawText_ext(
-      x1 + gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].param, c),
+      x1 + gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].x_offset, c),
       y1 + PSCG_TEXT_Y_GAP,
       LCD_get_gray16(~c->pscgElements[id].value),
       str

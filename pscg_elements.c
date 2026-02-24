@@ -144,6 +144,8 @@ static void pscg_fill_zero_defaults(uint16_t i, uint16_t screen_id, gr2context *
 	c->pscgElements[i].modified   = 0;
 	c->pscgElements[i].str_value  = 0;
 	c->pscgElements[i].str_value2 = 0;
+	c->pscgElements[i].y_offset   = 1;
+	c->pscgElements[i].x_offset   = 0;
 
 	c->pscgElements[screen_id].modified = 1;
 
@@ -171,7 +173,7 @@ uint16_t gr2_add_button(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint
 	c->pscgElements[i].type = GR2_TYPE_BUTTON;
 	pscg_add_fill_xy(i, x1, y1, x2, y2, c);
 	c->pscgElements[i].str_value = str;
-	c->pscgElements[i].param = 10; // text x1 is stored in param, default value is 10px
+	c->pscgElements[i].x_offset = 10; // text x1 is stored in param, default value is 10px
 	c->pscgElements[i].param2 = c->pscgScreens[c->pscgElements[screen].value].default_font; //číslo fontu
 	pscg_set_max_id(i, c);
 	c->elementsUsed++;
@@ -186,7 +188,7 @@ uint16_t gr2_add_cbutton(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uin
 	pscg_add_fill_xy(i, x1, y1, x2, y2, c);
 	c->pscgElements[i].str_value = str;
 	c->pscgElements[i].value = 0; // color is stored in value
-	c->pscgElements[i].param = 10;
+	c->pscgElements[i].x_offset = 10;
 	c->pscgElements[i].param2 = c->pscgScreens[c->pscgElements[screen].value].default_font; //číslo fontu
 	pscg_set_max_id(i, c);
 	c->elementsUsed++;

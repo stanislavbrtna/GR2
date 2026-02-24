@@ -149,6 +149,22 @@ uint16_t gr2_get_param2(uint16_t id, gr2context * c) {
 	return c->pscgElements[id].param2;
 }
 
+void gr2_set_y_offset(uint16_t id, int32_t val, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if (val != c->pscgElements[id].y_offset) {
+		c->pscgElements[id].modified = 1;
+	}
+	c->pscgElements[id].y_offset = val;
+}
+
+void gr2_set_x_offset(uint16_t id, int32_t val, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	if (val != c->pscgElements[id].x_offset) {
+		c->pscgElements[id].modified = 1;
+	}
+	c->pscgElements[id].x_offset = val;
+}
+
 void gr2_set_param(uint16_t id, int32_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
 	if (val != c->pscgElements[id].param) {

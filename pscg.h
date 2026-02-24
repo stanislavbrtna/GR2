@@ -154,6 +154,12 @@ uint8_t gr2_get_ghost(uint16_t id, gr2context * c);
 void gr2_set_select(uint16_t id, uint16_t val, gr2context * c);
 uint8_t gr2_get_select(uint16_t id, gr2context * c);
 
+// Vertical content offset
+void gr2_set_y_offset(uint16_t id, int32_t val, gr2context * c); 
+
+// Horizontal content offset
+void gr2_set_x_offset(uint16_t id, int32_t val, gr2context * c);
+
 // Rounded modificator
 void gr2_set_rounded(uint16_t id, uint16_t val, gr2context * c);
 uint8_t gr2_get_rounded(uint16_t id, gr2context * c);

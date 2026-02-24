@@ -60,13 +60,14 @@ void gr2_draw_button(
 
     if(c->pscgElements[id].str_value2 != 0 && !gr2_strcmp(c->pscgElements[id].str_value2, "")) {
 #ifdef PPM_SUPPORT_ENABLED
-      sda_draw_sic_file(x1 + 2 + c->pscgElements[id].param/2, y1 + 1, c->textColor, bg_color, c->pscgElements[id].str_value2);
+      sda_draw_sic_file(x1 + 2 + c->pscgElements[id].x_offset, y1 + c->pscgElements[id].y_offset, c->textColor, bg_color, c->pscgElements[id].str_value2);
       sic_width = sda_sic_get_last_width();
+      sic_width += c->pscgElements[id].x_offset/2;
 #endif
     }
 
     LCD_DrawText_ext(
-      x1 + gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].param + sic_width, c),
+      x1 + gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].x_offset + sic_width, c),
       y1 + PSCG_TEXT_Y_GAP,
       c->textColor,
       str
@@ -83,13 +84,13 @@ void gr2_draw_button(
 
     if(c->pscgElements[id].str_value2 != 0 && !gr2_strcmp(c->pscgElements[id].str_value2, "")) {
 #ifdef PPM_SUPPORT_ENABLED
-      sda_draw_sic_file(x1 + 2 + c->pscgElements[id].param/2, y1 + 1, c->textColor, LCD_get_gray16(c->fillColor), c->pscgElements[id].str_value2);
+      sda_draw_sic_file(x1 + 2 + c->pscgElements[id].x_offset, y1 + 1, c->textColor, LCD_get_gray16(c->fillColor), c->pscgElements[id].str_value2);
       sic_width = sda_sic_get_last_width();
 #endif
     }
 
     LCD_DrawText_ext(
-      x1 + gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].param + sic_width, c),
+      x1 + gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].x_offset + sic_width, c),
       y1 + PSCG_TEXT_Y_GAP,
       LCD_get_gray16(c->textColor),
       str

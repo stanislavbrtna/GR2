@@ -39,7 +39,13 @@ void gr2_draw_image(
     if (c->pscgElements[id].param != 0) {
       sda_p16_set_alpha(1, c->pscgElements[id].param - 1, c->backgroundColor);
     }
-    sda_img_draw(x1, y1, c->pscgElements[id].value, c->pscgElements[id].value, c->pscgElements[id].str_value);
+    sda_img_draw(
+      x1 + c->pscgElements[id].x_offset,
+      y1 + c->pscgElements[id].y_offset,
+      c->pscgElements[id].value,
+      c->pscgElements[id].value,
+      c->pscgElements[id].str_value
+    );
     sda_p16_set_alpha(0, 0, c->backgroundColor);
   }  else {
     LCD_FillRect(x1, y1, x2, y2, c->activeColor);
