@@ -248,6 +248,7 @@ uint16_t gr2_add_text(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_
 	c->pscgElements[i].type = GR2_TYPE_TEXT;
 	pscg_add_fill_xy(i, x1, y1, x2, y2, c);
 	c->pscgElements[i].str_value = str;
+	c->pscgElements[i].x_offset = 10;
 	//value: marks active textbox
 	//param: stores cursor position, stores last breakpoint in fix mode
 	//status_reg: bit0 - editable

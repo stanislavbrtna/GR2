@@ -37,7 +37,7 @@ static void draw_editable(int16_t x1,
   curr_font = LCD_Get_Font_Size();
   LCD_Set_Sys_Font(c->pscgElements[id].param2);
 
-  int16_t x_add = gr2_get_text_align_x(id, x1, x2, 10, c);
+  int16_t x_add = gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].x_offset, c);
 
   if (c->textBlockStart != 0 || c->textBlockEnd != 0) {
     LCD_set_text_block(c->textBlockStart - 1, c->textBlockEnd, text_select);
@@ -151,7 +151,7 @@ void gr2_draw_text(
   LCD_Set_Sys_Font(c->pscgElements[id].param2);
 
   // get additional alignment
-  int16_t x_add = gr2_get_text_align_x(id, x1, x2, 10, c);
+  int16_t x_add = gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].x_offset, c);
 
   LCD_set_fitText(gr2_text_get_fit(id, c), x2);
 
