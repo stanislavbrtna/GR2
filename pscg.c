@@ -310,8 +310,16 @@ void gr2_draw_screen(
 
         if (all == 1) {
           gr2_draw_screen(a, b, c, d, con->pscgElements[i].value, 1, con);
-        } else if (con->pscgElements[i].modified) {
-          gr2_draw_screen(a, b, c, d, con->pscgElements[i].value, con->pscgElements[i].modified, con);
+        } else if (
+          con->pscgElements[i].modified ||
+          con->pscgElements[con->pscgElements[i].value].modified
+        ) {
+          gr2_draw_screen(
+            a, b, c, d,
+            con->pscgElements[i].value,
+            con->pscgElements[con->pscgElements[i].value].modified,
+            con
+          );
           con->pscgElements[i].modified = 0;
         } else {
           gr2_draw_screen(a, b, c, d, con->pscgElements[i].value, 0, con);
