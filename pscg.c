@@ -308,16 +308,16 @@ void gr2_draw_screen(
           gr2_set_global_grayout_flag(1);
         }
 
+        uint8_t modified = con->pscgElements[i].modified ||
+          con->pscgElements[con->pscgElements[i].value].modified;
+
         if (all == 1) {
           gr2_draw_screen(a, b, c, d, con->pscgElements[i].value, 1, con);
-        } else if (
-          con->pscgElements[i].modified ||
-          con->pscgElements[con->pscgElements[i].value].modified
-        ) {
+        } else if (modified) {
           gr2_draw_screen(
             a, b, c, d,
             con->pscgElements[i].value,
-            con->pscgElements[con->pscgElements[i].value].modified,
+            modified,
             con
           );
           con->pscgElements[i].modified = 0;
