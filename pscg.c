@@ -321,6 +321,7 @@ void gr2_draw_screen(
             con
           );
           con->pscgElements[i].modified = 0;
+          con->pscgElements[con->pscgElements[i].value].modified = 0;
         } else {
           gr2_draw_screen(a, b, c, d, con->pscgElements[i].value, 0, con);
         }
