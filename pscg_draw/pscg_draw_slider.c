@@ -92,7 +92,13 @@ static void draw_slider(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t 
 
   // stripes/rectangle inside slider
   if(str2 != 0) {
-    sda_draw_sic_file(x1 + GR2_SLIDER_RADIUS/2 + c->pscgElements[id].x_offset, y1 + GR2_SLIDER_RADIUS/2 + c->pscgElements[id].y_offset, bc, ac, str2);
+    sda_draw_sic_file(
+      x1 + GR2_SLIDER_RADIUS/2 + c->pscgElements[id].x_offset,
+      y1 + GR2_SLIDER_RADIUS/2 + c->pscgElements[id].y_offset,
+      c->textColor,
+      ac,
+      str2
+    );
   } else {
     if(x2 - x1 < y2 - y1) {
       if (y2 - y1 > 48) {
