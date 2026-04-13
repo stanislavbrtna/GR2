@@ -22,6 +22,11 @@ SOFTWARE.
 
 #include "pscg_draw.h"
 
+#ifdef PPM_SUPPORT_ENABLED
+int8_t sda_get_if_sic(uint8_t * filename);
+#endif
+
+
 void gr2_draw_image(
     int16_t x1,
     int16_t y1,
