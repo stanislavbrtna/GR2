@@ -445,7 +445,7 @@ uint8_t touch_in_element(
     touch_x > a &&
     touch_x < c &&
     touch_y > b &&
-    touch_y < d &&
+    touch_y < d
   ) {
     if ((con->pscgElements[i].type == GR2_TYPE_SCREEN) || (con->pscgElements[i].type == GR2_TYPE_FRAME)) {
       return 1;
