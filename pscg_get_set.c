@@ -618,7 +618,7 @@ int16_t gr2_get_yscroll(uint16_t id, gr2context * c) {
 void gr2_set_xscroll(uint16_t id, int16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
 	if ((val != c->pscgScreens[c->pscgElements[id].value].x_scroll) && (c->pscgElements[id].modified == 0)) {
-		c->pscgElements[id].modified = 2;
+		c->pscgElements[id].modified = GR2_REDRAW_SCROLLED;
 	}
 	c->pscgScreens[c->pscgElements[id].value].x_scroll_old
 		= c->pscgScreens[c->pscgElements[id].value].x_scroll;
@@ -629,7 +629,7 @@ void gr2_set_xscroll(uint16_t id, int16_t val, gr2context * c) {
 void gr2_set_xscroll_initial(uint16_t id, int16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
 	if ((val != c->pscgScreens[c->pscgElements[id].value].x_scroll) && (c->pscgElements[id].modified == 0)) {
-		c->pscgElements[id].modified = 2;
+		c->pscgElements[id].modified = GR2_REDRAW_SCROLLED;
 	}
 
 	c->pscgScreens[c->pscgElements[id].value].x_scroll_old = val;
@@ -649,7 +649,7 @@ void gr2_set_default_font(uint16_t id, uint8_t val, gr2context * c) {
 void gr2_set_yscroll(uint16_t id, int16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
 	if ((val != c->pscgScreens[c->pscgElements[id].value].y_scroll) && (c->pscgElements[id].modified == 0)) {
-		c->pscgElements[id].modified = 2;
+		c->pscgElements[id].modified = GR2_REDRAW_SCROLLED;
 	}
 	c->pscgScreens[c->pscgElements[id].value].y_scroll_old
 		= c->pscgScreens[c->pscgElements[id].value].y_scroll;
@@ -659,7 +659,7 @@ void gr2_set_yscroll(uint16_t id, int16_t val, gr2context * c) {
 void gr2_set_yscroll_initial(uint16_t id, int16_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
 	if ((val != c->pscgScreens[c->pscgElements[id].value].y_scroll) && (c->pscgElements[id].modified == 0)) {
-		c->pscgElements[id].modified = 2;
+		c->pscgElements[id].modified = GR2_REDRAW_SCROLLED;
 	}
 	c->pscgScreens[c->pscgElements[id].value].y_scroll_old = val;
 	c->pscgScreens[c->pscgElements[id].value].y_scroll = val;

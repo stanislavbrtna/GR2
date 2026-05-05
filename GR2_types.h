@@ -50,6 +50,9 @@ SOFTWARE.
 #define GR2_ALIGN_RIGHT  1
 #define GR2_ALIGN_CENTER 2
 
+#define GR2_REDRAW_MODIFIED 0
+#define GR2_REDRAW_ALL      1
+#define GR2_REDRAW_SCROLLED 2
 
 typedef struct {
   uint16_t type;            // use enum in the future
