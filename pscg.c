@@ -124,7 +124,7 @@ void gr2_draw_screen(
 
   LCD_setSubDrawArea(x1, y1, x2, y2);
 
-  if (con->pscgElements[screen].modified == 1) {
+  if (con->pscgElements[screen].modified == 1 && !all) {
     all = 1;
   }
 
