@@ -48,7 +48,7 @@ static void draw_slider(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t 
 }
 #else
 static void draw_slider(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t select, uint8_t grayout, uint16_t id, uint8_t* str2, gr2context *c) {
-  uint16_t ac, bc, bac;
+  uint16_t ac, bc, bac, imgc;
   
   if (grayout == 0) {
     ac = c->activeColor;
@@ -88,6 +88,9 @@ static void draw_slider(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t 
 
   if (select) {
     bc = bac;
+    imgc = c->fillColor;
+  } else {
+    imgc = c->textColor;
   }
 
   // stripes/rectangle inside slider
@@ -95,7 +98,7 @@ static void draw_slider(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t 
     sda_draw_sic_file(
       x1 + GR2_SLIDER_RADIUS/2 + c->pscgElements[id].x_offset,
       y1 + GR2_SLIDER_RADIUS/2 + c->pscgElements[id].y_offset,
-      c->textColor,
+      imgc,
       ac,
       str2
     );
