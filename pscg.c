@@ -124,13 +124,9 @@ void gr2_draw_screen(
 
   LCD_setSubDrawArea(x1, y1, x2, y2);
 
-  if (con->pscgElements[screen].modified == 1 && !all) {
-    all = 1;
-  }
-
   if (con->pscgElements[screen].modified) {
-    printf("mod1\n");
-    draw_frame_flag = 1;
+    all = con->pscgElements[screen].modified; // override draw mode
+    draw_frame_flag = 1; // redraw frame
   }
 
   if (gr2_get_global_grayout_flag() || (con->pscgElements[screen].grayout == 1)) {
@@ -147,15 +143,14 @@ void gr2_draw_screen(
   LCD_getDrawArea(&area);
   scrID = con->pscgElements[screen].value;
 
-  if (all == 1) {
-    printf("mod2\n");
+  if (all == GR2_REDRAW_ALL) {
     draw_frame_flag = 1;
     if (con->pscgElements[screen].str_value != 0 && gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t*) "") != 1) {
       gr2_draw_screen_bg(x1, y1, x2, y2, x1, y1, screen, con);
     } else {
       LCD_FillRect(x1, y1, x2, y2, backgroundColor);
     }
-  } else if (all == 2) {
+  } else if (all == GR2_REDRAW_SCROLLED) {
     for (i = 1; i <= con->maxElementsId; i++) {
       if ((con->pscgElements[i].screen_id == screen) && (i != screen) && (con->pscgElements[i].valid == 1)) {
 
@@ -180,7 +175,7 @@ void gr2_draw_screen(
     con->pscgScreens[scrID].x_scroll_old = con->pscgScreens[scrID].x_scroll;
     con->pscgScreens[scrID].y_scroll_old = con->pscgScreens[scrID].y_scroll;
 
-    all = 1; //aby se znovu překreslily prvky
+    all = 1; // redraw all elements again
   }
 
   // handle elements previously marked as invisible
@@ -346,7 +341,7 @@ void gr2_draw_screen(
         con->pscgElements[con->pscgElements[i].value].modified;
 
       if (all == 1) {
-        gr2_draw_screen(a, b, c, d, con->pscgElements[i].value, 1, con);
+        gr2_draw_screen(a, b, c, d, con->pscgElements[i].value, GR2_REDRAW_ALL, con);
       } else if (modified) {
         gr2_draw_screen(
           a, b, c, d,
@@ -357,7 +352,7 @@ void gr2_draw_screen(
         con->pscgElements[i].modified = 0;
         con->pscgElements[con->pscgElements[i].value].modified = 0;
       } else {
-        gr2_draw_screen(a, b, c, d, con->pscgElements[i].value, 0, con);
+        gr2_draw_screen(a, b, c, d, con->pscgElements[i].value, GR2_REDRAW_MODIFIED, con);
       }
 
       gr2_set_global_grayout_flag(global_grayout_flag);
