@@ -86,6 +86,7 @@ void gr2_draw_button(
 #ifdef PPM_SUPPORT_ENABLED
       sda_draw_sic_file(x1 + 2 + c->pscgElements[id].x_offset, y1 + 1, c->textColor, LCD_get_gray16(c->fillColor), c->pscgElements[id].str_value2);
       sic_width = sda_sic_get_last_width();
+      sic_width += c->pscgElements[id].x_offset/2;
 #endif
     }
 
