@@ -560,17 +560,17 @@ uint8_t gr2_touch_input(
         }
       }
     }
-
-    // We can skip rest of the elements on outside click
-    if(!touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con)) {
-      continue;
-    }
   
     if (
       con->pscgElements[i].type == GR2_TYPE_SCREEN
     ) {
       COUNT_A_B_C_D
       retval = gr2_touch_input(a, b, c, d, touch_x, touch_y, event, i, con);
+    }
+
+    // We can skip rest of the elements on outside click
+    if(!touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con)) {
+      continue;
     }
 
     if (
@@ -672,9 +672,8 @@ uint8_t gr2_touch_input(
     }
   }
 
-  if (retval != 0) {
-    gr2_ki_unselect(screen, con);
-  }
+  // unselect the keyboard-selected 
+  gr2_ki_unselect(screen, con);
 
   return retval;
 }
