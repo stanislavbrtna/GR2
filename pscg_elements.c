@@ -345,6 +345,10 @@ uint16_t gr2_add_screen(gr2context * c) {
 	c->pscgScreens[scrI].valid = 1;
 	c->pscgScreens[scrI].x_scroll = 0;
 	c->pscgScreens[scrI].y_scroll = 0;
+	c->pscgScreens[scrI].x_scroll_min = 0;
+	c->pscgScreens[scrI].x_scroll_max = 0;
+	c->pscgScreens[scrI].y_scroll_min = 0;
+	c->pscgScreens[scrI].y_scroll_max = 0;
 	c->pscgScreens[scrI].x_scroll_old = 0;
 	c->pscgScreens[scrI].y_scroll_old = 0;
 	c->pscgScreens[scrI].x_cell = c->defaultGridSize;

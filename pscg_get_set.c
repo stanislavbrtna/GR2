@@ -636,6 +636,14 @@ void gr2_set_xscroll_initial(uint16_t id, int16_t val, gr2context * c) {
 	c->pscgScreens[c->pscgElements[id].value].x_scroll = val;
 }
 
+void gr2_set_scroll_limits(uint16_t id, int16_t x_min, int16_t x_max,int16_t y_min, int16_t y_max, gr2context * c) {
+	PSCG_BOUNDARY_CHECK_AND_RETURN();
+	c->pscgScreens[c->pscgElements[id].value].x_scroll_min = x_min;
+	c->pscgScreens[c->pscgElements[id].value].x_scroll_max = x_max;
+	c->pscgScreens[c->pscgElements[id].value].y_scroll_min = y_min;
+	c->pscgScreens[c->pscgElements[id].value].y_scroll_max = y_max;
+}
+
 void gr2_set_default_font(uint16_t id, uint8_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
 	if(c->pscgElements[id].type != GR2_TYPE_SCREEN) {

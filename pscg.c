@@ -487,6 +487,18 @@ uint8_t touch_in_element(uint16_t touch_x,
   }
 }
 
+static int16_t abs(int16_t a, int16_t b) {
+  if (a < 0)
+    a *= -1;
+  if (b < 0)
+    b *= -1;
+
+  if (a > b)
+    return a - b;
+  else
+    return b - a;
+}
+
 uint8_t gr2_touch_input(int16_t x1,
                         int16_t y1,
                         int16_t x2,
@@ -520,6 +532,89 @@ uint8_t gr2_touch_input(int16_t x1,
           (touch_in_element(
               touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con))) { // but out of element
         con->pscgElements[i].event = EV_DRAGOUT; // event dragout is not really used here
+      }
+    }
+  }
+
+  if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2) &&
+      (con->activeElement == 0 ||
+       (con->pscgElements[con->activeElement].type != GR2_TYPE_SLIDER_H &&
+        con->pscgElements[con->activeElement].type != GR2_TYPE_SLIDER_V))) {
+    if (event == EV_PRESSED) {
+      con->pscgScreens[con->pscgElements[screen].value].x_scroll_origin = touch_x;
+      con->pscgScreens[con->pscgElements[screen].value].y_scroll_origin = touch_y;
+      con->pscgScreens[con->pscgElements[screen].value].slideScroll = 0;
+    }
+
+    if (event == EV_HOLD) {
+      int16_t val_x =
+          abs(con->pscgScreens[con->pscgElements[screen].value].x_scroll_origin, (int16_t)touch_x);
+      int16_t val_y =
+          abs(con->pscgScreens[con->pscgElements[screen].value].y_scroll_origin, (int16_t)touch_y);
+
+      if (val_x > 32 || val_y > 32) {
+        con->pscgScreens[con->pscgElements[screen].value].slideScroll = 1;
+      }
+    }
+
+    if (event == EV_HOLD) {
+      if (con->pscgScreens[con->pscgElements[screen].value].slideScroll) {
+        uint8_t scrolled = 0;
+        // x axis
+        if (con->pscgScreens[con->pscgElements[screen].value].x_scroll_max != 0 ||
+            con->pscgScreens[con->pscgElements[screen].value].x_scroll_min != 0) {
+          int16_t val = gr2_get_xscroll(screen, con) +
+              ((int16_t)touch_x -
+               con->pscgScreens[con->pscgElements[screen].value].x_scroll_origin) *
+                  -1;
+
+          if (val < con->pscgScreens[con->pscgElements[screen].value].x_scroll_min) {
+            gr2_set_xscroll(
+                screen, con->pscgScreens[con->pscgElements[screen].value].x_scroll_min, con);
+          } else if (val > con->pscgScreens[con->pscgElements[screen].value].x_scroll_max) {
+            gr2_set_xscroll(
+                screen, con->pscgScreens[con->pscgElements[screen].value].x_scroll_max, con);
+          } else {
+            gr2_set_xscroll(screen, val, con);
+          }
+
+          con->pscgScreens[con->pscgElements[screen].value].x_scroll_origin = touch_x;
+          scrolled = 1;
+        }
+
+        // y axis
+        if (con->pscgScreens[con->pscgElements[screen].value].y_scroll_max != 0 ||
+            con->pscgScreens[con->pscgElements[screen].value].y_scroll_min != 0) {
+          int16_t val = gr2_get_yscroll(screen, con) +
+              ((int16_t)touch_y -
+               con->pscgScreens[con->pscgElements[screen].value].y_scroll_origin) *
+                  -1;
+          if (val < con->pscgScreens[con->pscgElements[screen].value].y_scroll_min) {
+            gr2_set_yscroll(
+                screen, con->pscgScreens[con->pscgElements[screen].value].y_scroll_min, con);
+          } else if (val > con->pscgScreens[con->pscgElements[screen].value].y_scroll_max) {
+            gr2_set_yscroll(
+                screen, con->pscgScreens[con->pscgElements[screen].value].y_scroll_max, con);
+          } else {
+            gr2_set_yscroll(screen, val, con);
+          }
+          con->pscgScreens[con->pscgElements[screen].value].y_scroll_origin = touch_y;
+          scrolled = 1;
+        }
+
+        if (scrolled) {
+          return 0;
+        }
+      }
+    }
+
+    if (event == EV_RELEASED) {
+      con->pscgScreens[con->pscgElements[screen].value].x_scroll_origin = 0;
+      con->pscgScreens[con->pscgElements[screen].value].y_scroll_origin = 0;
+
+      if (con->pscgScreens[con->pscgElements[screen].value].slideScroll) {
+        con->pscgScreens[con->pscgElements[screen].value].slideScroll = 0;
+        return 0;
       }
     }
   }
