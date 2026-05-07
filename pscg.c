@@ -603,6 +603,7 @@ uint8_t gr2_touch_input(int16_t x1,
         }
 
         if (scrolled) {
+          con->activeElement = 0;
           return 0;
         }
       }
