@@ -240,6 +240,10 @@ void gr2_draw_screen(
       continue;
     }
 
+    if(con->pscgElements[i].modified == 1) {
+      draw_frame_flag = 1;
+    }
+
     // Screen
     if (con->pscgElements[i].type == GR2_TYPE_SCREEN) {
       COUNT_A_B_C_D
@@ -248,8 +252,8 @@ void gr2_draw_screen(
         gr2_draw_screen(a, b, c, d, i, 1, con);
       } else if (con->pscgElements[i].modified) {
         //printf("modified\n");
-        gr2_draw_screen(a,b,c,d,i,con->pscgElements[i].modified, con); //tohle je ok
-        con->pscgElements[i].modified=0;
+        gr2_draw_screen(a,b,c,d,i,con->pscgElements[i].modified, con);
+        con->pscgElements[i].modified = 0;
       } else {
         //printf("basic redraw\n");
         gr2_draw_screen(a, b, c, d, i, 0, con);
@@ -521,9 +525,9 @@ uint8_t gr2_touch_input(
 
         if ((touch_y > b) && (touch_y < d)) {
           gr2_set_value(i,(int32_t)( ((float)(touch_y-b)*(float)con->pscgElements[i].param)/(float)(d-b)), con);
-        }else if((touch_y < b) && (con->pscgElements[i].value != 0)) {
+        } else if((touch_y < b) && (con->pscgElements[i].value != 0)) {
           gr2_set_value(i, 0, con);
-        }else if((touch_y > d) && con->pscgElements[i].value != con->pscgElements[i].param) {
+        } else if((touch_y > d) && con->pscgElements[i].value != con->pscgElements[i].param) {
           gr2_set_value(i, con->pscgElements[i].param, con);
         }
         if (event == EV_PRESSED) {
@@ -569,13 +573,11 @@ uint8_t gr2_touch_input(
     }
 
     // We can skip rest of the elements on outside click
-    if(!touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con)) {
+    if (!touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con)) {
       continue;
     }
 
-    if (
-      con->pscgElements[i].type == GR2_TYPE_FRAME
-    ){
+    if (con->pscgElements[i].type == GR2_TYPE_FRAME) {
       COUNT_A_B_C_D
       retval = gr2_touch_input(a, b, c, d, touch_x, touch_y, event, con->pscgElements[i].value, con);
     }
