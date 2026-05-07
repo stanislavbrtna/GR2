@@ -22,28 +22,43 @@ SOFTWARE.
 
 #include "GR2.h"
 
-#define COUNT_A_B_C_D_old \
-a = x1 + con->pscgElements[i].x1*con->pscgScreens[scrID].x_cell - con->pscgScreens[scrID].x_scroll_old \
-    + con->pscgElements[con->pscgElements[i].screen_id].x_offset + con->pscgScreens[scrID].cell_space_left; \
-b = y1 + con->pscgElements[i].y1*con->pscgScreens[scrID].y_cell - con->pscgScreens[scrID].y_scroll_old \
-    + con->pscgElements[con->pscgElements[i].screen_id].y_offset - 1 + con->pscgScreens[scrID].cell_space_top; \
-c = x1 + con->pscgElements[i].x2*con->pscgScreens[scrID].x_cell - con->pscgScreens[scrID].x_scroll_old - 1 \
-    + con->pscgElements[con->pscgElements[i].screen_id].x_offset - con->pscgScreens[scrID].cell_space_right; \
-d = y1 + con->pscgElements[i].y2*con->pscgScreens[scrID].y_cell - con->pscgScreens[scrID].y_scroll_old - 1 \
-    + con->pscgElements[con->pscgElements[i].screen_id].y_offset - 1 - con->pscgScreens[scrID].cell_space_bottom; \
+#define COUNT_A_B_C_D_old                                                                          \
+  a = x1 + con->pscgElements[i].x1 * con->pscgScreens[scrID].x_cell -                              \
+      con->pscgScreens[scrID].x_scroll_old +                                                       \
+      con->pscgElements[con->pscgElements[i].screen_id].x_offset +                                 \
+      con->pscgScreens[scrID].cell_space_left;                                                     \
+  b = y1 + con->pscgElements[i].y1 * con->pscgScreens[scrID].y_cell -                              \
+      con->pscgScreens[scrID].y_scroll_old +                                                       \
+      con->pscgElements[con->pscgElements[i].screen_id].y_offset - 1 +                             \
+      con->pscgScreens[scrID].cell_space_top;                                                      \
+  c = x1 + con->pscgElements[i].x2 * con->pscgScreens[scrID].x_cell -                              \
+      con->pscgScreens[scrID].x_scroll_old - 1 +                                                   \
+      con->pscgElements[con->pscgElements[i].screen_id].x_offset -                                 \
+      con->pscgScreens[scrID].cell_space_right;                                                    \
+  d = y1 + con->pscgElements[i].y2 * con->pscgScreens[scrID].y_cell -                              \
+      con->pscgScreens[scrID].y_scroll_old - 1 +                                                   \
+      con->pscgElements[con->pscgElements[i].screen_id].y_offset - 1 -                             \
+      con->pscgScreens[scrID].cell_space_bottom;
 
-#define COUNT_A_B_C_D \
-a = x1 + con->pscgElements[i].x1*con->pscgScreens[scrID].x_cell - con->pscgScreens[scrID].x_scroll \
-    + con->pscgElements[con->pscgElements[i].screen_id].x_offset + con->pscgScreens[scrID].cell_space_left; \
-b = y1 + con->pscgElements[i].y1*con->pscgScreens[scrID].y_cell - con->pscgScreens[scrID].y_scroll \
-    + con->pscgElements[con->pscgElements[i].screen_id].y_offset - 1 + con->pscgScreens[scrID].cell_space_top; \
-c = x1 + con->pscgElements[i].x2*con->pscgScreens[scrID].x_cell - con->pscgScreens[scrID].x_scroll - 1 \
-    + con->pscgElements[con->pscgElements[i].screen_id].x_offset - con->pscgScreens[scrID].cell_space_right; \
-d = y1 + con->pscgElements[i].y2*con->pscgScreens[scrID].y_cell - con->pscgScreens[scrID].y_scroll - 1 \
-    + con->pscgElements[con->pscgElements[i].screen_id].y_offset - 1 - con->pscgScreens[scrID].cell_space_bottom; \
+#define COUNT_A_B_C_D                                                                              \
+  a = x1 + con->pscgElements[i].x1 * con->pscgScreens[scrID].x_cell -                              \
+      con->pscgScreens[scrID].x_scroll +                                                           \
+      con->pscgElements[con->pscgElements[i].screen_id].x_offset +                                 \
+      con->pscgScreens[scrID].cell_space_left;                                                     \
+  b = y1 + con->pscgElements[i].y1 * con->pscgScreens[scrID].y_cell -                              \
+      con->pscgScreens[scrID].y_scroll +                                                           \
+      con->pscgElements[con->pscgElements[i].screen_id].y_offset - 1 +                             \
+      con->pscgScreens[scrID].cell_space_top;                                                      \
+  c = x1 + con->pscgElements[i].x2 * con->pscgScreens[scrID].x_cell -                              \
+      con->pscgScreens[scrID].x_scroll - 1 +                                                       \
+      con->pscgElements[con->pscgElements[i].screen_id].x_offset -                                 \
+      con->pscgScreens[scrID].cell_space_right;                                                    \
+  d = y1 + con->pscgElements[i].y2 * con->pscgScreens[scrID].y_cell -                              \
+      con->pscgScreens[scrID].y_scroll - 1 +                                                       \
+      con->pscgElements[con->pscgElements[i].screen_id].y_offset - 1 -                             \
+      con->pscgScreens[scrID].cell_space_bottom;
 
-
-uint16_t gr2_get_element_width(uint16_t id, gr2context * con) {
+uint16_t gr2_get_element_width(uint16_t id, gr2context *con) {
   uint16_t scrID = con->pscgElements[con->pscgElements[id].screen_id].value;
   int16_t a, b, c, d;
   int16_t x1 = 0;
@@ -54,7 +69,7 @@ uint16_t gr2_get_element_width(uint16_t id, gr2context * con) {
   return (uint16_t)(c - a);
 }
 
-uint16_t gr2_get_element_height(uint16_t id, gr2context * con) {
+uint16_t gr2_get_element_height(uint16_t id, gr2context *con) {
   uint16_t scrID = con->pscgElements[con->pscgElements[id].screen_id].value;
   int16_t a, b, c, d;
   int16_t x1 = 0;
@@ -67,27 +82,30 @@ uint16_t gr2_get_element_height(uint16_t id, gr2context * con) {
 
 #ifdef PPM_SUPPORT_ENABLED
 uint8_t svp_fexists(uint8_t *fname);
-uint8_t sda_draw_p16_scaled(uint16_t x, uint16_t y, int16_t scale_w, int16_t scale_h, uint8_t *filename);
+uint8_t
+sda_draw_p16_scaled(uint16_t x, uint16_t y, int16_t scale_w, int16_t scale_h, uint8_t *filename);
 #endif
 
-void gr2_draw_screen_bg(
-  int16_t x1,
-  int16_t y1,
-  int16_t x2,
-  int16_t y2,
-  int16_t imgX1,
-  int16_t imgY1,
-  uint16_t id,
-  gr2context * c
-) {
+void gr2_draw_screen_bg(int16_t x1,
+                        int16_t y1,
+                        int16_t x2,
+                        int16_t y2,
+                        int16_t imgX1,
+                        int16_t imgY1,
+                        uint16_t id,
+                        gr2context *c) {
   LCD_drawArea area;
   LCD_getDrawArea(&area);
   LCD_setSubDrawArea(x1, y1, x2, y2 + 1);
-  
+
 #ifdef PPM_SUPPORT_ENABLED
   if (svp_fexists(c->pscgElements[id].str_value)) {
-    sda_draw_p16_scaled(imgX1, imgY1, c->pscgElements[id].param, c->pscgElements[id].param, c->pscgElements[id].str_value);
-  }  else {
+    sda_draw_p16_scaled(imgX1,
+                        imgY1,
+                        c->pscgElements[id].param,
+                        c->pscgElements[id].param,
+                        c->pscgElements[id].str_value);
+  } else {
     LCD_FillRect(x1, y1, x2, y2, c->fillColor);
     LCD_DrawRectangle(x1, y1, x2, y2, c->borderColor);
     LCD_DrawLine(x1, y1, x2, y2, c->borderColor);
@@ -96,19 +114,11 @@ void gr2_draw_screen_bg(
 #else
   LCD_FillRect(x1, y1, x2, y2, c->backgroundColor);
 #endif
-  LCD_setDrawAreaS(&area); //draw_ppm changes subdraw area, so it must be restored
+  LCD_setDrawAreaS(&area); // draw_ppm changes subdraw area, so it must be restored
 }
 
-
 void gr2_draw_screen(
-  int16_t x1,
-  int16_t y1,
-  int16_t x2,
-  int16_t y2,
-  uint16_t screen,
-  uint8_t all,
-  gr2context * con
-){
+    int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t screen, uint8_t all, gr2context *con) {
   LCD_drawArea area;
   uint16_t i, scrID;
   int16_t a, b, c, d;
@@ -126,7 +136,7 @@ void gr2_draw_screen(
 
   if (con->pscgElements[screen].modified) {
     all = con->pscgElements[screen].modified; // override draw mode
-    draw_frame_flag = 1; // redraw frame
+    draw_frame_flag = 1;                      // redraw frame
   }
 
   if (gr2_get_global_grayout_flag() || (con->pscgElements[screen].grayout == 1)) {
@@ -145,14 +155,16 @@ void gr2_draw_screen(
 
   if (all == GR2_REDRAW_ALL) {
     draw_frame_flag = 1;
-    if (con->pscgElements[screen].str_value != 0 && gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t*) "") != 1) {
+    if (con->pscgElements[screen].str_value != 0 &&
+        gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t *)"") != 1) {
       gr2_draw_screen_bg(x1, y1, x2, y2, x1, y1, screen, con);
     } else {
       LCD_FillRect(x1, y1, x2, y2, backgroundColor);
     }
   } else if (all == GR2_REDRAW_SCROLLED) {
     for (i = 1; i <= con->maxElementsId; i++) {
-      if ((con->pscgElements[i].screen_id == screen) && (i != screen) && (con->pscgElements[i].valid == 1)) {
+      if ((con->pscgElements[i].screen_id == screen) && (i != screen) &&
+          (con->pscgElements[i].valid == 1)) {
 
         if ((x1 > 480) && (x1 > x2)) {
           x1 = 0;
@@ -162,9 +174,9 @@ void gr2_draw_screen(
           y1 = 0;
         }
 
-        COUNT_A_B_C_D_old
-        if(con->pscgElements[screen].param2 == 0) {
-          if (con->pscgElements[screen].str_value != 0 && !gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t*) "")) {
+        COUNT_A_B_C_D_old if (con->pscgElements[screen].param2 == 0) {
+          if (con->pscgElements[screen].str_value != 0 &&
+              !gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t *)"")) {
             gr2_draw_screen_bg(a, b, c + 1, d, x1, y1, screen, con);
           } else {
             LCD_FillRect(a, b, c + 1, d, backgroundColor);
@@ -181,15 +193,12 @@ void gr2_draw_screen(
   // handle elements previously marked as invisible
   if (con->invisibleFlag == 1) {
     for (i = 1; i <= con->maxElementsId; i++) {
-      if (
-          con->pscgElements[i].screen_id == screen &&
-          i != screen &&
-          con->pscgElements[i].valid == 1 &&
-          con->pscgElements[i].visible == 0 &&
-          con->pscgElements[i].modified == 1
-      ) {
+      if (con->pscgElements[i].screen_id == screen && i != screen &&
+          con->pscgElements[i].valid == 1 && con->pscgElements[i].visible == 0 &&
+          con->pscgElements[i].modified == 1) {
         COUNT_A_B_C_D
-        if (con->pscgElements[screen].str_value != 0 && gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t*) "") != 1) {
+        if (con->pscgElements[screen].str_value != 0 &&
+            gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t *)"") != 1) {
           gr2_draw_screen_bg(a, b, c, d, x1, y1, screen, con);
         } else {
           LCD_FillRect(a, b, c, d, backgroundColor);
@@ -202,30 +211,20 @@ void gr2_draw_screen(
   for (i = 1; i <= con->maxElementsId; i++) {
     // TODO: remove this if no regression occurs
     // if (
-    //   con->pscgElements[i].screen_id == screen && 
+    //   con->pscgElements[i].screen_id == screen &&
     //   i != screen &&
     //   con->pscgElements[i].valid == 1 &&
-    //   con->pscgElements[i].visible == 1 && 
+    //   con->pscgElements[i].visible == 1 &&
     //   con->pscgElements[i].modified
     // ) {
     //   //printf("mod3\n");
     //   //draw_frame_flag = 1;
     // }
 
-    if (
-      !(
-        con->pscgElements[i].screen_id == screen &&
-        i != screen &&
-        con->pscgElements[i].valid == 1 &&
-        con->pscgElements[i].visible == 1
-      )
-    ) {
-      if (
-        con->pscgElements[i].screen_id == screen &&
-        i != screen &&
-        con->pscgElements[i].valid == 1 &&
-        con->pscgElements[i].visible == 0
-      ) {
+    if (!(con->pscgElements[i].screen_id == screen && i != screen &&
+          con->pscgElements[i].valid == 1 && con->pscgElements[i].visible == 1)) {
+      if (con->pscgElements[i].screen_id == screen && i != screen &&
+          con->pscgElements[i].valid == 1 && con->pscgElements[i].visible == 0) {
         // clear flag for the modified invisible element
         con->pscgElements[i].modified = 0;
       }
@@ -233,29 +232,30 @@ void gr2_draw_screen(
       LCD_setDrawAreaS(&area);
       continue;
     }
-      
+
     // skip drawing elements outside the screen
     COUNT_A_B_C_D
     if ((a > x2 + 1) || (b > y2 + 1) || (c < x1 - 1) || (d < y1 - 1)) {
       continue;
     }
 
-    if(con->pscgElements[i].modified == 1) {
+    if (con->pscgElements[i].modified == 1) {
       draw_frame_flag = 1;
     }
 
     // Screen
     if (con->pscgElements[i].type == GR2_TYPE_SCREEN) {
       COUNT_A_B_C_D
-      //printf("PSCGdbg: DrawScreen a:%u b:%u c:%u d:%u id:%u mode: ", a,b,c,d, i);
+      // printf("PSCGdbg: DrawScreen a:%u b:%u c:%u d:%u id:%u mode: ", a,b,c,d,
+      // i);
       if (all == GR2_REDRAW_ALL) {
         gr2_draw_screen(a, b, c, d, i, 1, con);
       } else if (con->pscgElements[i].modified) {
-        //printf("modified\n");
-        gr2_draw_screen(a,b,c,d,i,con->pscgElements[i].modified, con);
+        // printf("modified\n");
+        gr2_draw_screen(a, b, c, d, i, con->pscgElements[i].modified, con);
         con->pscgElements[i].modified = 0;
       } else {
-        //printf("basic redraw\n");
+        // printf("basic redraw\n");
         gr2_draw_screen(a, b, c, d, i, 0, con);
       }
     }
@@ -263,12 +263,12 @@ void gr2_draw_screen(
     if (con->pscgElements[i].type == GR2_TYPE_BUTTON) {
       COUNT_A_B_C_D
       if ((all == 1) || (con->pscgElements[i].modified == 1)) {
-        if ((i == con->activeElement)||(con->pscgElements[i].value == 1)) {
+        if ((i == con->activeElement) || (con->pscgElements[i].value == 1)) {
           gr2_draw_button(a, b, c, d, con->pscgElements[i].str_value, 1, i, con);
         } else {
           gr2_draw_button(a, b, c, d, con->pscgElements[i].str_value, 0, i, con);
         }
-        //printf("drawing button %s\n", con->pscgElements[i].str_value);
+        // printf("drawing button %s\n", con->pscgElements[i].str_value);
         con->pscgElements[i].modified = 0;
       }
     }
@@ -276,7 +276,8 @@ void gr2_draw_screen(
     if (con->pscgElements[i].type == GR2_TYPE_TEXT) {
       COUNT_A_B_C_D
       if ((all == 1) || (con->pscgElements[i].modified == 1)) {
-        if (con->pscgElements[screen].str_value != 0 && all == 0 && gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t*) "") != 1) {
+        if (con->pscgElements[screen].str_value != 0 && all == 0 &&
+            gr2_strcmp(con->pscgElements[screen].str_value, (uint8_t *)"") != 1) {
           gr2_draw_screen_bg(a, b, c + 1, d, x1, y1, screen, con);
         }
         gr2_draw_text(a, b, c, d, i, con);
@@ -288,9 +289,11 @@ void gr2_draw_screen(
       COUNT_A_B_C_D
       if ((all == 1) || (con->pscgElements[i].modified == 1)) {
         if ((c - a) < (d - b)) {
-          gr2_draw_progbar_v(a,b,c,d, con->pscgElements[i].param,con->pscgElements[i].value, i, con);
+          gr2_draw_progbar_v(
+              a, b, c, d, con->pscgElements[i].param, con->pscgElements[i].value, i, con);
         } else {
-          gr2_draw_progbar_h(a,b,c,d, con->pscgElements[i].param,con->pscgElements[i].value, i, con);
+          gr2_draw_progbar_h(
+              a, b, c, d, con->pscgElements[i].param, con->pscgElements[i].value, i, con);
         }
         con->pscgElements[i].modified = 0;
       }
@@ -301,7 +304,7 @@ void gr2_draw_screen(
       if ((all == 1) || (con->pscgElements[i].modified == 1)) {
         if ((i == con->activeElement) || (con->pscgElements[i].value == 1)) {
           gr2_draw_icon(a, b, c, d, 1, i, con);
-        }else{
+        } else {
           gr2_draw_icon(a, b, c, d, 0, i, con);
         }
         con->pscgElements[i].modified = 0;
@@ -311,11 +314,28 @@ void gr2_draw_screen(
     if (con->pscgElements[i].type == GR2_TYPE_SLIDER_V) {
       COUNT_A_B_C_D
       if (all == 1 ||
-          (con->pscgElements[i].modified == 1 && con->pscgElements[i].value == con->pscgElements[i].prev_val)
-      ) {
-        gr2_draw_slider_v(a,b,c,d, con->pscgElements[i].param2, con->pscgElements[i].param,con->pscgElements[i].value,i, con);
-      } else if(con->pscgElements[i].modified != 0) {
-        gr2_draw_slider_v_f(a,b,c,d, con->pscgElements[i].param2, con->pscgElements[i].param, con->pscgElements[i].value,con->pscgElements[i].prev_val,i,con);
+          (con->pscgElements[i].modified == 1 &&
+           con->pscgElements[i].value == con->pscgElements[i].prev_val)) {
+        gr2_draw_slider_v(a,
+                          b,
+                          c,
+                          d,
+                          con->pscgElements[i].param2,
+                          con->pscgElements[i].param,
+                          con->pscgElements[i].value,
+                          i,
+                          con);
+      } else if (con->pscgElements[i].modified != 0) {
+        gr2_draw_slider_v_f(a,
+                            b,
+                            c,
+                            d,
+                            con->pscgElements[i].param2,
+                            con->pscgElements[i].param,
+                            con->pscgElements[i].value,
+                            con->pscgElements[i].prev_val,
+                            i,
+                            con);
       }
       con->pscgElements[i].modified = 0;
     }
@@ -323,11 +343,28 @@ void gr2_draw_screen(
     if (con->pscgElements[i].type == GR2_TYPE_SLIDER_H) {
       COUNT_A_B_C_D
       if (all == 1 ||
-          (con->pscgElements[i].modified == 1 && con->pscgElements[i].value == con->pscgElements[i].prev_val)
-      ) {
-        gr2_draw_slider_h(a, b, c, d, con->pscgElements[i].param2, con->pscgElements[i].param, con->pscgElements[i].value, i, con);
-      } else if(con->pscgElements[i].modified != 0) {
-        gr2_draw_slider_h_f(a,b,c,d, con->pscgElements[i].param2, con->pscgElements[i].param,con->pscgElements[i].value, con->pscgElements[i].prev_val,i, con);
+          (con->pscgElements[i].modified == 1 &&
+           con->pscgElements[i].value == con->pscgElements[i].prev_val)) {
+        gr2_draw_slider_h(a,
+                          b,
+                          c,
+                          d,
+                          con->pscgElements[i].param2,
+                          con->pscgElements[i].param,
+                          con->pscgElements[i].value,
+                          i,
+                          con);
+      } else if (con->pscgElements[i].modified != 0) {
+        gr2_draw_slider_h_f(a,
+                            b,
+                            c,
+                            d,
+                            con->pscgElements[i].param2,
+                            con->pscgElements[i].param,
+                            con->pscgElements[i].value,
+                            con->pscgElements[i].prev_val,
+                            i,
+                            con);
       }
       con->pscgElements[i].modified = 0;
     }
@@ -341,18 +378,13 @@ void gr2_draw_screen(
         gr2_set_global_grayout_flag(1);
       }
 
-      uint8_t modified = con->pscgElements[i].modified ||
-        con->pscgElements[con->pscgElements[i].value].modified;
+      uint8_t modified =
+          con->pscgElements[i].modified || con->pscgElements[con->pscgElements[i].value].modified;
 
       if (all == 1) {
         gr2_draw_screen(a, b, c, d, con->pscgElements[i].value, GR2_REDRAW_ALL, con);
       } else if (modified) {
-        gr2_draw_screen(
-          a, b, c, d,
-          con->pscgElements[i].value,
-          modified,
-          con
-        );
+        gr2_draw_screen(a, b, c, d, con->pscgElements[i].value, modified, con);
         con->pscgElements[i].modified = 0;
         con->pscgElements[con->pscgElements[i].value].modified = 0;
       } else {
@@ -377,7 +409,14 @@ void gr2_draw_screen(
     if (con->pscgElements[i].type == GR2_TYPE_CHECKBOX) {
       COUNT_A_B_C_D
       if ((all == 1) || (con->pscgElements[i].modified == 1)) {
-        gr2_draw_checkbox(a, b, c, d, con->pscgElements[i].str_value, (uint8_t) con->pscgElements[i].value, i, con);
+        gr2_draw_checkbox(a,
+                          b,
+                          c,
+                          d,
+                          con->pscgElements[i].str_value,
+                          (uint8_t)con->pscgElements[i].value,
+                          i,
+                          con);
         con->pscgElements[i].modified = 0;
       }
     }
@@ -389,11 +428,11 @@ void gr2_draw_screen(
         con->pscgElements[i].modified = 0;
       }
     }
-    
+
     LCD_setDrawAreaS(&area);
   }
 
-  if(draw_frame_flag == 1) {
+  if (draw_frame_flag == 1) {
     LCD_DrawRectangle(x1, y1, x2, y2, con->borderColor);
   }
 
@@ -403,13 +442,7 @@ void gr2_draw_screen(
 }
 
 uint8_t touch_in_screen(
-  uint16_t touch_x,
-  uint16_t touch_y,
-  int16_t x1,
-  int16_t y1,
-  int16_t x2,
-  int16_t y2
-) {
+    uint16_t touch_x, uint16_t touch_y, int16_t x1, int16_t y1, int16_t x2, int16_t y2) {
   if ((touch_x > x1) && (touch_y > y1) && (touch_x < x2) && (touch_y < y2)) {
     return 1;
   } else {
@@ -417,19 +450,16 @@ uint8_t touch_in_screen(
   }
 }
 
-
-uint8_t touch_in_element(
-  uint16_t touch_x,
-  uint16_t touch_y,
-  int16_t x1,
-  int16_t y1,
-  int16_t x2,
-  int16_t y2,
-  uint16_t i,
-  uint16_t screen,
-  gr2EventType event,
-  gr2context * con
-) {
+uint8_t touch_in_element(uint16_t touch_x,
+                         uint16_t touch_y,
+                         int16_t x1,
+                         int16_t y1,
+                         int16_t x2,
+                         int16_t y2,
+                         uint16_t i,
+                         uint16_t screen,
+                         gr2EventType event,
+                         gr2context *con) {
   int16_t a, b, c, d;
   uint16_t scrID;
   (void)(x2);
@@ -439,17 +469,14 @@ uint8_t touch_in_element(
 
   COUNT_A_B_C_D
 
-  if (
-    con->pscgElements[i].grayout == 0 &&
-    touch_x > a &&
-    touch_x < c &&
-    touch_y > b &&
-    touch_y < d
-  ) {
-    if ((con->pscgElements[i].type == GR2_TYPE_SCREEN) || (con->pscgElements[i].type == GR2_TYPE_FRAME)) {
+  if (con->pscgElements[i].grayout == 0 && touch_x > a && touch_x < c && touch_y > b &&
+      touch_y < d) {
+    if ((con->pscgElements[i].type == GR2_TYPE_SCREEN) ||
+        (con->pscgElements[i].type == GR2_TYPE_FRAME)) {
       return 1;
     } else {
-      if ((con->activeElement == 0 && event == EV_PRESSED) || (con->activeElement == i && event != EV_PRESSED)) {
+      if ((con->activeElement == 0 && event == EV_PRESSED) ||
+          (con->activeElement == i && event != EV_PRESSED)) {
         return 1;
       } else {
         return 0;
@@ -460,17 +487,15 @@ uint8_t touch_in_element(
   }
 }
 
-uint8_t gr2_touch_input(
-  int16_t x1,
-  int16_t y1,
-  int16_t x2,
-  int16_t y2,
-  uint16_t touch_x,
-  uint16_t touch_y,
-  gr2EventType event,
-  uint16_t screen,
-  gr2context * con
-) {
+uint8_t gr2_touch_input(int16_t x1,
+                        int16_t y1,
+                        int16_t x2,
+                        int16_t y2,
+                        uint16_t touch_x,
+                        uint16_t touch_y,
+                        gr2EventType event,
+                        uint16_t screen,
+                        gr2context *con) {
   uint16_t i, scrID;
   int16_t a, b, c, d;
   uint8_t retval = 0;
@@ -491,7 +516,9 @@ uint8_t gr2_touch_input(
   } else if ((event == EV_HOLD) && (con->activeElement != 0)) {
     i = con->activeElement;
     if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) { // touch in screen
-      if (1 != (touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con))) { // but out of element
+      if (1 !=
+          (touch_in_element(
+              touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con))) { // but out of element
         con->pscgElements[i].event = EV_DRAGOUT; // event dragout is not really used here
       }
     }
@@ -500,34 +527,33 @@ uint8_t gr2_touch_input(
   scrID = con->pscgElements[screen].value;
 
   for (i = 1; i <= con->maxElementsId; i++) {
-    if (
-        !(
-          con->pscgElements[i].screen_id == screen && 
-          i != screen && 
-          con->pscgElements[i].valid == 1 && 
-          con->pscgElements[i].visible == 1
-        )
-    ) {
+    if (!(con->pscgElements[i].screen_id == screen && i != screen &&
+          con->pscgElements[i].valid == 1 && con->pscgElements[i].visible == 1)) {
       continue;
     }
 
-    if(!touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
+    if (!touch_in_screen(touch_x, touch_y, x1, y1, x2, y2)) {
       continue;
     }
 
     if (con->pscgElements[i].type == GR2_TYPE_SLIDER_V) {
       COUNT_A_B_C_D
-      if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con) && con->activeElement == 0) || (con->activeElement == i)) {
+      if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con) &&
+           con->activeElement == 0) ||
+          (con->activeElement == i)) {
         con->pscgElements[i].event = event;
         con->pscgElements[i].prev_val = con->pscgElements[i].value;
-        d -= con->pscgElements[i].param2/2;
-        b += con->pscgElements[i].param2/2;
+        d -= con->pscgElements[i].param2 / 2;
+        b += con->pscgElements[i].param2 / 2;
 
         if ((touch_y > b) && (touch_y < d)) {
-          gr2_set_value(i,(int32_t)( ((float)(touch_y-b)*(float)con->pscgElements[i].param)/(float)(d-b)), con);
-        } else if((touch_y < b) && (con->pscgElements[i].value != 0)) {
+          gr2_set_value(i,
+                        (int32_t)(((float)(touch_y - b) * (float)con->pscgElements[i].param) /
+                                  (float)(d - b)),
+                        con);
+        } else if ((touch_y < b) && (con->pscgElements[i].value != 0)) {
           gr2_set_value(i, 0, con);
-        } else if((touch_y > d) && con->pscgElements[i].value != con->pscgElements[i].param) {
+        } else if ((touch_y > d) && con->pscgElements[i].value != con->pscgElements[i].param) {
           gr2_set_value(i, con->pscgElements[i].param, con);
         }
         if (event == EV_PRESSED) {
@@ -542,16 +568,21 @@ uint8_t gr2_touch_input(
 
     if (con->pscgElements[i].type == GR2_TYPE_SLIDER_H) {
       COUNT_A_B_C_D
-      if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con) && con->activeElement == 0) || (con->activeElement == i)) {
-        con->pscgElements[i].event    = event;
+      if ((touch_in_element(touch_x, touch_y, x1, y1, x2, y2, i, screen, event, con) &&
+           con->activeElement == 0) ||
+          (con->activeElement == i)) {
+        con->pscgElements[i].event = event;
         con->pscgElements[i].prev_val = con->pscgElements[i].value;
-        a += con->pscgElements[i].param2/2;
-        c -= con->pscgElements[i].param2/2;
+        a += con->pscgElements[i].param2 / 2;
+        c -= con->pscgElements[i].param2 / 2;
         if ((touch_x > a) && (touch_x < c)) {
-          gr2_set_value(i, (int32_t)((float)con->pscgElements[i].param) * ((float)(touch_x - a) / (float)(c - a)), con);
-        } else if((touch_x < a) && (con->pscgElements[i].value != 0)) {
+          gr2_set_value(i,
+                        (int32_t)((float)con->pscgElements[i].param) *
+                            ((float)(touch_x - a) / (float)(c - a)),
+                        con);
+        } else if ((touch_x < a) && (con->pscgElements[i].value != 0)) {
           gr2_set_value(i, 0, con);
-        } else if((touch_x > c) && (con->pscgElements[i].value != con->pscgElements[i].param)) {
+        } else if ((touch_x > c) && (con->pscgElements[i].value != con->pscgElements[i].param)) {
           gr2_set_value(i, con->pscgElements[i].param, con);
         }
 
@@ -564,10 +595,8 @@ uint8_t gr2_touch_input(
         }
       }
     }
-  
-    if (
-      con->pscgElements[i].type == GR2_TYPE_SCREEN
-    ) {
+
+    if (con->pscgElements[i].type == GR2_TYPE_SCREEN) {
       COUNT_A_B_C_D
       retval = gr2_touch_input(a, b, c, d, touch_x, touch_y, event, i, con);
     }
@@ -579,13 +608,15 @@ uint8_t gr2_touch_input(
 
     if (con->pscgElements[i].type == GR2_TYPE_FRAME) {
       COUNT_A_B_C_D
-      retval = gr2_touch_input(a, b, c, d, touch_x, touch_y, event, con->pscgElements[i].value, con);
+      retval =
+          gr2_touch_input(a, b, c, d, touch_x, touch_y, event, con->pscgElements[i].value, con);
     }
 
-    if ((con->pscgElements[i].type == GR2_TYPE_BUTTON) || (con->pscgElements[i].type == GR2_TYPE_IMAGE)) {
-      con->pscgElements[i].event    = event;
+    if (con->pscgElements[i].type == GR2_TYPE_BUTTON ||
+        con->pscgElements[i].type == GR2_TYPE_IMAGE) {
+      con->pscgElements[i].event = event;
       con->pscgElements[i].modified = 1;
-      if (event == EV_PRESSED){
+      if (event == EV_PRESSED) {
         con->activeElement = i;
       }
 
@@ -596,7 +627,7 @@ uint8_t gr2_touch_input(
     }
 
     if (con->pscgElements[i].type == GR2_TYPE_ICON) {
-      con->pscgElements[i].event    = event;
+      con->pscgElements[i].event = event;
       con->pscgElements[i].modified = 1;
       retval = 1;
       if (event == EV_PRESSED) {
@@ -631,7 +662,7 @@ uint8_t gr2_touch_input(
       if (event == EV_PRESSED) {
         con->activeElement = i;
       }
-      
+
       if (gr2_text_get_editable(i, con)) {
         if (event == EV_RELEASED) {
           if (con->textActive == 0) {
@@ -641,17 +672,19 @@ uint8_t gr2_touch_input(
           con->activeElement = 0;
         }
       }
-    
+
       // store current absolute touch coordinates for cursor positioning
       if (con->pscgElements[i].value == 1) {
         if (gr2_text_get_align(i, con) == GR2_ALIGN_LEFT) {
           con->textMouseX = touch_x - a - con->pscgElements[i].x_offset;
         } else if (gr2_text_get_align(i, con) == GR2_ALIGN_RIGHT) {
-          con->textMouseX = touch_x - a - (gr2_get_text_align_x(i, a, c, con->pscgElements[i].x_offset, con));
+          con->textMouseX =
+              touch_x - a - (gr2_get_text_align_x(i, a, c, con->pscgElements[i].x_offset, con));
         } else if (gr2_text_get_align(i, con) == GR2_ALIGN_CENTER) {
-          con->textMouseX = touch_x - a - (gr2_get_text_align_x(i, a, c, con->pscgElements[i].x_offset, con));
+          con->textMouseX =
+              touch_x - a - (gr2_get_text_align_x(i, a, c, con->pscgElements[i].x_offset, con));
         }
-        if(gr2_text_get_fit(i, con)) {
+        if (gr2_text_get_fit(i, con)) {
           con->textMaxWidth = c - a;
         } else {
           con->textMaxWidth = 0;
@@ -674,7 +707,7 @@ uint8_t gr2_touch_input(
     }
   }
 
-  // unselect the keyboard-selected 
+  // unselect the keyboard-selected
   gr2_ki_unselect(screen, con);
 
   return retval;

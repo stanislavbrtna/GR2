@@ -23,147 +23,104 @@ SOFTWARE.
 #ifndef GR2_GUI_DRAW_H_
 #define GR2_GUI_DRAW_H_
 
+#include "GR2_types.h"
+
 // text align helper
-int16_t gr2_get_text_align_x(
-    uint16_t id,
-    int16_t x1,
-    int16_t x2,
-    int16_t offset,
-    gr2context * c
-);
+int16_t gr2_get_text_align_x(uint16_t id, int16_t x1, int16_t x2, int16_t offset, gr2context *c);
 
 // headers for the element draw functions, used only internaly in the GR2
-void gr2_draw_button(
-           int16_t x1,
-           int16_t y1,
-           int16_t x2,
-           int16_t y2,
-           uint8_t *str,
-           uint8_t active,
-           uint16_t id,
-           gr2context * c
-          );
+void gr2_draw_button(int16_t x1,
+                     int16_t y1,
+                     int16_t x2,
+                     int16_t y2,
+                     uint8_t *str,
+                     uint8_t active,
+                     uint16_t id,
+                     gr2context *c);
 
-void gr2_draw_cbutton(
-           int16_t x1,
-           int16_t y1,
-           int16_t x2,
-           int16_t y2,
-           uint8_t *str,
-           uint8_t active,
-           uint16_t id,
-           gr2context * c
-          );
+void gr2_draw_cbutton(int16_t x1,
+                      int16_t y1,
+                      int16_t x2,
+                      int16_t y2,
+                      uint8_t *str,
+                      uint8_t active,
+                      uint16_t id,
+                      gr2context *c);
 
-void gr2_draw_text(
-           int16_t x1,
-           int16_t y1,
-           int16_t x2,
-           int16_t y2,
-           uint16_t id,
-           gr2context * c
-          );
+void gr2_draw_text(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t id, gr2context *c);
 
-void gr2_draw_slider_v(
-           int16_t x1,
-           int16_t y1,
-           int16_t x2,
-           int16_t y2,
-           uint16_t slider_size,
-           int32_t param,
-           int32_t value,
-           uint16_t id,
-           gr2context * c
-          );
+void gr2_draw_slider_v(int16_t x1,
+                       int16_t y1,
+                       int16_t x2,
+                       int16_t y2,
+                       uint16_t slider_size,
+                       int32_t param,
+                       int32_t value,
+                       uint16_t id,
+                       gr2context *c);
 
-void gr2_draw_slider_h(
-           int16_t x1,
-           int16_t y1,
-           int16_t x2,
-           int16_t y2,
-           uint16_t slider_size,
-           int32_t param,
-           int32_t value,
-           uint16_t id,
-           gr2context * c
-          );
+void gr2_draw_slider_h(int16_t x1,
+                       int16_t y1,
+                       int16_t x2,
+                       int16_t y2,
+                       uint16_t slider_size,
+                       int32_t param,
+                       int32_t value,
+                       uint16_t id,
+                       gr2context *c);
 
-void gr2_draw_checkbox(
-           int16_t x1,
-           int16_t y1,
-           int16_t x2,
-           int16_t y2,
-           uint8_t *str,
-           uint8_t active,
-           uint16_t id,
-           gr2context * c
-          );
+void gr2_draw_checkbox(int16_t x1,
+                       int16_t y1,
+                       int16_t x2,
+                       int16_t y2,
+                       uint8_t *str,
+                       uint8_t active,
+                       uint16_t id,
+                       gr2context *c);
 
-void gr2_draw_progbar_v(
-           int16_t x1,
-           int16_t y1,
-           int16_t x2,
-           int16_t y2,
-           int32_t param,
-           int32_t value,
-           uint16_t id,
-           gr2context * c
-          );
+void gr2_draw_progbar_v(int16_t x1,
+                        int16_t y1,
+                        int16_t x2,
+                        int16_t y2,
+                        int32_t param,
+                        int32_t value,
+                        uint16_t id,
+                        gr2context *c);
 
-void gr2_draw_progbar_h(
-           int16_t x1,
-           int16_t y1,
-           int16_t x2,
-           int16_t y2,
-           int32_t param,
-           int32_t value,
-           uint16_t id,
-           gr2context * c
-          );
+void gr2_draw_progbar_h(int16_t x1,
+                        int16_t y1,
+                        int16_t x2,
+                        int16_t y2,
+                        int32_t param,
+                        int32_t value,
+                        uint16_t id,
+                        gr2context *c);
 
 void gr2_draw_icon(
-           int16_t x1,
-           int16_t y1,
-           int16_t x2,
-           int16_t y2,
-           uint8_t active,
-           uint16_t id,
-           gr2context * c
-          );
+    int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint8_t active, uint16_t id, gr2context *c);
 
-void gr2_draw_image(
-           int16_t x1,
-           int16_t y1,
-           int16_t x2,
-           int16_t y2,
-           uint16_t id,
-           gr2context * c
-          );
+void gr2_draw_image(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t id, gr2context *c);
 
-void gr2_draw_slider_v_f(
-           int16_t x1,
-           int16_t y1,
-           int16_t x2,
-           int16_t y2,
-           uint16_t slider_size,
-           int32_t param,
-           int32_t value,
-           int32_t oldval,
-           uint16_t id,
-           gr2context * c
-          );
+void gr2_draw_slider_v_f(int16_t x1,
+                         int16_t y1,
+                         int16_t x2,
+                         int16_t y2,
+                         uint16_t slider_size,
+                         int32_t param,
+                         int32_t value,
+                         int32_t oldval,
+                         uint16_t id,
+                         gr2context *c);
 
-void gr2_draw_slider_h_f(
-           int16_t x1,
-           int16_t y1,
-           int16_t x2,
-           int16_t y2,
-           uint16_t slider_size,
-           int32_t param,
-           int32_t value,
-           int32_t oldval,
-           uint16_t id,
-           gr2context * c
-          );
+void gr2_draw_slider_h_f(int16_t x1,
+                         int16_t y1,
+                         int16_t x2,
+                         int16_t y2,
+                         uint16_t slider_size,
+                         int32_t param,
+                         int32_t value,
+                         int32_t oldval,
+                         uint16_t id,
+                         gr2context *c);
 
 #endif
