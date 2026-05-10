@@ -33,6 +33,10 @@ SOFTWARE.
 #define PSCG_TEXT_Y_GAP 8
 #endif
 
+#ifndef GR2_DRAG_TRESHOLD
+#define GR2_DRAG_TRESHOLD 16
+#endif
+
 #ifndef PSCG_CHECKBOX_HSPACE_UP
 #define PSCG_CHECKBOX_HSPACE_UP 5
 #endif

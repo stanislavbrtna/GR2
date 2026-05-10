@@ -539,7 +539,9 @@ uint8_t gr2_touch_input(int16_t x1,
   if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2) &&
       (con->activeElement == 0 ||
        (con->pscgElements[con->activeElement].type != GR2_TYPE_SLIDER_H &&
-        con->pscgElements[con->activeElement].type != GR2_TYPE_SLIDER_V))) {
+        con->pscgElements[con->activeElement].type != GR2_TYPE_SLIDER_V &&
+        !(con->pscgElements[con->activeElement].type == GR2_TYPE_TEXT &&
+          gr2_get_text_active(con->activeElement, con))))) {
     if (event == EV_PRESSED) {
       con->pscgScreens[con->pscgElements[screen].value].x_scroll_origin = touch_x;
       con->pscgScreens[con->pscgElements[screen].value].y_scroll_origin = touch_y;
@@ -552,7 +554,7 @@ uint8_t gr2_touch_input(int16_t x1,
       int16_t val_y =
           abs(con->pscgScreens[con->pscgElements[screen].value].y_scroll_origin, (int16_t)touch_y);
 
-      if (val_x > 32 || val_y > 32) {
+      if (val_x > GR2_DRAG_TRESHOLD || val_y > GR2_DRAG_TRESHOLD) {
         con->pscgScreens[con->pscgElements[screen].value].slideScroll = 1;
       }
     }
