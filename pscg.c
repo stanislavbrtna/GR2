@@ -364,8 +364,7 @@ void gr2_draw_screen(
     }
     // Slider V
     if (con->pscgElements[i].type == GR2_TYPE_SLIDER_V) {
-      if (all == 1 ||
-          (con->pscgElements[i].modified == 1)) {
+      if (all == 1 || (con->pscgElements[i].modified == 1)) {
         gr2_draw_slider_v(a,
                           b,
                           c,
@@ -391,8 +390,7 @@ void gr2_draw_screen(
     }
     // Slider H
     if (con->pscgElements[i].type == GR2_TYPE_SLIDER_H) {
-      if (all == 1 ||
-          (con->pscgElements[i].modified == 1) {
+      if (all == 1 || con->pscgElements[i].modified == 1) {
         gr2_draw_slider_h(a,
                           b,
                           c,
@@ -577,9 +575,13 @@ static void gr2_handle_scrollbars(uint16_t screen, gr2context *con) {
     }
 
     if (gr2_get_event(con->pscgScreens[scrID].y_scroll_bar, con)) {
-      if (gr2_get_value(con->pscgScreens[scrID].y_scroll_bar, con) + con->pscgScreens[scrID].y_scroll_min !=
+      if (gr2_get_value(con->pscgScreens[scrID].y_scroll_bar, con) +
+              con->pscgScreens[scrID].y_scroll_min !=
           con->pscgScreens[scrID].y_scroll) {
-        gr2_set_yscroll(screen, gr2_get_value(con->pscgScreens[scrID].y_scroll_bar, con) + con->pscgScreens[scrID].y_scroll_min, con);
+        gr2_set_yscroll(screen,
+                        gr2_get_value(con->pscgScreens[scrID].y_scroll_bar, con) +
+                            con->pscgScreens[scrID].y_scroll_min,
+                        con);
       }
     }
     gr2_clear_event(con->pscgScreens[scrID].y_scroll_bar, con);
@@ -593,7 +595,8 @@ static void gr2_handle_scrollbars(uint16_t screen, gr2context *con) {
     }
 
     if (gr2_get_event(con->pscgScreens[scrID].x_scroll_bar, con)) {
-      if (gr2_get_value(con->pscgScreens[scrID].x_scroll_bar, con) + con->pscgScreens[scrID].x_scroll_min !=
+      if (gr2_get_value(con->pscgScreens[scrID].x_scroll_bar, con) +
+              con->pscgScreens[scrID].x_scroll_min !=
           con->pscgScreens[scrID].x_scroll) {
         gr2_set_xscroll(screen, gr2_get_value(con->pscgScreens[scrID].x_scroll_bar, con), con);
       }
