@@ -265,7 +265,13 @@ void gr2_set_yscroll(uint16_t id, int16_t val, gr2context *c);
 void gr2_set_xscroll_initial(uint16_t id, int16_t val, gr2context *c);
 void gr2_set_yscroll_initial(uint16_t id, int16_t val, gr2context *c);
 
-void gr2_set_scroll_limits(uint16_t id, int16_t x_min, int16_t x_max,int16_t y_min, int16_t y_max, gr2context * c);
+void gr2_set_scroll_limits(
+    uint16_t id, int16_t x_min, int16_t x_max, int16_t y_min, int16_t y_max, gr2context *c);
+int16_t gr2_get_x_scroll_max(uint16_t id, gr2context *c);
+int16_t gr2_get_y_scroll_max(uint16_t id, gr2context *c);
+
+void gr2_set_x_scroll_bar(uint16_t screen_id, uint16_t id, gr2context *c);
+void gr2_set_y_scroll_bar(uint16_t screen_id, uint16_t id, gr2context *c);
 
 void gr2_set_x_cell(uint16_t id, uint16_t val, gr2context *c);
 void gr2_set_y_cell(uint16_t id, uint16_t val, gr2context *c);

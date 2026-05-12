@@ -620,6 +620,11 @@ void gr2_set_xscroll(uint16_t id, int16_t val, gr2context * c) {
 	if ((val != c->pscgScreens[c->pscgElements[id].value].x_scroll) && (c->pscgElements[id].modified == 0)) {
 		c->pscgElements[id].modified = GR2_REDRAW_SCROLLED;
 	}
+
+  if(c->pscgScreens[c->pscgElements[id].value].x_scroll_bar) {
+    gr2_set_value(c->pscgScreens[c->pscgElements[id].value].x_scroll_bar, val, c);
+  }
+
 	c->pscgScreens[c->pscgElements[id].value].x_scroll_old
 		= c->pscgScreens[c->pscgElements[id].value].x_scroll;
 	c->pscgScreens[c->pscgElements[id].value].x_scroll = val;
@@ -644,6 +649,26 @@ void gr2_set_scroll_limits(uint16_t id, int16_t x_min, int16_t x_max,int16_t y_m
 	c->pscgScreens[c->pscgElements[id].value].y_scroll_max = y_max;
 }
 
+int16_t gr2_get_x_scroll_max(uint16_t id, gr2context * c) {
+  PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
+  return c->pscgScreens[c->pscgElements[id].value].x_scroll_max;
+}
+
+int16_t gr2_get_y_scroll_max(uint16_t id, gr2context * c) {
+  PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
+  return c->pscgScreens[c->pscgElements[id].value].y_scroll_max;
+}
+
+void gr2_set_x_scroll_bar(uint16_t screen_id, uint16_t id, gr2context * c) {
+  PSCG_BOUNDARY_CHECK_AND_RETURN();
+  c->pscgScreens[c->pscgElements[screen_id].value].x_scroll_bar = id;
+}
+
+void gr2_set_y_scroll_bar(uint16_t screen_id, uint16_t id, gr2context * c) {
+  PSCG_BOUNDARY_CHECK_AND_RETURN();
+  c->pscgScreens[c->pscgElements[screen_id].value].y_scroll_bar = id;
+}
+
 void gr2_set_default_font(uint16_t id, uint8_t val, gr2context * c) {
 	PSCG_BOUNDARY_CHECK_AND_RETURN();
 	if(c->pscgElements[id].type != GR2_TYPE_SCREEN) {
@@ -659,6 +684,11 @@ void gr2_set_yscroll(uint16_t id, int16_t val, gr2context * c) {
 	if ((val != c->pscgScreens[c->pscgElements[id].value].y_scroll) && (c->pscgElements[id].modified == 0)) {
 		c->pscgElements[id].modified = GR2_REDRAW_SCROLLED;
 	}
+
+  if(c->pscgScreens[c->pscgElements[id].value].y_scroll_bar) {
+    gr2_set_value(c->pscgScreens[c->pscgElements[id].value].y_scroll_bar, val, c);
+  }
+
 	c->pscgScreens[c->pscgElements[id].value].y_scroll_old
 		= c->pscgScreens[c->pscgElements[id].value].y_scroll;
 	c->pscgScreens[c->pscgElements[id].value].y_scroll = val;
