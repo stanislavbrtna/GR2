@@ -171,16 +171,11 @@ void gr2_draw_screen(
     int16_t y_min = y2;
     int16_t y_max = y1;
 
-    LCD_drawArea area;
-    LCD_getDrawArea(&area);
-    LCD_setSubDrawArea(x1, y1, x2, y2 + 1);
-
     for (i = 1; i <= con->maxElementsId; i++) {
       if ((con->pscgElements[i].screen_id == screen) && (i != screen) &&
           (con->pscgElements[i].valid == 1)) {
         if (con->pscgElements[screen].param2 == 1) {
           // Draw element border
-          COUNT_A_B_C_D;
           int16_t cx1, cy1, cx2, cy2;
 
           cx1 = x1 + con->pscgElements[i].x1 * con->pscgScreens[scrID].x_cell -
@@ -199,12 +194,16 @@ void gr2_draw_screen(
               con->pscgScreens[scrID].y_scroll +
               con->pscgElements[con->pscgElements[i].screen_id].y_offset;
 
-          LCD_FillRect(cx1, cy1, cx2, b, backgroundColor); // backgroundColor
+          if(cx1 > x1 || cx2 < x1 || cy2 < y1 || cy1 > y2) {
+            continue;
+          }
+
+          COUNT_A_B_C_D;
+          // TODO: if image, use gr2_draw_screen_bg, slow otherwise
+          LCD_FillRect(cx1, cy1, cx2, b, backgroundColor);
           LCD_FillRect(cx1, d, cx2, cy2, backgroundColor);
           LCD_FillRect(cx1, cy1, a, cy2, backgroundColor);
           LCD_FillRect(c, cy1, cx2, cy2, backgroundColor);
-
-          // TODO: if image, use gr2_draw_screen_bg, slow otherwise
 
           // get min-max
           if (cx1 < x_min)
@@ -246,12 +245,12 @@ void gr2_draw_screen(
       LCD_FillRect(x1, y_max, x2, y2, backgroundColor);
     }
 
-    LCD_setDrawAreaS(&area);
     con->pscgScreens[scrID].x_scroll_old = con->pscgScreens[scrID].x_scroll;
     con->pscgScreens[scrID].y_scroll_old = con->pscgScreens[scrID].y_scroll;
 
     all = 1; // redraw all elements again
   }
+  
   // handle elements previously marked as invisible
   if (con->invisibleFlag == 1) {
     for (i = 1; i <= con->maxElementsId; i++) {
