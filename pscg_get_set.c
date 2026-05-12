@@ -71,6 +71,12 @@ void gr2_set_value(uint16_t id, int32_t val, gr2context *c) {
     }
     c->pscgElements[id].modified = 1; // redraw modified
   }
+
+  if ((c->pscgElements[id].type == GR2_TYPE_SLIDER_H ||
+       c->pscgElements[id].type == GR2_TYPE_SLIDER_V)) {
+    c->pscgElements[id].modified = 2;
+  }
+
   c->pscgElements[id].value = val;
 }
 

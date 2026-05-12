@@ -122,11 +122,11 @@ void gr2_draw_screen_bg(int16_t x1,
 }
 
 #ifdef GR2_DRAW_DBG
-  #define BGCOL LCD_MixColor(255, 0, 0)
-  #define BGCOL2 LCD_MixColor(0, 255, 0)
+#define BGCOL  LCD_MixColor(255, 0, 0)
+#define BGCOL2 LCD_MixColor(0, 255, 0)
 #else
-  #define BGCOL backgroundColor
-  #define BGCOL2 backgroundColor
+#define BGCOL  backgroundColor
+#define BGCOL2 backgroundColor
 #endif
 
 void gr2_draw_screen(
@@ -202,7 +202,7 @@ void gr2_draw_screen(
               con->pscgScreens[scrID].y_scroll +
               con->pscgElements[con->pscgElements[i].screen_id].y_offset;
 
-          if(cx1 > x2 || cx2 < x1 || cy2 < y1 || cy1 > y2) {
+          if (cx1 > x2 || cx2 < x1 || cy2 < y1 || cy1 > y2) {
             continue;
           }
 
@@ -365,8 +365,7 @@ void gr2_draw_screen(
     // Slider V
     if (con->pscgElements[i].type == GR2_TYPE_SLIDER_V) {
       if (all == 1 ||
-          (con->pscgElements[i].modified == 1 &&
-           con->pscgElements[i].value == con->pscgElements[i].prev_val)) {
+          (con->pscgElements[i].modified == 1)) {
         gr2_draw_slider_v(a,
                           b,
                           c,
@@ -376,7 +375,7 @@ void gr2_draw_screen(
                           con->pscgElements[i].value,
                           i,
                           con);
-      } else if (con->pscgElements[i].modified != 0) {
+      } else if (con->pscgElements[i].modified == 2) {
         gr2_draw_slider_v_f(a,
                             b,
                             c,
@@ -393,8 +392,7 @@ void gr2_draw_screen(
     // Slider H
     if (con->pscgElements[i].type == GR2_TYPE_SLIDER_H) {
       if (all == 1 ||
-          (con->pscgElements[i].modified == 1 &&
-           con->pscgElements[i].value == con->pscgElements[i].prev_val)) {
+          (con->pscgElements[i].modified == 1) {
         gr2_draw_slider_h(a,
                           b,
                           c,
@@ -404,7 +402,7 @@ void gr2_draw_screen(
                           con->pscgElements[i].value,
                           i,
                           con);
-      } else if (con->pscgElements[i].modified != 0) {
+      } else if (con->pscgElements[i].modified == 2) {
         gr2_draw_slider_h_f(a,
                             b,
                             c,
@@ -579,12 +577,9 @@ static void gr2_handle_scrollbars(uint16_t screen, gr2context *con) {
     }
 
     if (gr2_get_event(con->pscgScreens[scrID].y_scroll_bar, con)) {
-      if (gr2_get_value(con->pscgScreens[scrID].y_scroll_bar, con) !=
+      if (gr2_get_value(con->pscgScreens[scrID].y_scroll_bar, con) + con->pscgScreens[scrID].y_scroll_min !=
           con->pscgScreens[scrID].y_scroll) {
-        gr2_set_yscroll(screen,
-                        gr2_get_value(con->pscgScreens[scrID].y_scroll_bar, con) +
-                            con->pscgScreens[scrID].y_scroll_min,
-                        con);
+        gr2_set_yscroll(screen, gr2_get_value(con->pscgScreens[scrID].y_scroll_bar, con) + con->pscgScreens[scrID].y_scroll_min, con);
       }
     }
     gr2_clear_event(con->pscgScreens[scrID].y_scroll_bar, con);
@@ -598,12 +593,9 @@ static void gr2_handle_scrollbars(uint16_t screen, gr2context *con) {
     }
 
     if (gr2_get_event(con->pscgScreens[scrID].x_scroll_bar, con)) {
-      if (gr2_get_value(con->pscgScreens[scrID].x_scroll_bar, con) !=
+      if (gr2_get_value(con->pscgScreens[scrID].x_scroll_bar, con) + con->pscgScreens[scrID].x_scroll_min !=
           con->pscgScreens[scrID].x_scroll) {
-        gr2_set_xscroll(screen,
-                        gr2_get_value(con->pscgScreens[scrID].x_scroll_bar, con) +
-                            con->pscgScreens[scrID].x_scroll_min,
-                        con);
+        gr2_set_xscroll(screen, gr2_get_value(con->pscgScreens[scrID].x_scroll_bar, con), con);
       }
     }
     gr2_clear_event(con->pscgScreens[scrID].x_scroll_bar, con);
@@ -724,7 +716,6 @@ uint8_t gr2_touch_input(int16_t x1,
         }
 
         if (scrolled) {
-          gr2_update_scrollbars(screen, con);
           con->activeElement = 0;
           return 0;
         }
