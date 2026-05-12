@@ -194,7 +194,7 @@ void gr2_draw_screen(
               con->pscgScreens[scrID].y_scroll +
               con->pscgElements[con->pscgElements[i].screen_id].y_offset;
 
-          if(cx1 > x1 || cx2 < x1 || cy2 < y1 || cy1 > y2) {
+          if(cx1 > x2 || cx2 < x1 || cy2 < y1 || cy1 > y2) {
             continue;
           }
 
@@ -250,7 +250,7 @@ void gr2_draw_screen(
 
     all = 1; // redraw all elements again
   }
-  
+
   // handle elements previously marked as invisible
   if (con->invisibleFlag == 1) {
     for (i = 1; i <= con->maxElementsId; i++) {
