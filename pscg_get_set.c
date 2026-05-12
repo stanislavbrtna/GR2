@@ -581,7 +581,9 @@ void gr2_set_xscroll(uint16_t id, int16_t val, gr2context *c) {
   }
 
   if (c->pscgScreens[c->pscgElements[id].value].x_scroll_bar) {
-    gr2_set_value(c->pscgScreens[c->pscgElements[id].value].x_scroll_bar, val, c);
+    gr2_set_value(c->pscgScreens[c->pscgElements[id].value].x_scroll_bar,
+                  val - c->pscgScreens[c->pscgElements[id].value].x_scroll_min,
+                  c);
   }
 
   c->pscgScreens[c->pscgElements[id].value].x_scroll_old =
@@ -648,7 +650,9 @@ void gr2_set_yscroll(uint16_t id, int16_t val, gr2context *c) {
   }
 
   if (c->pscgScreens[c->pscgElements[id].value].y_scroll_bar) {
-    gr2_set_value(c->pscgScreens[c->pscgElements[id].value].y_scroll_bar, val, c);
+    gr2_set_value(c->pscgScreens[c->pscgElements[id].value].y_scroll_bar,
+                  val - c->pscgScreens[c->pscgElements[id].value].y_scroll_min,
+                  c);
   }
 
   c->pscgScreens[c->pscgElements[id].value].y_scroll_old =
