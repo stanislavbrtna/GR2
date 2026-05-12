@@ -554,8 +554,24 @@ uint8_t gr2_touch_input(int16_t x1,
       int16_t val_y =
           abs(con->pscgScreens[con->pscgElements[screen].value].y_scroll_origin, (int16_t)touch_y);
 
-      if (val_x > GR2_DRAG_TRESHOLD || val_y > GR2_DRAG_TRESHOLD) {
+      if ((val_x > GR2_DRAG_TRESHOLD || val_y > GR2_DRAG_TRESHOLD) &&
+          !con->pscgScreens[con->pscgElements[screen].value].slideScroll) {
         con->pscgScreens[con->pscgElements[screen].value].slideScroll = 1;
+      }
+
+      if (con->pscgScreens[con->pscgElements[screen].value].slideScroll == 1) {
+        if (con->pscgScreens[con->pscgElements[screen].value].y_scroll_origin > touch_y) {
+          con->pscgScreens[con->pscgElements[screen].value].y_scroll_origin -= GR2_DRAG_TRESHOLD;
+        } else {
+          con->pscgScreens[con->pscgElements[screen].value].y_scroll_origin += GR2_DRAG_TRESHOLD;
+        }
+
+        if (con->pscgScreens[con->pscgElements[screen].value].x_scroll_origin > touch_x) {
+          con->pscgScreens[con->pscgElements[screen].value].x_scroll_origin -= GR2_DRAG_TRESHOLD;
+        } else {
+          con->pscgScreens[con->pscgElements[screen].value].x_scroll_origin += GR2_DRAG_TRESHOLD;
+        }
+        con->pscgScreens[con->pscgElements[screen].value].slideScroll = 2;
       }
     }
 
