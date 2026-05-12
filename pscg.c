@@ -545,9 +545,8 @@ static void gr2_update_scrollbars(uint16_t screen, gr2context *con) {
   uint16_t scrID = con->pscgElements[screen].value;
   if (con->pscgScreens[scrID].y_scroll_bar) {
     if (gr2_get_yscroll(screen, con) !=
-            (int16_t)gr2_get_value(con->pscgScreens[scrID].y_scroll_bar, con) +
-                con->pscgScreens[scrID].y_scroll_min,
-        con) {
+        (int16_t)gr2_get_value(con->pscgScreens[scrID].y_scroll_bar, con) +
+            con->pscgScreens[scrID].y_scroll_min) {
       gr2_set_value(con->pscgScreens[scrID].y_scroll_bar,
                     con->pscgScreens[scrID].y_scroll - con->pscgScreens[scrID].y_scroll_min,
                     con);
