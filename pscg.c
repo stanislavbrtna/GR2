@@ -121,6 +121,14 @@ void gr2_draw_screen_bg(int16_t x1,
   LCD_setDrawAreaS(&area); // draw_ppm changes subdraw area, so it must be restored
 }
 
+#ifdef GR2_DRAW_DBG
+  #define BGCOL LCD_MixColor(255, 0, 0)
+  #define BGCOL2 LCD_MixColor(0, 255, 0)
+#else
+  #define BGCOL backgroundColor
+  #define BGCOL2 backgroundColor
+#endif
+
 void gr2_draw_screen(
     int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t screen, uint8_t all, gr2context *con) {
   LCD_drawArea area;
@@ -200,10 +208,10 @@ void gr2_draw_screen(
 
           COUNT_A_B_C_D;
           // TODO: if image, use gr2_draw_screen_bg, slow otherwise
-          LCD_FillRect(cx1, cy1, cx2, b, backgroundColor);
-          LCD_FillRect(cx1, d, cx2, cy2, backgroundColor);
-          LCD_FillRect(cx1, cy1, a, cy2, backgroundColor);
-          LCD_FillRect(c, cy1, cx2, cy2, backgroundColor);
+          LCD_FillRect(cx1, cy1, cx2, b, BGCOL);
+          LCD_FillRect(cx1, d, cx2, cy2, BGCOL);
+          LCD_FillRect(cx1, cy1, a, cy2, BGCOL);
+          LCD_FillRect(c, cy1, cx2, cy2, BGCOL);
 
           // get min-max
           if (cx1 < x_min)
@@ -238,11 +246,11 @@ void gr2_draw_screen(
     }
 
     if (con->pscgElements[screen].param2 == 1) {
-      LCD_FillRect(x1, y1, x_min, y2, backgroundColor); // backgroundColor
-      LCD_FillRect(x_max, y1, x2, y2, backgroundColor);
+      LCD_FillRect(x1, y1, x_min, y2, BGCOL2); // backgroundColor
+      LCD_FillRect(x_max, y1, x2, y2, BGCOL2);
 
-      LCD_FillRect(x1, y1, x2, y_min, backgroundColor);
-      LCD_FillRect(x1, y_max, x2, y2, backgroundColor);
+      LCD_FillRect(x1, y1, x2, y_min, BGCOL2);
+      LCD_FillRect(x1, y_max, x2, y2, BGCOL2);
     }
 
     con->pscgScreens[scrID].x_scroll_old = con->pscgScreens[scrID].x_scroll;
