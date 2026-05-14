@@ -59,21 +59,22 @@ int32_t gr2_get_value(uint16_t id, gr2context *c) {
 
 void gr2_set_value(uint16_t id, int32_t val, gr2context *c) {
   PSCG_BOUNDARY_CHECK_AND_RETURN();
-
   if (c->pscgElements[id].type == GR2_TYPE_SCREEN) {
     return;
   }
 
-  if ((val != c->pscgElements[id].value) && (c->pscgElements[id].modified == 0)) {
-    if (c->pscgElements[id].modified == 0) {
-      // Store value before item was modified
-      c->pscgElements[id].prev_val = c->pscgElements[id].value;
-    }
+  if (val == c->pscgElements[id].value) {
+    return;
+  }
+
+  if (c->pscgElements[id].modified == 0) {
+    // Store value before item was modified
+    c->pscgElements[id].prev_val = c->pscgElements[id].value;
     c->pscgElements[id].modified = 1; // redraw modified
   }
 
-  if ((c->pscgElements[id].type == GR2_TYPE_SLIDER_H ||
-       c->pscgElements[id].type == GR2_TYPE_SLIDER_V)) {
+  if (c->pscgElements[id].type == GR2_TYPE_SLIDER_H ||
+      c->pscgElements[id].type == GR2_TYPE_SLIDER_V) {
     c->pscgElements[id].modified = 2;
   }
 
@@ -586,7 +587,11 @@ void gr2_set_xscroll(uint16_t id, int16_t val, gr2context *c) {
     c->pscgElements[id].modified = GR2_REDRAW_SCROLLED;
   }
 
-  if (c->pscgScreens[c->pscgElements[id].value].x_scroll_bar) {
+  if (c->pscgScreens[c->pscgElements[id].value].x_scroll_bar &&
+      gr2_get_valid(c->pscgScreens[c->pscgElements[id].value].x_scroll_bar, c) &&
+      gr2_get_value(c->pscgScreens[c->pscgElements[id].value].x_scroll_bar, c) +
+              c->pscgScreens[c->pscgElements[id].value].x_scroll_min !=
+          val) {
     gr2_set_value(c->pscgScreens[c->pscgElements[id].value].x_scroll_bar,
                   val - c->pscgScreens[c->pscgElements[id].value].x_scroll_min,
                   c);
@@ -655,7 +660,11 @@ void gr2_set_yscroll(uint16_t id, int16_t val, gr2context *c) {
     c->pscgElements[id].modified = GR2_REDRAW_SCROLLED;
   }
 
-  if (c->pscgScreens[c->pscgElements[id].value].y_scroll_bar) {
+  if (c->pscgScreens[c->pscgElements[id].value].y_scroll_bar &&
+      gr2_get_valid(c->pscgScreens[c->pscgElements[id].value].y_scroll_bar, c) &&
+      gr2_get_value(c->pscgScreens[c->pscgElements[id].value].y_scroll_bar, c) +
+              c->pscgScreens[c->pscgElements[id].value].y_scroll_min !=
+          val) {
     gr2_set_value(c->pscgScreens[c->pscgElements[id].value].y_scroll_bar,
                   val - c->pscgScreens[c->pscgElements[id].value].y_scroll_min,
                   c);

@@ -573,17 +573,13 @@ static void gr2_handle_scrollbars(uint16_t screen, gr2context *con) {
           con->pscgScreens[scrID].y_scroll_bar, con->pscgScreens[scrID].y_scroll_max, con);
     }
 
-    if (gr2_get_event(con->pscgScreens[scrID].y_scroll_bar, con)) {
-      if (gr2_get_value(con->pscgScreens[scrID].y_scroll_bar, con) +
-              con->pscgScreens[scrID].y_scroll_min !=
-          con->pscgScreens[scrID].y_scroll) {
-        gr2_set_yscroll(screen,
-                        gr2_get_value(con->pscgScreens[scrID].y_scroll_bar, con) +
-                            con->pscgScreens[scrID].y_scroll_min,
-                        con);
-      }
+    // Event is not cleared, because clearing the event forces unwanted redraws on hold
+    if (gr2_get_event(con->pscgScreens[scrID].y_scroll_bar, con) == EV_HOLD) {
+      gr2_set_yscroll(screen,
+                      gr2_get_value(con->pscgScreens[scrID].y_scroll_bar, con) +
+                          con->pscgScreens[scrID].y_scroll_min,
+                      con);
     }
-    gr2_clear_event(con->pscgScreens[scrID].y_scroll_bar, con);
   }
 
   if (con->pscgScreens[scrID].x_scroll_bar) {
@@ -593,14 +589,13 @@ static void gr2_handle_scrollbars(uint16_t screen, gr2context *con) {
           con->pscgScreens[scrID].x_scroll_bar, con->pscgScreens[scrID].x_scroll_max, con);
     }
 
-    if (gr2_get_event(con->pscgScreens[scrID].x_scroll_bar, con)) {
-      if (gr2_get_value(con->pscgScreens[scrID].x_scroll_bar, con) +
-              con->pscgScreens[scrID].x_scroll_min !=
-          con->pscgScreens[scrID].x_scroll) {
-        gr2_set_xscroll(screen, gr2_get_value(con->pscgScreens[scrID].x_scroll_bar, con), con);
-      }
+    if (gr2_get_event(con->pscgScreens[scrID].x_scroll_bar, con) == EV_HOLD) {
+      gr2_set_xscroll(
+          screen,
+          gr2_get_value(con->pscgScreens[scrID].x_scroll_bar + con->pscgScreens[scrID].x_scroll_min,
+                        con),
+          con);
     }
-    gr2_clear_event(con->pscgScreens[scrID].x_scroll_bar, con);
   }
 }
 
@@ -745,7 +740,6 @@ uint8_t gr2_touch_input(int16_t x1,
 
   if (con->pscgScreens[scrID].x_scroll_bar || con->pscgScreens[scrID].y_scroll_bar) {
     gr2_handle_scrollbars(screen, con);
-    gr2_update_scrollbars(screen, con);
   }
 
   for (i = 1; i <= con->maxElementsId; i++) {
@@ -769,10 +763,11 @@ uint8_t gr2_touch_input(int16_t x1,
         b += con->pscgElements[i].param2 / 2;
 
         if ((touch_y > b) && (touch_y < d)) {
-          gr2_set_value(i,
-                        (int32_t)(((float)(touch_y - b) * (float)con->pscgElements[i].param) /
-                                  (float)(d - b)),
-                        con);
+          int32_t val = (int32_t)(((float)(touch_y - b) * (float)con->pscgElements[i].param) /
+                                  (float)(d - b));
+          if (con->pscgElements[i].value != val) {
+            gr2_set_value(i, val, con);
+          }
         } else if ((touch_y < b) && (con->pscgElements[i].value != 0)) {
           gr2_set_value(i, 0, con);
         } else if ((touch_y > d) && con->pscgElements[i].value != con->pscgElements[i].param) {
