@@ -616,7 +616,7 @@ uint8_t gr2_touch_input(int16_t x1,
                         gr2context *con) {
   uint16_t i, scrID;
   int16_t a, b, c, d;
-  uint8_t retval = 0;
+  uint8_t keyboardFlag = 0;
 
   if (screen > con->elementsMax) {
     gr2_error((uint8_t *)"id out of bounds.", con);
@@ -779,7 +779,6 @@ uint8_t gr2_touch_input(int16_t x1,
         if (event == EV_RELEASED) {
           con->activeElement = 0;
         }
-        retval = 1;
       }
     }
 
@@ -803,7 +802,6 @@ uint8_t gr2_touch_input(int16_t x1,
           gr2_set_value(i, con->pscgElements[i].param, con);
         }
 
-        retval = 1;
         if (event == EV_PRESSED) {
           con->activeElement = i;
         }
@@ -815,7 +813,10 @@ uint8_t gr2_touch_input(int16_t x1,
 
     if (con->pscgElements[i].type == GR2_TYPE_SCREEN) {
       COUNT_A_B_C_D;
-      retval = gr2_touch_input(a, b, c, d, touch_x, touch_y, event, i, con);
+      uint8_t r = gr2_touch_input(a, b, c, d, touch_x, touch_y, event, i, con);
+      if (r == 2) {
+        keyboardFlag = r;
+      }
     }
 
     // We can skip rest of the elements on outside click
@@ -825,8 +826,11 @@ uint8_t gr2_touch_input(int16_t x1,
 
     if (con->pscgElements[i].type == GR2_TYPE_FRAME) {
       COUNT_A_B_C_D;
-      retval =
+      uint8_t r =
           gr2_touch_input(a, b, c, d, touch_x, touch_y, event, con->pscgElements[i].value, con);
+      if (r == 2) {
+        keyboardFlag = r;
+      }
     }
 
     if (con->pscgElements[i].type == GR2_TYPE_BUTTON ||
@@ -840,13 +844,12 @@ uint8_t gr2_touch_input(int16_t x1,
       if (event == EV_RELEASED) {
         con->activeElement = 0;
       }
-      retval = 1;
     }
 
     if (con->pscgElements[i].type == GR2_TYPE_ICON) {
       con->pscgElements[i].event = event;
       con->pscgElements[i].modified = 1;
-      retval = 1;
+
       if (event == EV_PRESSED) {
         con->activeElement = i;
       }
@@ -871,7 +874,6 @@ uint8_t gr2_touch_input(int16_t x1,
         }
         con->activeElement = 0;
       }
-      retval = 1;
     }
 
     if (con->pscgElements[i].type == GR2_TYPE_TEXT) {
@@ -883,7 +885,7 @@ uint8_t gr2_touch_input(int16_t x1,
       if (gr2_text_get_editable(i, con)) {
         if (event == EV_RELEASED) {
           if (con->textActive == 0) {
-            retval = 2; // magic return value for opening the sw keyboard
+            keyboardFlag = 2; // magic return value for opening the sw keyboard
           }
           gr2_activate_text(i, con);
           con->activeElement = 0;
@@ -914,7 +916,6 @@ uint8_t gr2_touch_input(int16_t x1,
     if (con->pscgElements[i].type == GR2_TYPE_COLOR_BUTTON) {
       con->pscgElements[i].event = event;
       con->pscgElements[i].modified = 1;
-      retval = 1;
       if (event == EV_PRESSED) {
         con->activeElement = i;
       }
@@ -926,6 +927,5 @@ uint8_t gr2_touch_input(int16_t x1,
 
   // unselect the keyboard-selected
   gr2_ki_unselect(screen, con);
-
-  return retval;
+  return keyboardFlag;
 }
