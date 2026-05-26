@@ -541,29 +541,6 @@ static int16_t gr2_abs(int16_t a, int16_t b) {
     return b - a;
 }
 
-static void gr2_update_scrollbars(uint16_t screen, gr2context *con) {
-  uint16_t scrID = con->pscgElements[screen].value;
-  if (con->pscgScreens[scrID].y_scroll_bar) {
-    if (gr2_get_yscroll(screen, con) !=
-        (int16_t)gr2_get_value(con->pscgScreens[scrID].y_scroll_bar, con) +
-            con->pscgScreens[scrID].y_scroll_min) {
-      gr2_set_value(con->pscgScreens[scrID].y_scroll_bar,
-                    con->pscgScreens[scrID].y_scroll - con->pscgScreens[scrID].y_scroll_min,
-                    con);
-    }
-  }
-
-  if (con->pscgScreens[scrID].x_scroll_bar) {
-    if (gr2_get_xscroll(screen, con) !=
-        (int16_t)gr2_get_value(con->pscgScreens[scrID].x_scroll_bar, con) +
-            con->pscgScreens[scrID].x_scroll_min) {
-      gr2_set_value(con->pscgScreens[scrID].x_scroll_bar,
-                    gr2_get_xscroll(screen, con) - con->pscgScreens[scrID].x_scroll_min,
-                    con);
-    }
-  }
-}
-
 static void gr2_handle_scrollbars(uint16_t screen, gr2context *con) {
   uint16_t scrID = con->pscgElements[screen].value;
   if (con->pscgScreens[scrID].y_scroll_bar) {
@@ -573,8 +550,10 @@ static void gr2_handle_scrollbars(uint16_t screen, gr2context *con) {
           con->pscgScreens[scrID].y_scroll_bar, con->pscgScreens[scrID].y_scroll_max, con);
     }
 
-    // Event is not cleared, because clearing the event forces unwanted redraws on hold
-    if (gr2_get_event(con->pscgScreens[scrID].y_scroll_bar, con) == EV_HOLD) {
+    gr2EventType ev = gr2_get_event(con->pscgScreens[scrID].y_scroll_bar, con);
+
+    if (ev == EV_HOLD || ev == EV_PRESSED) {
+      // Event is not cleared, because clearing the event forces unwanted redraws on hold
       gr2_set_yscroll(screen,
                       gr2_get_value(con->pscgScreens[scrID].y_scroll_bar, con) +
                           con->pscgScreens[scrID].y_scroll_min,
@@ -589,7 +568,9 @@ static void gr2_handle_scrollbars(uint16_t screen, gr2context *con) {
           con->pscgScreens[scrID].x_scroll_bar, con->pscgScreens[scrID].x_scroll_max, con);
     }
 
-    if (gr2_get_event(con->pscgScreens[scrID].x_scroll_bar, con) == EV_HOLD) {
+    gr2EventType ev = gr2_get_event(con->pscgScreens[scrID].y_scroll_bar, con);
+
+    if (ev == EV_HOLD || ev == EV_PRESSED) {
       gr2_set_xscroll(
           screen,
           gr2_get_value(con->pscgScreens[scrID].x_scroll_bar + con->pscgScreens[scrID].x_scroll_min,
@@ -603,6 +584,34 @@ static uint8_t gr2_get_screen_scrollable(uint16_t screen, gr2context *con) {
   uint16_t scrID = con->pscgElements[screen].value;
   return con->pscgScreens[scrID].x_scroll_max != 0 || con->pscgScreens[scrID].x_scroll_min != 0 ||
       con->pscgScreens[scrID].y_scroll_min != 0 || con->pscgScreens[scrID].y_scroll_max != 0;
+}
+
+static void gr2_handle_scb_subscreens(uint16_t screen, gr2context *con) {
+  for (uint16_t i = 1; i <= con->maxElementsId; i++) {
+
+    if (!(con->pscgElements[i].screen_id == screen && i != screen &&
+          con->pscgElements[i].valid == 1 && con->pscgElements[i].visible == 1)) {
+      continue;
+    }
+
+    if (con->pscgElements[i].type == GR2_TYPE_SCREEN) {
+      uint16_t scrID = con->pscgElements[i].value;
+      if (con->pscgScreens[scrID].x_scroll_bar || con->pscgScreens[scrID].y_scroll_bar) {
+        gr2_handle_scrollbars(i, con);
+      }
+
+      gr2_handle_scb_subscreens(i, con);
+    }
+
+    if (con->pscgElements[i].type == GR2_TYPE_FRAME) {
+      uint16_t scrID = con->pscgElements[con->pscgElements[i].value].value;
+      if (con->pscgScreens[scrID].x_scroll_bar || con->pscgScreens[scrID].y_scroll_bar) {
+        gr2_handle_scrollbars(i, con);
+      }
+
+      gr2_handle_scb_subscreens(con->pscgElements[i].value, con);
+    }
+  }
 }
 
 uint8_t gr2_touch_input(int16_t x1,
@@ -624,9 +633,10 @@ uint8_t gr2_touch_input(int16_t x1,
     return 0;
   }
 
+  scrID = con->pscgElements[screen].value;
+
   if (event == EV_NONE) {
-    con->pscgElements[con->activeElement].modified = 1;
-    con->activeElement = 0;
+    gr2_handle_scb_subscreens(screen, con);
     return 0;
   } else if (event == EV_RELEASED) {
     con->pscgElements[con->activeElement].modified = 1;
@@ -641,8 +651,6 @@ uint8_t gr2_touch_input(int16_t x1,
       }
     }
   }
-
-  scrID = con->pscgElements[screen].value;
 
   if (touch_in_screen(touch_x, touch_y, x1, y1, x2, y2) && gr2_get_screen_scrollable(screen, con) &&
       (con->activeElement == 0 ||
