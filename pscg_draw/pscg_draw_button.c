@@ -68,7 +68,7 @@ void gr2_draw_button(
 
     LCD_DrawText_ext(
       x1 + gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].x_offset + sic_width, c),
-      y1 + PSCG_TEXT_Y_GAP,
+      y1 + PSCG_TEXT_Y_GAP + c->pscgElements[id].param,
       c->textColor,
       str
     );
@@ -92,7 +92,7 @@ void gr2_draw_button(
 
     LCD_DrawText_ext(
       x1 + gr2_get_text_align_x(id, x1, x2, c->pscgElements[id].x_offset + sic_width, c),
-      y1 + PSCG_TEXT_Y_GAP,
+      y1 + PSCG_TEXT_Y_GAP + c->pscgElements[id].param,
       LCD_get_gray16(c->textColor),
       str
     );
