@@ -606,7 +606,7 @@ static void gr2_handle_scb_subscreens(uint16_t screen, gr2context *con) {
     if (con->pscgElements[i].type == GR2_TYPE_FRAME) {
       uint16_t scrID = con->pscgElements[con->pscgElements[i].value].value;
       if (con->pscgScreens[scrID].x_scroll_bar || con->pscgScreens[scrID].y_scroll_bar) {
-        gr2_handle_scrollbars(i, con);
+        gr2_handle_scrollbars(con->pscgElements[i].value, con);
       }
 
       gr2_handle_scb_subscreens(con->pscgElements[i].value, con);
@@ -635,8 +635,10 @@ uint8_t gr2_touch_input(int16_t x1,
 
   scrID = con->pscgElements[screen].value;
 
+  // priority handling of scrollbar events
+  gr2_handle_scb_subscreens(screen, con);
+
   if (event == EV_NONE) {
-    gr2_handle_scb_subscreens(screen, con);
     return 0;
   } else if (event == EV_RELEASED) {
     con->pscgElements[con->activeElement].modified = 1;
