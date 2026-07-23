@@ -144,6 +144,12 @@ void gr2_draw_screen(
     return;
   }
 
+  if (!con->pscgElements[screen].valid) {
+    gr2_error((uint8_t *)"invalid screen id.", con);
+    printf("%s: invalid screen id.\n", __FUNCTION__);
+    return;
+  }
+
   LCD_setSubDrawArea(x1, y1, x2, y2);
 
   if (con->pscgElements[screen].modified) {
