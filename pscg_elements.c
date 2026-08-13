@@ -83,6 +83,9 @@ void pscg_dump_screen_values(uint16_t id, uint16_t val, gr2context * c){
 		printf("gr2Element %u: NOT a screen\n", id);
 		return;
 	}
+
+	pscg_indent(val);
+	printf("gr2Element %u, screenID %u valid = %u \n", id, scrID, c->pscgScreens[scrID].valid);
 	pscg_indent(val);
 	printf("gr2Element %u, screenID %u x_scroll = %u \n", id, scrID, c->pscgScreens[scrID].x_scroll);
 	pscg_indent(val);

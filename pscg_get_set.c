@@ -822,9 +822,15 @@ void gr2_set_event(uint16_t id, gr2EventType val, gr2context *c) {
 
 void gr2_activate_text(uint16_t id, gr2context *c) {
   PSCG_BOUNDARY_CHECK_AND_RETURN();
+  
+  if(c->pscgElements[id].type != GR2_TYPE_TEXT) {
+    gr2_error((uint8_t *)"gr2_activate_text: not text type element.", c);
+  }
+
   if (c->textActiveId == id && c->textActive == 1) {
     return;
   }
+
   if (c->textActive == 1) {
     gr2_text_deactivate(c);
   }
@@ -839,6 +845,10 @@ void gr2_activate_text(uint16_t id, gr2context *c) {
 }
 
 void gr2_text_deactivate(gr2context *c) {
+  if(!c->textActive) {
+    return;
+  }
+  
   c->textActive = 0;
   c->pscgElements[c->textActiveId].value = 0;
   c->pscgElements[c->textActiveId].modified = 1;
