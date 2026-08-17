@@ -850,8 +850,11 @@ void gr2_text_deactivate(gr2context *c) {
   }
   
   c->textActive = 0;
-  c->pscgElements[c->textActiveId].value = 0;
-  c->pscgElements[c->textActiveId].modified = 1;
+
+  if(c->pscgElements[c->textActiveId].valid && c->pscgElements[c->textActiveId].type == GR2_TYPE_TEXT) {
+    c->pscgElements[c->textActiveId].value = 0;
+    c->pscgElements[c->textActiveId].modified = 1;
+  } 
 }
 
 uint8_t gr2_get_text_active(uint16_t id, gr2context *c) {
