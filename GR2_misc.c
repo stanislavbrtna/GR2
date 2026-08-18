@@ -61,6 +61,9 @@ void gr2_reset_context(gr2context * c) {
   c->backgroundColor = 0xF800; // red
   c->fillColor       = 0x07E0; // green
   c->activeColor     = 0xFFFF; // white
+
+  c->timerMs       = 0;
+  c->coolDownTimer = 0;
 }
 
 

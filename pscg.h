@@ -54,6 +54,9 @@ void gr2_draw_screen(
 // after the root screen redraw, this function does a cleanup
 void gr2_draw_end(gr2context *c);
 
+// set the internal ms timer
+void gr2_set_timer(uint64_t valMs, gr2context *c);
+
 // dumps screen contents to the console
 void gr2_dump_screen(uint16_t id, gr2context *con);
 

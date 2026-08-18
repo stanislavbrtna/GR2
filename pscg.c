@@ -639,6 +639,10 @@ uint8_t gr2_touch_input(int16_t x1,
     return 0;
   }
 
+  if(con->coolDownTimer > con->timerMs) {
+    return 0;
+  }
+
   scrID = con->pscgElements[screen].value;
 
   // priority handling of scrollbar events
@@ -748,6 +752,7 @@ uint8_t gr2_touch_input(int16_t x1,
       con->pscgScreens[scrID].y_scroll_origin = 0;
 
       if (con->pscgScreens[scrID].slideScroll) {
+        con->coolDownTimer = con->timerMs + 100;
         con->pscgScreens[scrID].slideScroll = 0;
         return 0;
       }

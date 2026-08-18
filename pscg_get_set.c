@@ -865,3 +865,7 @@ uint8_t gr2_get_text_active(uint16_t id, gr2context *c) {
     return 0;
   }
 }
+
+void gr2_set_timer(uint64_t valMs, gr2context *c) {
+  c->timerMs = valMs;
+}

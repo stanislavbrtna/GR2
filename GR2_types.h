@@ -175,6 +175,9 @@ typedef struct {
   uint16_t backgroundColor;
   uint16_t fillColor;
   uint16_t activeColor;
+
+  int64_t timerMs;
+  int64_t coolDownTimer;
 } gr2context;
 
 #endif
