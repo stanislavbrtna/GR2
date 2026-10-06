@@ -70,12 +70,13 @@ void gr2_set_value(uint16_t id, int32_t val, gr2context *c) {
   if (c->pscgElements[id].modified == 0) {
     // Store value before item was modified
     c->pscgElements[id].prev_val = c->pscgElements[id].value;
-    c->pscgElements[id].modified = 1; // redraw modified
-  }
-
-  if (c->pscgElements[id].type == GR2_TYPE_SLIDER_H ||
+    
+    if (c->pscgElements[id].type == GR2_TYPE_SLIDER_H ||
       c->pscgElements[id].type == GR2_TYPE_SLIDER_V) {
-    c->pscgElements[id].modified = 2;
+      c->pscgElements[id].modified = 2; // fast redraw for sliders
+    } else {
+      c->pscgElements[id].modified = 1; // redraw modified
+    }
   }
 
   c->pscgElements[id].value = val;
@@ -814,7 +815,12 @@ gr2EventType gr2_get_event(uint16_t id, gr2context *c) {
 void gr2_set_event(uint16_t id, gr2EventType val, gr2context *c) {
   PSCG_BOUNDARY_CHECK_AND_RETURN();
   if (val != c->pscgElements[id].event) {
-    c->pscgElements[id].modified = 1;
+    if (c->pscgElements[id].type == GR2_TYPE_SLIDER_H ||
+      c->pscgElements[id].type == GR2_TYPE_SLIDER_V) {
+      c->pscgElements[id].modified = 2; // fast redraw for sliders
+    } else {
+      c->pscgElements[id].modified = 1; // redraw modified
+    }
   }
   c->pscgElements[id].event = val;
 }
