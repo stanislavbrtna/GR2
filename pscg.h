@@ -188,6 +188,7 @@ void gr2_text_set_align(uint16_t id, uint16_t val, gr2context *c);
 
 // modified flag
 void gr2_set_modified(uint16_t id, gr2context *c);
+uint8_t gr2_get_modified(uint16_t id, gr2context *c);
 
 // slider size
 void gr2_set_slider_size(uint16_t id, uint16_t val, gr2context *c);

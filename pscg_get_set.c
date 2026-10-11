@@ -166,6 +166,11 @@ void gr2_set_modified(uint16_t id, gr2context *c) {
   c->pscgElements[id].modified = 1;
 }
 
+uint8_t gr2_get_modified(uint16_t id, gr2context *c) {
+  PSCG_BOUNDARY_CHECK_AND_RETURN();
+  return c->pscgElements[id].modified;
+}
+
 void gr2_set_slider_size(uint16_t id, uint16_t val, gr2context *c) {
   PSCG_BOUNDARY_CHECK_AND_RETURN();
 
