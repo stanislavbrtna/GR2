@@ -146,7 +146,7 @@ void gr2_draw_screen(
 
   if (!con->pscgElements[screen].valid) {
     gr2_error((uint8_t *)"invalid screen id.", con);
-    printf("%s: invalid screen id.\n", __FUNCTION__);
+    printf("%s: invalid screen id: %u\n", __FUNCTION__, screen);
     return;
   }
 
