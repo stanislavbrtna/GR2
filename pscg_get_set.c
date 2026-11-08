@@ -167,7 +167,7 @@ void gr2_set_modified(uint16_t id, gr2context *c) {
 }
 
 uint8_t gr2_get_modified(uint16_t id, gr2context *c) {
-  PSCG_BOUNDARY_CHECK_AND_RETURN();
+  PSCG_BOUNDARY_CHECK_AND_RETURN_ZERO();
   return c->pscgElements[id].modified;
 }
 
@@ -442,7 +442,7 @@ uint8_t *gr2_get_str(uint16_t id, gr2context *c) {
     printf("%s: WARN! string value out of bounds! Empty string returned. (element id: %u)\n",
            __FUNCTION__,
            id);
-    return "";
+    return (uint8_t *)"";
   }
 
   return c->pscgElements[id].str_value;
